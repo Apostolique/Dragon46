@@ -21,6 +21,7 @@ namespace GameProject {
         }
 
         protected override void LoadContent() {
+            InputHelper.Setup(this);
             Database.Load();
 
             _currentState = new MainMenuState(GraphicsDevice);
@@ -29,8 +30,6 @@ namespace GameProject {
 
             Assets.Setup(Content);
             _backgrounds = new Backgrounds(GraphicsDevice);
-            // TODO: use this.Content to load your game content here
-            InputHelper.Setup(this);
         }
 
         protected override void Update(GameTime gameTime) {
@@ -38,6 +37,8 @@ namespace GameProject {
 
             if (Triggers.Quit.Pressed())
                 Exit();
+
+            Core.Update(gameTime);
 
             var nextState = _currentState.Update(gameTime);
 
@@ -55,9 +56,6 @@ namespace GameProject {
                     }
                     break;
             }
-
-            // TODO: Add your update logic here
-            CameraWrapper.Update(gameTime);
 
             InputHelper.UpdateCleanup();
             base.Update(gameTime);
