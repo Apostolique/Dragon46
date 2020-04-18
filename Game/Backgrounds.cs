@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Dcrew.MonoGame._2D_Spatial_Partition;
 using Microsoft.Xna.Framework;
@@ -6,11 +7,14 @@ using Microsoft.Xna.Framework.Graphics;
 namespace GameProject {
     public class Backgrounds {
         public Backgrounds(GraphicsDevice g) {
+            _r = new Random();
+            int mapLength = 20000;
+
             _s = new SpriteBatch(g);
-            Quadtree<BackgroundObjects>.Add(new BackgroundObjects(0, 0, -4, Assets.Bush));
-            Quadtree<BackgroundObjects>.Add(new BackgroundObjects(0, 0, -3, Assets.Bush));
-            Quadtree<BackgroundObjects>.Add(new BackgroundObjects(400, 0, -2, Assets.Bush));
-            Quadtree<BackgroundObjects>.Add(new BackgroundObjects(-300, 0, -1, Assets.Bush));
+
+            for (int i = 0; i < 300; i++) {
+                Quadtree<BackgroundObjects>.Add(new BackgroundObjects(_r.Next(0, mapLength), -Assets.Bush.Height, _r.Next(_furthest + 1, 0), Assets.Bush));
+            }
         }
 
         public void Draw() {
@@ -23,7 +27,7 @@ namespace GameProject {
                 Matrix.CreateScale(scale) *
                 Matrix.CreateScale(size.X, size.Y, 1) *
                 Matrix.CreateTranslation(posOffset.X, posOffset.Y, 1) *
-                CameraWrapper.Camera.View(-10) *
+                CameraWrapper.Camera.View(_furthest) *
                 Matrix.CreateScale(1f / size.X, 1f / size.Y, 1);
 
             Assets.Infinite.Parameters["ScrollMatrix"].SetValue(Matrix.Invert(m));
@@ -51,5 +55,7 @@ namespace GameProject {
         }
 
         SpriteBatch _s;
+        Random _r;
+        int _furthest = -5;
     }
 }
