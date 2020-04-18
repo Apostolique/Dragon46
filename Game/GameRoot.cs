@@ -22,6 +22,7 @@ namespace GameProject {
 
         protected override void LoadContent() {
             InputHelper.Setup(this);
+            Database.Load();
 
             _currentState = new MainMenuState(GraphicsDevice);
 

@@ -27,6 +27,7 @@ namespace GameProject
         private static Dictionary<CharacterType, List<AbilityType>> _castableAbilities;
         private static Dictionary<StatusEffectType, Type> _statusEffects;
         private static Dictionary<CharacterType, EnemyType> _enemies;
+        private static Dictionary<CharacterType, HeroType> _heroes;
 
         public static void Load()
         {
@@ -35,6 +36,9 @@ namespace GameProject
                 {
                     AbilityType.Defend,
                     new Ability()
+                    {
+                        Name = "Defend"
+                    }
                 },
             };
 
@@ -58,7 +62,27 @@ namespace GameProject
             {
                 {
                     CharacterType.Goblin,
-                    new EnemyType(type: CharacterType.Goblin, maxHP: 100)
+                    new EnemyType(type: CharacterType.Goblin, maxHP: 100, name: "Goblin")
+                }
+            };
+
+            _heroes = new Dictionary<CharacterType, HeroType>()
+            {
+                {
+                    CharacterType.Cleric,
+                    new HeroType(type: CharacterType.Cleric, maxHP: 100, name: "Cleric")
+                },
+                {
+                    CharacterType.Wizard,
+                    new HeroType(type: CharacterType.Wizard, maxHP: 90, name: "Wizard")
+                },
+                {
+                    CharacterType.Archer,
+                    new HeroType(type: CharacterType.Archer, maxHP: 120, name: "Archer")
+                },
+                {
+                    CharacterType.Warrior,
+                    new HeroType(type: CharacterType.Warrior, maxHP: 200, name: "Warrior")
                 }
             };
         }
@@ -92,6 +116,22 @@ namespace GameProject
                 throw new Exception("Status effect not defined: " + type.ToString());
 
             return _statusEffects[type];
+        }
+
+        public static EnemyType GetEnemy(CharacterType type)
+        {
+            if (!_enemies.ContainsKey(type))
+                throw new Exception("Enemy not defined: " + type.ToString());
+
+            return _enemies[type];
+        }
+
+        public static HeroType GetHero(CharacterType type)
+        {
+            if (!_heroes.ContainsKey(type))
+                throw new Exception("Hero not defined: " + type.ToString());
+
+            return _heroes[type];
         }
     }
 }

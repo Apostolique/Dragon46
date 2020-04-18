@@ -44,6 +44,11 @@ namespace GameProject
 
             _characters = new List<Character>();
 
+            _characters.Add(new Character(Database.GetHero(CharacterType.Cleric), false, 0, _slotPositions[0]));
+            _characters.Add(new Character(Database.GetHero(CharacterType.Wizard), false, 1, _slotPositions[1]));
+            _characters.Add(new Character(Database.GetHero(CharacterType.Archer), false, 2, _slotPositions[2]));
+            _characters.Add(new Character(Database.GetHero(CharacterType.Warrior), false, 3, _slotPositions[3]));
+
             _gameManager = new GameManager();
             _gameManager.Load(_rng);
         }
@@ -93,7 +98,8 @@ namespace GameProject
 
             if (nextEncounter == null)
             {
-                // TODO : player won the game
+                PlayerWon();
+                return;
             }
 
             _characters.RemoveAll(c => c.Enemy);
@@ -103,15 +109,23 @@ namespace GameProject
             for (var i = 0; i < nextEncounter.Enemies.Count; i++)
             {
                 var enemy = nextEncounter.Enemies[i];
-                var newEnemy = new Character(enemy.EnemyType, enemySlot);
+                var newEnemy = new Character(enemy.EnemyType, true, enemySlot, _slotPositions[enemySlot]);
                 _characters.Add(newEnemy);
                 enemySlot++;
+
+                if (enemySlot >= _slotPositions.Length)
+                    continue;
             }
+        }
+
+        protected void PlayerWon()
+        {
+            throw new NotImplementedException("Player won");
         }
 
         protected void GameOver()
         {
-            // TODO : game over
+            throw new NotImplementedException("Game over");
         }
 
         protected void CheckNextCharacterAbility(Character character)
@@ -119,6 +133,8 @@ namespace GameProject
             if (character == null)
                 return;
             if (character.CastingAbility != null && !character.CastingAbility.Finished)
+                return;
+            if (character.Dead)
                 return;
 
             var abilities = Database.GetCharacterAbilities(character.Type);
