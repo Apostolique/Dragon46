@@ -68,7 +68,6 @@ namespace GameProject
                 target = enemies[_rng.Next(0, enemies.Count)];
 
             var abilityTimer = new AbilityTimer(character, target, nextAbility);
-            _abilityTimers.Add(abilityTimer);
             character.CastAbility(abilityTimer);
         }
     }
