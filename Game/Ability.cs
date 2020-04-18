@@ -11,7 +11,7 @@ namespace GameProject
         public int Damage { get; set; }
         public string Name { get; set; }
 
-        protected List<AbilityEffect> _onHitEffects;
+        protected List<AbilityEffect> _onHitEffects = new List<AbilityEffect>();
 
         public Ability() { }
 

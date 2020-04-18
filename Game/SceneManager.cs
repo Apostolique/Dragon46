@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GameProject
 {
@@ -9,11 +10,17 @@ namespace GameProject
         protected Random _rng;
 
         protected Vector2[] _slotPositions;
-        protected Character[] _heroParty;
-        protected Character[] _enemyParty;
+        protected List<Character> _characters;
 
-        // abilities currently casting
-        protected List<AbilityTimer> _abilityTimers;
+        protected List<Character> _heroCharacters
+        {
+            get { return _characters.Where(c => !c.Enemy).ToList(); }
+        }
+
+        protected List<Character> _enemyCharacters
+        {
+            get { return _characters.Where(c => c.Enemy).ToList(); }
+        }
 
         public SceneManager()
         {
@@ -30,17 +37,17 @@ namespace GameProject
                 new Vector2(0, 0), // enemy 3
                 new Vector2(0, 0), // enemy 4
             };
+
+            _characters = new List<Character>();
         }
 
         public void Update(GameTime gameTime)
         {
-            for (var i = 0; i < _abilityTimers.Count; i++)
-                _abilityTimers[i].Update(gameTime);
-
-            _abilityTimers.RemoveAll(t => t.Finished);
-
-            for (var i = 0; i < _heroParty.Length; i++)
-                CheckNextCharacterAbility(_heroParty[i]);
+            for (var i = 0; i < _characters.Count; i++)
+            {
+                _characters[i].Update(gameTime);
+                CheckNextCharacterAbility(_characters[i]);
+            }
         }
 
         protected void CheckNextCharacterAbility(Character character)
@@ -53,12 +60,14 @@ namespace GameProject
             var abilities = Database.GetCharacterAbilities(character.Type);
             var nextAbility = abilities[_rng.Next(0, abilities.Count)];
 
-            var target = _heroParty[_rng.Next(0, _heroParty.Length)];
+            var heroes = _heroCharacters;
+            var enemies = _enemyCharacters;
+            
+            var target = heroes[_rng.Next(0, heroes.Count)];
             if (!character.Enemy)
-                target = _enemyParty[_rng.Next(0, _enemyParty.Length)];
+                target = enemies[_rng.Next(0, enemies.Count)];
 
             var abilityTimer = new AbilityTimer(character, target, nextAbility);
-            _abilityTimers.Add(abilityTimer);
             character.CastAbility(abilityTimer);
         }
     }
