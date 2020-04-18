@@ -7,6 +7,15 @@ namespace GameProject {
             Camera = new Camera(new Vector2(0, 0));
         }
 
+        public static void Update(GameTime gameTime) {
+            if (Triggers.CameraLeft.Held()) {
+                CameraWrapper.Camera.XY += new Vector2(0.2f * gameTime.ElapsedGameTime.Milliseconds, 0);
+            }
+            if (Triggers.CameraRight.Held()) {
+                CameraWrapper.Camera.XY -= new Vector2(0.2f * gameTime.ElapsedGameTime.Milliseconds, 0);
+            }
+        }
+
         public static Camera Camera;
     }
 }

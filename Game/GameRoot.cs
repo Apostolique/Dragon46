@@ -32,6 +32,7 @@ namespace GameProject {
                 Exit();
 
             // TODO: Add your update logic here
+            CameraWrapper.Update(gameTime);
 
             InputHelper.UpdateCleanup();
             base.Update(gameTime);
