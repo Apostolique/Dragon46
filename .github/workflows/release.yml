@@ -1,0 +1,47 @@
+name: Release to NuGet
+
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: Build Windows
+      run: dotnet publish Platforms/Core -r win-x64 -c Release --output build-windows
+    - name: Build Osx
+      run: dotnet publish Platforms/Core -r osx-x64 -c Release --output build-osx
+    - name: Build Linux
+      run: dotnet publish Platforms/Core -r linux-x64 -c Release --output build-linux
+    - name: Clean NetCoreBeauty
+      run: find . -name 'NetCoreBeauty' -type f -delete
+    - uses: josephbmanley/butler-publish-itchio-action@master
+      env:
+        BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+        CHANNEL: windows
+        ITCH_GAME: dragon46
+        ITCH_USER: apos
+        PACKAGE: build-windows
+    - uses: josephbmanley/butler-publish-itchio-action@master
+      env:
+        BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+        CHANNEL: osx
+        ITCH_GAME: dragon46
+        ITCH_USER: apos
+        PACKAGE: build-osx
+    - uses: josephbmanley/butler-publish-itchio-action@master
+      env:
+        BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+        CHANNEL: linux
+        ITCH_GAME: dragon46
+        ITCH_USER: apos
+        PACKAGE: build-linux
