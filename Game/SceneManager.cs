@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,10 @@ namespace GameProject
 {
     public class SceneManager
     {
+        protected int _internalScore;
+
         protected Random _rng;
+        protected GameManager _gameManager;
 
         protected Vector2[] _slotPositions;
         protected List<Character> _characters;
@@ -39,15 +43,61 @@ namespace GameProject
             };
 
             _characters = new List<Character>();
+
+            _gameManager = new GameManager();
+            _gameManager.Load(_rng);
         }
 
         public void Update(GameTime gameTime)
         {
+            _internalScore += gameTime.ElapsedGameTime.Milliseconds;
+
             for (var i = 0; i < _characters.Count; i++)
             {
                 _characters[i].Update(gameTime);
                 CheckNextCharacterAbility(_characters[i]);
             }
+
+            var heroesAlive = 0;
+            foreach (var hero in _heroCharacters)
+                if (hero != null && !hero.Dead)
+                    heroesAlive += 1;
+
+            if (heroesAlive == 0)
+            {
+                GameOver();
+                return;
+            }
+
+            var enemiesAlive = 0;
+            foreach (var enemy in _enemyCharacters)
+                if (enemy != null && !enemy.Dead)
+                    enemiesAlive += 1;
+
+            if (enemiesAlive == 0)
+                MoveNextEncounter();
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            for (var i = 0; i < _characters.Count; i++)
+            {
+                if (!_characters[i].Dead)
+                    _characters[i].Draw(spriteBatch, _slotPositions[_characters[i].Slot]);
+            }
+        }
+
+        protected void MoveNextEncounter()
+        {
+            if (_gameManager.NextEncounter() == null)
+            {
+                // TODO : player won the game
+            }
+        }
+
+        protected void GameOver()
+        {
+            // TODO : game over
         }
 
         protected void CheckNextCharacterAbility(Character character)

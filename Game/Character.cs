@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace GameProject
@@ -44,6 +45,11 @@ namespace GameProject
             _statusEffect?.Update(gameTime);
             if (_statusEffect != null && _statusEffect.Finished)
                 _statusEffect = null;
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Vector2 position)
+        {
+
         }
 
         public void ApplyDamage(int damage)
