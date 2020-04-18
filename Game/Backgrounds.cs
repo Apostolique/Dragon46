@@ -2,15 +2,14 @@ using System.Linq;
 using Dcrew.MonoGame._2D_Spatial_Partition;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
 
 namespace GameProject {
     public class Backgrounds {
         public Backgrounds(GraphicsDevice g) {
             _s = new SpriteBatch(g);
-            Quadtree<BackgroundObjects>.Add(new BackgroundObjects(0, 0, -2, 100, 200, Color.Red));
-            Quadtree<BackgroundObjects>.Add(new BackgroundObjects(0, 0, -1, 100, 200, Color.Beige));
-            Quadtree<BackgroundObjects>.Add(new BackgroundObjects(0, 0, 0, 100, 200, Color.Blue));
+            Quadtree<BackgroundObjects>.Add(new BackgroundObjects(0, 0, -2, Assets.Bush));
+            Quadtree<BackgroundObjects>.Add(new BackgroundObjects(0, 0, -1, Assets.Bush));
+            Quadtree<BackgroundObjects>.Add(new BackgroundObjects(0, 0, 0, Assets.Bush));
         }
 
         public void Draw() {

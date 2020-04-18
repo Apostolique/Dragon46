@@ -20,6 +20,7 @@ namespace GameProject {
         protected override void LoadContent() {
             _s = new SpriteBatch(GraphicsDevice);
 
+            Assets.Setup(Content);
             _backgrounds = new Backgrounds(GraphicsDevice);
             // TODO: use this.Content to load your game content here
             InputHelper.Setup(this);

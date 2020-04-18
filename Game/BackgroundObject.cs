@@ -5,19 +5,19 @@ using MonoGame.Extended;
 
 namespace GameProject {
     public class BackgroundObjects : IAABB {
-        public BackgroundObjects(int x, int y, float z, int width, int height, Color c) {
-            _aabb = new Rectangle(x, y, width, height);
+        public BackgroundObjects(int x, int y, float z, Texture2D texture) {
             Z = z;
-            Color = c;
+            Texture = texture;
+            _aabb = new Rectangle(x, y, Texture.Width, Texture.Height);
         }
 
-        public Rectangle AABB => _aabb;
-        public float Angle => 0;
-        public Vector2 Origin => Vector2.Zero;
-        public Color Color {
+        public Texture2D Texture {
             get;
             set;
         }
+        public Rectangle AABB => _aabb;
+        public float Angle => 0;
+        public Vector2 Origin => Vector2.Zero;
 
         public float Z {
             get;
@@ -25,10 +25,9 @@ namespace GameProject {
         } = 0;
 
         public void Draw(SpriteBatch s) {
-            s.FillRectangle(AABB, Color);
+            s.Draw(Texture, AABB, Color.White);
         }
 
-        private Rectangle _aabb;
-
+        Rectangle _aabb;
     }
 }
