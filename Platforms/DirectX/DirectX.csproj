@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+	<LangVersion>8.0</LangVersion>
     <AssemblyName>Dragon46</AssemblyName>
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <PublishTrimmed>true</PublishTrimmed>
