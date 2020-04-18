@@ -1,9 +1,14 @@
-﻿namespace GameProject
+﻿using Microsoft.Xna.Framework;
+using System;
+
+namespace GameProject
 {
     public class Character
     {
         protected CharacterType _type;
         public CharacterType Type { get => _type; }
+
+        public CharacterSprite Sprite;
 
         protected int _maxHP;
         protected int _currentHP;
@@ -20,7 +25,26 @@
         protected AbilityTimer _castingAbility;
         public AbilityTimer CastingAbility { get => _castingAbility; }
 
-        public Character() { }
+        protected StatusEffect _statusEffect;
+        public StatusEffect StatusEffect { get => _statusEffect; }
+
+        public Character(CharacterType type, bool enemy, int slot)
+        {
+            _type = type;
+            _enemy = enemy;
+            Slot = slot;
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            _castingAbility?.Update(gameTime);
+            if (_castingAbility != null && _castingAbility.Finished)
+                _castingAbility = null;
+
+            _statusEffect?.Update(gameTime);
+            if (_statusEffect != null && _statusEffect.Finished)
+                _statusEffect = null;
+        }
 
         public void ApplyDamage(int damage)
         {
@@ -56,6 +80,15 @@
                 return;
 
             _castingAbility = castAbility;
+        }
+
+        public void ApplyStatusEffect(StatusEffectType type)
+        {
+            if (_statusEffect != null || !_statusEffect.Finished)
+                return;
+
+            var e = Database.GetStatusEffect(type);
+            _statusEffect = (StatusEffect)Activator.CreateInstance(e, this);
         }
     }
 }

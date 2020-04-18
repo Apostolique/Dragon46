@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace GameProject
@@ -15,10 +16,17 @@ namespace GameProject
         Defend
     }
 
+    public enum StatusEffectType
+    {
+        Sleep, Stun, Poison, HealOverTime
+    }
+
     public static class Database
     {
         private static Dictionary<AbilityType, Ability> _abilities;
         private static Dictionary<CharacterType, List<AbilityType>> _castableAbilities;
+
+        private static Dictionary<StatusEffectType, Type> _statusEffects;
 
         public static void Load()
         {
@@ -40,6 +48,11 @@ namespace GameProject
                     }
                 },
             }; // CastableAbilities
+
+            _statusEffects = new Dictionary<StatusEffectType, Type>()
+            {
+                { StatusEffectType.Poison, typeof(PoisonStatus) }
+            };
         }
 
         public static Ability GetAbility(AbilityType type)
@@ -53,7 +66,7 @@ namespace GameProject
         public static List<Ability> GetCharacterAbilities(CharacterType type)
         {
             if (!_castableAbilities.ContainsKey(type))
-                return null;
+                throw new Exception("Castable abilities not defined: " + type.ToString());
 
             var abilities = new List<Ability>();
 
@@ -63,6 +76,14 @@ namespace GameProject
             }
 
             return abilities;
+        }
+
+        public static Type GetStatusEffect(StatusEffectType type)
+        {
+            if (!_statusEffects.ContainsKey(type))
+                throw new Exception("Status effect not defined: " + type.ToString());
+
+            return _statusEffects[type];
         }
     }
 }
