@@ -1,17 +1,10 @@
 namespace GameProject
 {
-    public class EnemyType
+    public class EnemyType : BaseCharacterType
     {
-        protected CharacterType _type;
-        public CharacterType Type { get => _type; }
-
-        protected int _maxHP;
-        public int MaxHP { get => _maxHP; }
-
-        public EnemyType(CharacterType type, int maxHP)
+        public EnemyType(CharacterType type, int maxHP, string name) : base(type, maxHP, name)
         {
-            _type = type;
-            _maxHP = maxHP;
+
         }
     }
 

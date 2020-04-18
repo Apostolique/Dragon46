@@ -21,6 +21,8 @@ namespace GameProject {
         }
 
         protected override void LoadContent() {
+            Database.Load();
+
             _currentState = new MainMenuState(GraphicsDevice);
 
             _s = new SpriteBatch(GraphicsDevice);

@@ -6,10 +6,15 @@ namespace GameProject
 {
     public class Character
     {
+        protected string _name;
+        public string Name { get => _name; }
+
         protected CharacterType _type;
         public CharacterType Type { get => _type; }
 
         public CharacterSprite Sprite;
+
+        protected Vector2 _drawPosition = Vector2.Zero;
 
         protected int _maxHP;
         protected int _currentHP;
@@ -29,31 +34,21 @@ namespace GameProject
         protected StatusEffect _statusEffect;
         public StatusEffect StatusEffect { get => _statusEffect; }
 
-        public Character(CharacterType type, bool enemy, int slot)
+        public Character(BaseCharacterType data, bool enemy, int slot, Vector2 drawPosition)
         {
-            _type = type;
             _enemy = enemy;
-            Slot = slot;
-        }
-
-        public Character(HeroType heroData, int slot)
-        {
-            _enemy = true;
-            _type = heroData.Type;
-            _maxHP = heroData.MaxHP;
-            Slot = slot;
-        }
-
-        public Character(EnemyType enemyData, int slot)
-        {
-            _enemy = true;
-            _type = enemyData.Type;
-            _maxHP = enemyData.MaxHP;
+            _type = data.Type;
+            _maxHP = data.MaxHP;
+            _drawPosition = drawPosition;
+            _name = data.Name;
             Slot = slot;
         }
 
         public void Update(GameTime gameTime)
         {
+            if (_dead)
+                return;
+
             _castingAbility?.Update(gameTime);
             if (_castingAbility != null && _castingAbility.Finished)
                 _castingAbility = null;

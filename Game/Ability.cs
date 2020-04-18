@@ -11,13 +11,21 @@ namespace GameProject
         public int Damage { get; set; }
         public string Name { get; set; }
 
+        protected List<AbilityEffect> _onCastEffects = new List<AbilityEffect>();
         protected List<AbilityEffect> _onHitEffects = new List<AbilityEffect>();
 
         public Ability() { }
 
+        public void Cast(Character caster, Character target)
+        {
+            for (var i = 0; i < _onCastEffects.Count; i++)
+                _onCastEffects[i].Apply(caster, target, this);
+        }
+
         public void Apply(Character caster, Character target)
         {
-            target.ApplyDamage(Damage);
+            if (Damage > 0)
+                target.ApplyDamage(Damage);
 
             for (var i = 0; i < _onHitEffects.Count; i++)
                 _onHitEffects[i].Apply(caster, target, this);

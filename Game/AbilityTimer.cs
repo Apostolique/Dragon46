@@ -25,6 +25,7 @@ namespace GameProject
             _ability = ability;
 
             _timeRemaining = _ability.CastTime;
+            _ability.Cast(caster, target);
         }
 
         public bool Update(GameTime gameTime)

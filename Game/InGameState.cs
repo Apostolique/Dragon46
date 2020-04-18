@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace GameProject
 {
@@ -20,7 +21,7 @@ namespace GameProject
 
         public override void Draw()
         {
-            //_sceneManager.Draw(spriteBatch);
+            throw new NotImplementedException("Draw _sceneManager");
         }
     }
 }
