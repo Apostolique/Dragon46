@@ -28,7 +28,7 @@ namespace GameProject {
         protected override void Update(GameTime gameTime) {
             InputHelper.UpdateSetup();
 
-            if (_quit.Pressed())
+            if (Triggers.Quit.Pressed())
                 Exit();
 
             // TODO: Add your update logic here
@@ -49,11 +49,5 @@ namespace GameProject {
         GraphicsDeviceManager _graphics;
         SpriteBatch _s;
         Backgrounds _backgrounds;
-
-        ConditionComposite _quit =
-            new ConditionComposite(
-                new ConditionSet(new ConditionKeyboard(Keys.Escape)),
-                new ConditionSet(new ConditionGamePad(GamePadButton.Back, 0))
-            );
     }
 }
