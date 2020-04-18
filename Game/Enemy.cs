@@ -18,6 +18,6 @@ namespace GameProject
     public class Enemy
     {
         protected EnemyType _enemyType;
-        protected EnemyType EnemyType { get => _enemyType; }
+        public EnemyType EnemyType { get => _enemyType; }
     }
 }

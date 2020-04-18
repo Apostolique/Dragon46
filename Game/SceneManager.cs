@@ -102,8 +102,8 @@ namespace GameProject
 
             for (var i = 0; i < nextEncounter.Enemies.Count; i++)
             {
-                var enemyData = nextEncounter.Enemies[i];
-                var newEnemy = new Character(enemyData, enemySlot);
+                var enemy = nextEncounter.Enemies[i];
+                var newEnemy = new Character(enemy.EnemyType, enemySlot);
                 _characters.Add(newEnemy);
                 enemySlot++;
             }
