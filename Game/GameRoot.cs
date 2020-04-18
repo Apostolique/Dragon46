@@ -20,6 +20,7 @@ namespace GameProject {
         protected override void LoadContent() {
             _s = new SpriteBatch(GraphicsDevice);
 
+            _backgrounds = new Backgrounds(GraphicsDevice);
             // TODO: use this.Content to load your game content here
             InputHelper.Setup(this);
         }
@@ -40,12 +41,14 @@ namespace GameProject {
             GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
+            _backgrounds.Draw();
 
             base.Draw(gameTime);
         }
 
         GraphicsDeviceManager _graphics;
         SpriteBatch _s;
+        Backgrounds _backgrounds;
 
         ConditionComposite _quit =
             new ConditionComposite(
