@@ -14,12 +14,16 @@ namespace GameProject {
 
             _infiniteObjects.Add(new InfiniteObjects(Assets.Sky, _furthest, 10));
 
+            var groundScale = 6;
+
             for (int i = _furthest + 1; i < 0; i++) {
-                _infiniteObjects.Add(new InfiniteObjects(Assets.Ground, i, 6, 0));
+                for (int j = 0; j < mapLength; j += (Assets.Ground.Width - 40) * groundScale) {
+                    Quadtree<BackgroundObjects>.Add(new BackgroundObjects(j, 0, i, groundScale, Assets.Ground, j));
+                }
             }
 
             for (int i = 0; i < 300; i++) {
-                Quadtree<BackgroundObjects>.Add(new BackgroundObjects(_r.Next(0, mapLength), -Assets.Bush.Height, _r.Next(_furthest + 1, 0), Assets.Bush));
+                Quadtree<BackgroundObjects>.Add(new BackgroundObjects(_r.Next(0, mapLength), -Assets.Bush.Height, _r.Next(_furthest + 1, 0), 1f, Assets.Bush));
             }
         }
 
@@ -32,7 +36,7 @@ namespace GameProject {
                 backgroundObject => backgroundObject,
                 (z, backgroundObjects) => new {
                     Z = z,
-                    BackgroundObjects = backgroundObjects
+                    BackgroundObjects = backgroundObjects.OrderBy(o => o.Depth)
                 }
             ).OrderBy(l => l.Z);
 
