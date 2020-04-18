@@ -2,7 +2,7 @@ namespace GameProject
 {
     public class EnemyType : BaseCharacterType
     {
-        public EnemyType(CharacterType type, int maxHP, string name) : base(type, maxHP, name)
+        public EnemyType(CharacterType type, int maxHP, string name, int baseArmour) : base(type, maxHP, name, baseArmour)
         {
 
         }

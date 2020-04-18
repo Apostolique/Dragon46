@@ -5,6 +5,7 @@ namespace GameProject
     public class StatusEffect
     {
         protected Character _owner;
+        public Character Owner { get => _owner; }
 
         protected int _timeRemaining;
         public int TimeRemaining { get => _timeRemaining; }

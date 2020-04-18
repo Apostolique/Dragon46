@@ -88,7 +88,7 @@ namespace GameProject
             for (var i = 0; i < _characters.Count; i++)
             {
                 if (!_characters[i].Dead)
-                    _characters[i].Draw(spriteBatch, _slotPositions[_characters[i].Slot]);
+                    _characters[i].Draw(spriteBatch);
             }
         }
 

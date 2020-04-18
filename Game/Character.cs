@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 
 namespace GameProject
 {
@@ -17,8 +18,12 @@ namespace GameProject
         protected Vector2 _drawPosition = Vector2.Zero;
 
         protected int _maxHP;
+        protected int _baseArmour;
         protected int _currentHP;
         public int CurrentHP { get => _currentHP; }
+        public int BaseArmour { get => _baseArmour; }
+
+        public int AddedArmour { get; set; }
 
         protected bool _dead;
         public bool Dead { get => _dead; }
@@ -33,6 +38,8 @@ namespace GameProject
 
         protected StatusEffect _statusEffect;
         public StatusEffect StatusEffect { get => _statusEffect; }
+
+        protected List<Buff> _buffs;
 
         public Character(BaseCharacterType data, bool enemy, int slot, Vector2 drawPosition)
         {
@@ -56,9 +63,14 @@ namespace GameProject
             _statusEffect?.Update(gameTime);
             if (_statusEffect != null && _statusEffect.Finished)
                 _statusEffect = null;
+
+            for (var i = 0; i < _buffs.Count; i++)
+                _buffs[i].Update(gameTime);
+
+            _buffs.RemoveAll(b => b.Finished);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 position)
+        public void Draw(SpriteBatch spriteBatch)
         {
 
         }
@@ -86,6 +98,12 @@ namespace GameProject
                 _currentHP = _maxHP;
         }
 
+        public void ApplyBuff(Buff buff)
+        {
+            buff.Apply();
+            _buffs.Add(buff);
+        }
+
         public void AbilityFinished()
         {
             _castingAbility = null;
@@ -97,6 +115,11 @@ namespace GameProject
                 return;
 
             _castingAbility = castAbility;
+        }
+
+        public void ApplyStatusEffect(StatusEffect effect)
+        {
+            _statusEffect = effect;
         }
 
         public void ApplyStatusEffect(StatusEffectType type)

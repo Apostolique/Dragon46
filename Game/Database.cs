@@ -13,7 +13,14 @@ namespace GameProject
 
     public enum AbilityType
     {
-        Defend
+        // player abilities
+        Heal,
+        StoneSkin,
+        Silence,
+        // party abilities
+        Defend,
+        // enemy abilities
+        BasicEnemyAttack,
     }
 
     public enum StatusEffectType
@@ -37,7 +44,15 @@ namespace GameProject
                     AbilityType.Defend,
                     new Ability()
                     {
-                        Name = "Defend"
+                        Name = "Defend",
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                AddCasterArmour = 5,
+                                Duration = 10000
+                            }
+                        }
                     }
                 },
             };
@@ -62,7 +77,7 @@ namespace GameProject
             {
                 {
                     CharacterType.Goblin,
-                    new EnemyType(type: CharacterType.Goblin, maxHP: 100, name: "Goblin")
+                    new EnemyType(type: CharacterType.Goblin, maxHP: 100, name: "Goblin", baseArmour: 0)
                 }
             };
 
@@ -70,19 +85,19 @@ namespace GameProject
             {
                 {
                     CharacterType.Cleric,
-                    new HeroType(type: CharacterType.Cleric, maxHP: 100, name: "Cleric")
+                    new HeroType(type: CharacterType.Cleric, maxHP: 100, name: "Cleric", baseArmour: 0)
                 },
                 {
                     CharacterType.Wizard,
-                    new HeroType(type: CharacterType.Wizard, maxHP: 90, name: "Wizard")
+                    new HeroType(type: CharacterType.Wizard, maxHP: 90, name: "Wizard", baseArmour: 0)
                 },
                 {
                     CharacterType.Archer,
-                    new HeroType(type: CharacterType.Archer, maxHP: 120, name: "Archer")
+                    new HeroType(type: CharacterType.Archer, maxHP: 120, name: "Archer", baseArmour: 0)
                 },
                 {
                     CharacterType.Warrior,
-                    new HeroType(type: CharacterType.Warrior, maxHP: 200, name: "Warrior")
+                    new HeroType(type: CharacterType.Warrior, maxHP: 200, name: "Warrior", baseArmour: 0)
                 }
             };
         }
