@@ -10,7 +10,7 @@ namespace GameProject
         protected Random _rng;
         protected List<Encounter> _encounters;
         protected int _currentEncounter;
-        public Encounter CurrentEncounter { get => _currentEncounter > _encounters.Count ? null : _encounters[_currentEncounter]; }
+        public Encounter CurrentEncounter { get => _currentEncounter >= _encounters.Count ? null : _encounters[_currentEncounter]; }
 
         public void Load(Random rng)
         {
