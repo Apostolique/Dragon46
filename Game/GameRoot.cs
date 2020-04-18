@@ -5,6 +5,8 @@ using Apos.Input;
 
 namespace GameProject {
     public class GameRoot : Game {
+        protected GameState _currentState;
+
         public GameRoot() {
             _graphics = new GraphicsDeviceManager(this);
             IsMouseVisible = true;
@@ -19,6 +21,8 @@ namespace GameProject {
         }
 
         protected override void LoadContent() {
+            _currentState = new MainMenuState(GraphicsDevice);
+
             _s = new SpriteBatch(GraphicsDevice);
 
             Assets.Setup(Content);
@@ -33,6 +37,23 @@ namespace GameProject {
             if (Triggers.Quit.Pressed())
                 Exit();
 
+            var nextState = _currentState.Update(gameTime);
+
+            switch (nextState)
+            {
+                case GameStateType.MainMenu:
+                    {
+                        _currentState = new MainMenuState(GraphicsDevice);
+                    }
+                    break;
+
+                case GameStateType.InGame:
+                    {
+                        _currentState = new InGameState(GraphicsDevice);
+                    }
+                    break;
+            }
+
             // TODO: Add your update logic here
             CameraWrapper.Update(gameTime);
 
@@ -42,6 +63,8 @@ namespace GameProject {
 
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.Black);
+
+            _currentState.Draw();
 
             // TODO: Add your drawing code here
             _backgrounds.Draw();
