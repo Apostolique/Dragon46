@@ -32,10 +32,13 @@ namespace GameProject
             if (_finished)
                 return _finished;
 
+            _timeRemaining -= gameTime.ElapsedGameTime.Milliseconds;
+
             if (_timeRemaining < 0)
             {
                 _finished = true;
                 _ability.Apply(_caster, _target);
+                _caster.AbilityFinished();
             }
 
             return _finished;
