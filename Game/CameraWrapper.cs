@@ -14,6 +14,12 @@ namespace GameProject {
             if (Triggers.CameraRight.Held()) {
                 CameraWrapper.Camera.XY -= new Vector2(0.2f * gameTime.ElapsedGameTime.Milliseconds, 0);
             }
+            if (Triggers.CameraUp.Held()) {
+                CameraWrapper.Camera.XY += new Vector2(0, 0.2f * gameTime.ElapsedGameTime.Milliseconds);
+            }
+            if (Triggers.CameraDown.Held()) {
+                CameraWrapper.Camera.XY -= new Vector2(0, 0.2f * gameTime.ElapsedGameTime.Milliseconds);
+            }
         }
 
         public static Camera Camera;
