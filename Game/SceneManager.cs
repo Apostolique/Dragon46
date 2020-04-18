@@ -89,9 +89,23 @@ namespace GameProject
 
         protected void MoveNextEncounter()
         {
-            if (_gameManager.NextEncounter() == null)
+            var nextEncounter = _gameManager.NextEncounter();
+
+            if (nextEncounter == null)
             {
                 // TODO : player won the game
+            }
+
+            _characters.RemoveAll(c => c.Enemy);
+
+            var enemySlot = 4;
+
+            for (var i = 0; i < nextEncounter.Enemies.Count; i++)
+            {
+                var enemyData = nextEncounter.Enemies[i];
+                var newEnemy = new Character(enemyData, enemySlot);
+                _characters.Add(newEnemy);
+                enemySlot++;
             }
         }
 

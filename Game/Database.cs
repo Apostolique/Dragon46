@@ -26,7 +26,7 @@ namespace GameProject
         private static Dictionary<AbilityType, Ability> _abilities;
         private static Dictionary<CharacterType, List<AbilityType>> _castableAbilities;
         private static Dictionary<StatusEffectType, Type> _statusEffects;
-        private static Dictionary<CharacterType, Enemy> _enemies;
+        private static Dictionary<CharacterType, EnemyType> _enemies;
 
         public static void Load()
         {
@@ -54,11 +54,11 @@ namespace GameProject
                 { StatusEffectType.Poison, typeof(PoisonStatus) }
             };
 
-            _enemies = new Dictionary<CharacterType, Enemy>()
+            _enemies = new Dictionary<CharacterType, EnemyType>()
             {
                 {
                     CharacterType.Goblin,
-                    new Enemy(){ }
+                    new EnemyType(type: CharacterType.Goblin, maxHP: 100)
                 }
             };
         }

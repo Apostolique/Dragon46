@@ -36,6 +36,22 @@ namespace GameProject
             Slot = slot;
         }
 
+        public Character(HeroType heroData, int slot)
+        {
+            _enemy = true;
+            _type = heroData.Type;
+            _maxHP = heroData.MaxHP;
+            Slot = slot;
+        }
+
+        public Character(EnemyType enemyData, int slot)
+        {
+            _enemy = true;
+            _type = enemyData.Type;
+            _maxHP = enemyData.MaxHP;
+            Slot = slot;
+        }
+
         public void Update(GameTime gameTime)
         {
             _castingAbility?.Update(gameTime);

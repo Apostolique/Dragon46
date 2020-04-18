@@ -8,5 +8,10 @@ namespace GameProject
         public int Difficulty { get => _difficulty; }
 
         public List<Enemy> Enemies;
+
+        public Encounter()
+        {
+            Enemies = new List<Enemy>();
+        }
     }
 }
