@@ -14,12 +14,13 @@ namespace GameProject
         
         public override GameStateType Update(GameTime gameTime)
         {
+            _sceneManager.Update(gameTime);
             return GameStateType.None;
         }
 
         public override void Draw()
         {
-            
+            //_sceneManager.Draw(spriteBatch);
         }
     }
 }
