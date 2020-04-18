@@ -1,7 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Dcrew.MonoGame._2D_Spatial_Partition;
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject {
@@ -12,30 +12,20 @@ namespace GameProject {
 
             _s = new SpriteBatch(g);
 
+            _infiniteObjects.Add(new InfiniteObjects(Assets.Sky, _furthest, 10));
+
+            for (int i = _furthest + 1; i < 0; i++) {
+                _infiniteObjects.Add(new InfiniteObjects(Assets.Ground, i, 6, 0));
+            }
+
             for (int i = 0; i < 300; i++) {
                 Quadtree<BackgroundObjects>.Add(new BackgroundObjects(_r.Next(0, mapLength), -Assets.Bush.Height, _r.Next(_furthest + 1, 0), Assets.Bush));
             }
         }
 
         public void Draw() {
-            Rectangle view = _s.GraphicsDevice.Viewport.Bounds;
-            Vector2 size = new Vector2(Assets.Sky.Width, Assets.Sky.Height);
-            var scale = 10;
-            var posOffset = new Vector2(0, 0);
-
-            Matrix m =
-                Matrix.CreateScale(scale) *
-                Matrix.CreateScale(size.X, size.Y, 1) *
-                Matrix.CreateTranslation(posOffset.X, posOffset.Y, 1) *
-                CameraWrapper.Camera.View(_furthest) *
-                Matrix.CreateScale(1f / size.X, 1f / size.Y, 1);
-
-            Assets.Infinite.Parameters["ScrollMatrix"].SetValue(Matrix.Invert(m));
-            Assets.Infinite.Parameters["ViewportSize"].SetValue(new Vector2(view.Width, view.Height));
-
-            _s.Begin(samplerState: SamplerState.LinearWrap, effect: Assets.Infinite);
-            _s.Draw(Assets.Sky, new Vector2(0, 0), view, Color.White);
-            _s.End();
+            foreach (var e in _infiniteObjects)
+                e.Draw(_s);
 
             var byLayer = Quadtree<BackgroundObjects>.Query(Quadtree<BackgroundObjects>.Bounds).GroupBy(
                 backgroundObject => backgroundObject.Z,
@@ -56,6 +46,7 @@ namespace GameProject {
 
         SpriteBatch _s;
         Random _r;
+        List<InfiniteObjects> _infiniteObjects = new List<InfiniteObjects>();
         int _furthest = -5;
     }
 }

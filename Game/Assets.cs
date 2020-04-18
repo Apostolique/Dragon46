@@ -6,11 +6,13 @@ namespace GameProject {
         public static void Setup(ContentManager content) {
             Infinite = content.Load<Effect>("infinite");
             Sky = content.Load<Texture2D>("sky");
+            Ground = content.Load<Texture2D>("ground");
             Bush = content.Load<Texture2D>("bush");
         }
 
         public static Effect Infinite;
         public static Texture2D Sky;
+        public static Texture2D Ground;
         public static Texture2D Bush;
     }
 }
