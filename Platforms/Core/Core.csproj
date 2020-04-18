@@ -9,6 +9,7 @@
     <PublishReadyToRun>false</PublishReadyToRun>
     <TieredCompilation>false</TieredCompilation>
     <RuntimeIdentifiers>win10-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+    <BeautyExcludes>SDL2*;libSDL2*;sdl2*;soft_oal*;openal*</BeautyExcludes>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +17,7 @@
     <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.8.0.2" />
     <PackageReference Include="Apos.Content.Read" Version="0.1.1" />
     <PackageReference Include="Apos.Input" Version="0.8.3" />
+    <PackageReference Include="nulastudio.NetCoreBeauty" Version="1.2.7"/>
   </ItemGroup>
 
   <ItemGroup>
