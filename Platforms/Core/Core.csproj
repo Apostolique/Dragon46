@@ -24,6 +24,7 @@
     <PackageReference Include="Dcrew.MonoGame.2D_Spatial_Partition" Version="1.3.2" />
     <PackageReference Include="Dcrew.ObjectPool" Version="1.0.1" />
     <PackageReference Include="MonoGame.Extended" Version="3.7.0" />
+    <PackageReference Include="MonoGame.Extended.Tweening" Version="3.7.0" />
   </ItemGroup>
 
   <ItemGroup>
