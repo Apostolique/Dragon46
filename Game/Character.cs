@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GameProject
+﻿namespace GameProject
 {
     public class Character
     {
@@ -10,6 +8,9 @@ namespace GameProject
 
         protected bool _dead;
         public bool Dead { get => _dead; }
+
+        protected AbilityTimer _castingAbility;
+        public AbilityTimer CastingAbility { get => _castingAbility; }
 
         public Character() { }
 
@@ -24,6 +25,16 @@ namespace GameProject
                 _currentHP = 0;
                 _dead = true;
             }
+        }
+
+        public void ApplyHeal(int heal)
+        {
+            if (_dead)
+                return;
+
+            _currentHP += heal;
+            if (_currentHP > _maxHP)
+                _currentHP = _maxHP;
         }
     }
 }

@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using System;
 
 namespace GameProject
 {
@@ -36,10 +35,18 @@ namespace GameProject
             if (_timeRemaining < 0)
             {
                 _finished = true;
-                _ability.Apply(_target);
+                _ability.Apply(_caster, _target);
             }
 
             return _finished;
+        }
+
+        public void AddTimeRemaining(int time)
+        {
+            if (_finished)
+                return;
+
+            _timeRemaining += time;
         }
     }
 }

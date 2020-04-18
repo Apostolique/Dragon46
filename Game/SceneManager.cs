@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
 
 namespace GameProject
@@ -16,14 +15,10 @@ namespace GameProject
 
         public void Update(GameTime gameTime)
         {
-            var removeTimers = new List<AbilityTimer>();
-
             for (var i = 0; i < _abilityTimers.Count; i++)
-                if (_abilityTimers[i].Update(gameTime))
-                    removeTimers.Add(_abilityTimers[i]);
+                _abilityTimers[i].Update(gameTime);
 
-            for (var i = 0; i < removeTimers.Count; i++)
-                _abilityTimers.Remove(removeTimers[i]);
+            _abilityTimers.RemoveAll(t => t.Finished);
         }
     }
 }
