@@ -11,6 +11,7 @@ namespace GameProject {
             Sky = content.Load<Texture2D>("sky");
             Ground = content.Load<Texture2D>("grass_and_path");
             Bush = content.Load<Texture2D>("bush");
+            Tree = content.Load<Texture2D>("tree");
 
             UIFont = DynamicSpriteFont.FromTtf(TitleContainer.OpenStream("Content/Lato-Bold.ttf"), 16);
 
@@ -88,6 +89,7 @@ namespace GameProject {
         public static Texture2D Sky;
         public static Texture2D Ground;
         public static Texture2D Bush;
+        public static Texture2D Tree;
 
         public static DynamicSpriteFont UIFont;
 

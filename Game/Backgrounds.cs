@@ -17,14 +17,18 @@ namespace GameProject {
 
             var groundScale = 1;
 
+            var maxDepth = 0;
+
             for (int i = _furthest + 1; i <= 0; i++) {
                 for (int j = 0; j < mapLength; j += (Assets.Ground.Width - 100) * groundScale) {
-                    Quadtree<BackgroundObjects>.Add(new BackgroundObjects(j, 0, i, groundScale, Assets.Ground, j));
+                    maxDepth++;
+                    Quadtree<BackgroundObjects>.Add(new BackgroundObjects(j, 0, i, groundScale, Assets.Ground, maxDepth));
                 }
             }
 
-            for (int i = 0; i < 300; i++) {
-                Quadtree<BackgroundObjects>.Add(new BackgroundObjects(_r.Next(0, mapLength), -Assets.Bush.Height, _r.Next(_furthest + 1, 0), 1f, Assets.Bush));
+            for (int i = 0; i < 130; i++) {
+                var scale = (float)(_r.NextDouble() * 0.8 + 0.2);
+                Quadtree<BackgroundObjects>.Add(new BackgroundObjects(_r.Next(0, mapLength), -(int)(Assets.Tree.Height * scale) + 250, _r.Next(_furthest + 1, 1), scale, Assets.Tree, maxDepth + (int)((1 - scale) * 100)));
             }
         }
 
