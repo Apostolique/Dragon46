@@ -28,7 +28,7 @@ namespace GameProject {
             }
 
             for (int i = 0; i < 130; i++) {
-                var scale = (float)(Core.R.NextDouble() * 0.8 + 0.2);
+                var scale = (float)(Core.R.NextDouble() * 0.4 + 0.6);
                 Quadtree<BackgroundObjects>.Add(new BackgroundObjects(Core.R.Next(0, mapLength), -(int)(Assets.Tree.Height * scale) + 250, Core.R.Next(_furthest + 1, 1), scale, Assets.Tree, true, maxDepth + (int)((1 - scale) * 100)));
             }
         }
