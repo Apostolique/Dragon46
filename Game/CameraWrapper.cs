@@ -8,18 +8,11 @@ namespace GameProject {
         }
 
         public static void Update(GameTime gameTime) {
-            if (Triggers.CameraLeft.Held()) {
-                CameraWrapper.Camera.XY -= new Vector2(0.2f * gameTime.ElapsedGameTime.Milliseconds, 0);
+            if (Triggers.CameraLeft.Pressed()) {
+                GoToPrevEncounter(2000);
             }
             if (Triggers.CameraRight.Held()) {
-                CameraWrapper.Camera.XY += new Vector2(0.2f * gameTime.ElapsedGameTime.Milliseconds, 0);
-            }
-            if (Triggers.CameraDown.Held()) {
-                CameraWrapper.Camera.XY += new Vector2(0, 0.2f * gameTime.ElapsedGameTime.Milliseconds);
-            }
-
-            if (Triggers.CameraNext.Pressed()) {
-                GoToNextEncounter();
+                GoToNextEncounter(2000);
             }
 
             if (CameraTween != null) {
@@ -31,8 +24,11 @@ namespace GameProject {
             }
         }
 
-        public static void GoToNextEncounter() {
-            CameraTween = new Tween(2000, Camera.X, Camera.X + 2000, false);
+        public static void GoToPrevEncounter(float duration, float distance = 2000) {
+            CameraTween = new Tween(duration, Camera.X, Camera.X - distance, false);
+        }
+        public static void GoToNextEncounter(float duration, float distance = 2000) {
+            CameraTween = new Tween(duration, Camera.X, Camera.X + distance, false);
         }
 
         public static Camera Camera;
