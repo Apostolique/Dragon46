@@ -22,6 +22,10 @@ namespace GameProject {
             }
         }
 
+        public static void GoToNextEncounter() {
+
+        }
+
         public static Camera Camera;
     }
 }
