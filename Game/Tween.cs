@@ -9,7 +9,7 @@ namespace GameProject {
             Target = target;
             Bounce = bounce;
 
-            Interpolation = (a, b) => MathHelper.Lerp(a, b, _percent);
+            Interpolation = (a, b, c) => MathHelper.Lerp(a, b, c);
         }
 
         public bool Bounce {
@@ -24,7 +24,7 @@ namespace GameProject {
             get;
             set;
         }
-        public float Value => Interpolation(Start, Target);
+        public float Value => Interpolation(Start, Target, _percent);
         public float Start {
             get;
             set;
@@ -33,7 +33,7 @@ namespace GameProject {
             get;
             set;
         }
-        public Func<float, float, float> Interpolation {
+        public Func<float, float, float, float> Interpolation {
             get;
             set;
         }
