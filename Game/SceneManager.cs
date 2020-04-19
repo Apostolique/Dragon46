@@ -75,7 +75,7 @@ namespace GameProject
                 if (hero != null && !hero.Dead)
                     heroesAlive += 1;
 
-            if (heroesAlive == 0)
+            if (heroesAlive < 4)
             {
                 return GameStateType.GameOver;
             }

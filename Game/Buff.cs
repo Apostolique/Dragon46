@@ -12,6 +12,7 @@ namespace GameProject
         /// </summary>
         protected int _timeRemaining;
         public int TimeRemaining { get => _timeRemaining; }
+        protected int _totalDuration;
 
         protected bool _finished;
         public bool Finished { get => _finished; }
@@ -24,6 +25,7 @@ namespace GameProject
 
         public Buff(Character owner, int duration, string name)
         {
+            _totalDuration = duration;
             _owner = owner;
             _timeRemaining = duration;
             _name = name;
@@ -43,6 +45,11 @@ namespace GameProject
             }
 
             return _finished;
+        }
+
+        public void ResetTimer()
+        {
+            _timeRemaining = _totalDuration;
         }
 
         public void Apply()

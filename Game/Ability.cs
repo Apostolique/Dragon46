@@ -15,6 +15,8 @@ namespace GameProject
         public bool TargetFriendly { get; set; }
         public bool TargetSelf { get; set; }
 
+        public int CooldownDuration { get; set; } = 600;
+
         public List<AbilityEffect> OnCastEffects = new List<AbilityEffect>();
         public List<AbilityEffect> OnHitEffects = new List<AbilityEffect>();
 
@@ -36,7 +38,22 @@ namespace GameProject
         public void Apply(Character caster, Character target)
         {
             if (Damage > 0)
-                target.ApplyDamage(DamageType, Damage);
+            {
+                var modifiedDamage = Damage;
+
+                if (DamageType == DamageType.Physical)
+                {
+                    var totalStrength = caster.BaseStrength + caster.AddedStrength;
+                    modifiedDamage = (int)(Damage + (Damage * (totalStrength / 100f)));
+                }
+                else if (DamageType == DamageType.Magical)
+                {
+                    var totalIntelligence = caster.BaseIntelligence + caster.AddedIntelligence;
+                    modifiedDamage = (int)(Damage + (Damage * (totalIntelligence / 100f)));
+                }
+
+                target.ApplyDamage(DamageType, modifiedDamage);
+            }
 
             for (var i = 0; i < OnHitEffects.Count; i++)
             {

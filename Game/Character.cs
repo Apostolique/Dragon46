@@ -27,13 +27,19 @@ namespace GameProject
         protected int _baseArmour;
         protected int _baseMagicResistance;
         protected int _currentHP;
+        protected int _baseStrength;
+        protected int _baseIntelligence;
         public int MaxHP { get => _maxHP; }
         public int CurrentHP { get => _currentHP; }
         public int BaseArmour { get => _baseArmour; }
         public int BaseMagicResistance { get => _baseMagicResistance; }
+        public int BaseStrength { get => _baseStrength; }
+        public int BaseIntelligence { get => _baseIntelligence; }
 
         public int AddedArmour { get; set; }
         public int AddedMagicResistance { get; set; }
+        public int AddedStrength { get; set; }
+        public int AddedIntelligence { get; set; }
 
         protected bool _dead;
         public bool Dead { get => _dead; }
@@ -50,7 +56,7 @@ namespace GameProject
         public AbilityTimer CastingAbility { get => _castingAbility; }
         public bool IsCasting { get => (_castingAbility == null || _castingAbility.Finished) ? false : true; }
 
-        protected int _castingCooldownDuration = 600;
+        //protected int _castingCooldownDuration = 600;
         protected int _castingCooldownTimer;
         public bool CastingCooldown { get => _castingCooldownTimer > 0; }
 
@@ -70,6 +76,8 @@ namespace GameProject
             _name = data.Name;
             Slot = slot;
             _player = player;
+            _baseStrength = data.BaseStrength;
+            _baseIntelligence = data.BaseIntelligence;
 
             _baseArmour = data.BaseArmour;
             _baseMagicResistance = data.BaseMagicResistance;
@@ -174,18 +182,22 @@ namespace GameProject
 
         public bool ApplyBuff(Buff buff)
         {
-            if (_buffs.Where(e => e.Name == buff.Name).Count() > 0)
+            var existingBuff = _buffs.Where(e => e.Name == buff.Name).FirstOrDefault();
+            if (existingBuff != null)
+            {
+                existingBuff.ResetTimer();
                 return false;
+            }
 
             buff.Apply();
             _buffs.Add(buff);
             return true;
         }
 
-        public void AbilityFinished()
+        public void AbilityFinished(Ability ability)
         {
             _castingAbility = null;
-            _castingCooldownTimer = _castingCooldownDuration;
+            _castingCooldownTimer = ability.CooldownDuration;
         }
 
         public void CastAbility(AbilityTimer castAbility)
@@ -198,8 +210,12 @@ namespace GameProject
 
         public bool ApplyStatusEffect(StatusEffect effect)
         {
-            if (_statusEffects.Where(e => e.Type == effect.Type).Count() > 0)
+            var existingEffect = _statusEffects.Where(e => e.Type == effect.Type).FirstOrDefault();
+            if (existingEffect != null)
+            {
+                existingEffect.ResetTimer();
                 return false;
+            }
 
             _statusEffects.Add(effect);
             return true;
