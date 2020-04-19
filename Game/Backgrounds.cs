@@ -8,7 +8,6 @@ using Microsoft.Xna.Framework.Graphics;
 namespace GameProject {
     public class Backgrounds {
         public Backgrounds(GraphicsDevice g) {
-            _r = new Random();
             int mapLength = 20000;
 
             _s = new SpriteBatch(g);
@@ -22,13 +21,13 @@ namespace GameProject {
             for (int i = _furthest + 1; i <= 0; i++) {
                 for (int j = 0; j < mapLength; j += (Assets.Ground.Width - 100) * groundScale) {
                     maxDepth++;
-                    Quadtree<BackgroundObjects>.Add(new BackgroundObjects(j, 0, i, groundScale, Assets.Ground, maxDepth));
+                    Quadtree<BackgroundObjects>.Add(new BackgroundObjects(j, 0, i, groundScale, Assets.Ground, false, maxDepth));
                 }
             }
 
             for (int i = 0; i < 130; i++) {
-                var scale = (float)(_r.NextDouble() * 0.8 + 0.2);
-                Quadtree<BackgroundObjects>.Add(new BackgroundObjects(_r.Next(0, mapLength), -(int)(Assets.Tree.Height * scale) + 250, _r.Next(_furthest + 1, 1), scale, Assets.Tree, maxDepth + (int)((1 - scale) * 100)));
+                var scale = (float)(Core.R.NextDouble() * 0.8 + 0.2);
+                Quadtree<BackgroundObjects>.Add(new BackgroundObjects(Core.R.Next(0, mapLength), -(int)(Assets.Tree.Height * scale) + 250, Core.R.Next(_furthest + 1, 1), scale, Assets.Tree, true, maxDepth + (int)((1 - scale) * 100)));
             }
         }
 
@@ -59,7 +58,6 @@ namespace GameProject {
         }
 
         SpriteBatch _s;
-        Random _r;
         List<InfiniteObjects> _infiniteObjects = new List<InfiniteObjects>();
         int _furthest = -5;
     }

@@ -17,12 +17,14 @@ namespace GameProject
 
             _backgrounds = new Backgrounds(graphics);
         }
-        
+
         public override GameStateType Update(GameTime gameTime)
         {
             Core.Update(gameTime);
 
             var newState = _sceneManager.Update(gameTime);
+
+            _backgrounds.Update(gameTime);
 
             return newState;
         }
