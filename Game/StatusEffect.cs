@@ -33,7 +33,10 @@ namespace GameProject
             _timeRemaining -= gameTime.ElapsedGameTime.Milliseconds;
 
             if (_timeRemaining < 0)
+            {
                 _finished = true;
+                Finish();
+            }
 
             return _finished;
         }
@@ -41,6 +44,26 @@ namespace GameProject
         public virtual void ResetTimer()
         {
             _timeRemaining = _totalDuration;
+        }
+
+        public virtual void Finish()
+        {
+
+        }
+    }
+
+    public class SilenceStatus : StatusEffect
+    {
+        public SilenceStatus(Character owner, int duration) : base(owner, duration)
+        {
+            Type = StatusEffectType.Silence;
+            _name = "Silence";
+            owner.ApplySilence();
+        }
+
+        public override void Finish()
+        {
+            Owner.RemoveSilence();
         }
     }
 

@@ -64,6 +64,9 @@ namespace GameProject
         protected int _castingCooldownTimer;
         public bool CastingCooldown { get => _castingCooldownTimer > 0; }
 
+        protected int _silenceTimer;
+        public bool Silenced;
+
         protected List<StatusEffect> _statusEffects;
         public List<StatusEffect> StatusEffects { get => _statusEffects; }
 
@@ -219,6 +222,20 @@ namespace GameProject
                 _currentHP = _maxHP;
         }
 
+        public void ApplySilence()
+        {
+            if (Silenced)
+                return;
+
+            Silenced = true;
+            _castingAbility = null;
+        }
+
+        public void RemoveSilence()
+        {
+            Silenced = false;
+        }
+
         public bool ApplyBuff(Buff buff)
         {
             var existingBuff = _buffs.Where(e => e.Name == buff.Name).FirstOrDefault();
@@ -242,6 +259,8 @@ namespace GameProject
         public void CastAbility(AbilityTimer castAbility)
         {
             if (_castingAbility != null)
+                return;
+            if (Silenced)
                 return;
 
             _castingAbility = castAbility;

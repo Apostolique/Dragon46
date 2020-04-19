@@ -34,7 +34,7 @@ namespace GameProject
 
     public enum StatusEffectType
     {
-        Sleep, Stun, Poison, HealOverTime
+        Silence, Poison, HealOverTime
     }
 
     public enum DamageType
@@ -131,12 +131,12 @@ namespace GameProject
                     {
                         AbilityType = AbilityType.Silence,
                         Name = "Silence",
-                        CastTime = 2500,
+                        CastTime = 3500,
                         OnHitEffects = new List<AbilityEffect>()
                         {
                             new AbilityEffect()
                             {
-                                Silence = 2500
+                                Silence = 2000
                             }
                         }
                     }

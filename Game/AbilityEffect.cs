@@ -41,26 +41,32 @@ namespace GameProject
 
             if (Poison > 0)
             {
-                var poisonEffect = new PoisonStatus(target, Duration)
+                var poisonStatus = new PoisonStatus(target, Duration)
                 {
                     DamagePerTick = Poison,
                 };
 
-                poisonEffect.Start(1000);
+                poisonStatus.Start(1000);
 
-                target.ApplyStatusEffect(poisonEffect);
+                target.ApplyStatusEffect(poisonStatus);
             }
 
             if (HealOverTime > 0)
             {
-                var healEffect = new HealOverTimeStatus(target, Duration)
+                var healStatus = new HealOverTimeStatus(target, Duration)
                 {
                     HealPerTick = HealOverTime,
                 };
 
-                healEffect.Start(1000);
+                healStatus.Start(1000);
 
-                target.ApplyStatusEffect(healEffect);
+                target.ApplyStatusEffect(healStatus);
+            }
+
+            if (Silence > 0)
+            {
+                var silenceStatus = new SilenceStatus(target, Silence);
+                target.ApplyStatusEffect(silenceStatus);
             }
 
             if (SelfDamage > 0)
