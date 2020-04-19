@@ -6,7 +6,11 @@ using SpriteFontPlus;
 
 namespace GameProject {
     public static class Assets {
+        public static ContentManager Content;
+
         public static void Setup(ContentManager content) {
+            Content = content;
+
             Infinite = content.Load<Effect>("infinite");
             Sky = content.Load<Texture2D>("sky");
             Ground = content.Load<Texture2D>("grass_and_path");
