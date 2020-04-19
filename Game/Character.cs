@@ -18,7 +18,7 @@ namespace GameProject
         protected Vector2 _drawPosition = Vector2.Zero;
         public Vector2 DrawPosition { get => _drawPosition; }
 
-        protected const int _hitDuration = 300;
+        protected const int _hitDuration = 600;
         protected bool _isHit;
         protected int _hitTimer;
 
@@ -42,6 +42,10 @@ namespace GameProject
         protected AbilityTimer _castingAbility;
         public AbilityTimer CastingAbility { get => _castingAbility; }
         public bool IsCasting { get => (_castingAbility == null || _castingAbility.Finished) ? false : true; }
+
+        protected int _castingCooldownDuration = 600;
+        protected int _castingCooldownTimer;
+        public bool CastingCooldown { get => _castingCooldownTimer > 0; }
 
         protected StatusEffect _statusEffect;
         public StatusEffect StatusEffect { get => _statusEffect; }
@@ -87,6 +91,9 @@ namespace GameProject
                 if (_hitTimer <= 0)
                     _isHit = false;
             }
+
+            if (_castingCooldownTimer > 0)
+                _castingCooldownTimer -= gameTime.ElapsedGameTime.Milliseconds;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -143,6 +150,7 @@ namespace GameProject
         public void AbilityFinished()
         {
             _castingAbility = null;
+            _castingCooldownTimer = _castingCooldownDuration;
         }
 
         public void CastAbility(AbilityTimer castAbility)

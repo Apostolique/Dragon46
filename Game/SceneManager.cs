@@ -149,9 +149,11 @@ namespace GameProject
         {
             if (character == null)
                 return;
-            if (character.CastingAbility != null && !character.CastingAbility.Finished)
+            if (character.IsCasting)
                 return;
             if (character.Dead)
+                return;
+            if (character.CastingCooldown)
                 return;
 
             var abilities = Database.GetCharacterAbilities(character.Type);
