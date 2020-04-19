@@ -79,6 +79,8 @@ namespace GameProject {
                     break;
             }
 
+            Assets.SoundManager.Update();
+
             InputHelper.UpdateCleanup();
             base.Update(gameTime);
         }
