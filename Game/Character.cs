@@ -89,7 +89,7 @@ namespace GameProject
             _buffs = new List<Buff>();
             _statusEffects = new List<StatusEffect>();
 
-            _scaleTween = new Tween(1500, 1f, 0.95f, EasingFunctions.ExponentialInOut, true);
+            _scaleTween = new Tween(1200 + Core.R.Next(0, 500), 1f, 0.95f, EasingFunctions.ExponentialInOut, true);
         }
 
         public void Update(GameTime gameTime)

@@ -61,7 +61,7 @@ namespace GameProject
 
             _gameManager = new GameManager();
             _gameManager.Load(_rng);
-            
+
             _uiManager = new InGameUIManager(_graphics);
         }
 
@@ -120,7 +120,7 @@ namespace GameProject
 
         public void Draw()
         {
-            _spriteBatch.Begin(sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+            _spriteBatch.Begin(sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend);
 
             for (var i = 0; i < _characters.Count; i++)
             {
