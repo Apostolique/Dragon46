@@ -14,10 +14,16 @@ namespace GameProject
 
     public enum AbilityType
     {
+        None,
+
         // player abilities
-        Heal,
-        StoneSkin,
-        Silence,
+        HealingLight, // burst heal with long cast time
+        Regeneration, // heal over time with shorter cast time
+        StoneSkin, // add physical defence
+        MagicShield, // add magic resistance
+        Silence, // stop enemy abilities
+        Distract, // slow down current ability timer
+
         // party abilities
         Defend,
         BasicAttack,
@@ -50,6 +56,102 @@ namespace GameProject
         {
             _abilities = new Dictionary<AbilityType, Ability>()
             {
+                // player abilities
+                {
+                    AbilityType.HealingLight,
+                    new Ability()
+                    {
+                        Name = "Healing Light",
+                        CastTime = 5000,
+                        TargetFriendly = true,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                HitStun = 1000
+                            }
+                        }
+                    }
+                },
+                {
+                    AbilityType.Regeneration,
+                    new Ability()
+                    {
+                        Name = "Regeneration",
+                        CastTime = 2500,
+                        TargetFriendly = true,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                HealOverTime = 5
+                            }
+                        }
+                    }
+                },
+                {
+                    AbilityType.StoneSkin,
+                    new Ability()
+                    {
+                        Name = "Stone Skin",
+                        CastTime = 2000,
+                        TargetFriendly = true,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                AddTargetArmour = 35
+                            }
+                        }
+                    }
+                },
+                {
+                    AbilityType.MagicShield,
+                    new Ability()
+                    {
+                        Name = "Magic Shield",
+                        CastTime = 2000,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                AddTargetMagicResistance = 1000
+                            }
+                        }
+                    }
+                },
+                {
+                    AbilityType.Silence,
+                    new Ability()
+                    {
+                        Name = "Silence",
+                        CastTime = 2500,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                Silence = 2500
+                            }
+                        }
+                    }
+                },
+                {
+                    AbilityType.Distract,
+                    new Ability()
+                    {
+                        Name = "Distract",
+                        CastTime = 2500,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                HitStun = 1000
+                            }
+                        }
+                    }
+                },
+
+                // other characters
                 {
                     AbilityType.Defend,
                     new Ability()
@@ -61,8 +163,8 @@ namespace GameProject
                         {
                             new AbilityEffect()
                             {
-                                AddCasterArmour = 5,
-                                Duration = 5000
+                                AddCasterArmour = 20,
+                                Duration = 2500
                             }
                         }
                     }
@@ -126,7 +228,12 @@ namespace GameProject
                     CharacterType.Cleric,
                     new List<AbilityType>()
                     {
-                        AbilityType.Defend
+                        AbilityType.HealingLight,
+                        AbilityType.Regeneration,
+                        AbilityType.StoneSkin,
+                        AbilityType.MagicShield,
+                        AbilityType.Silence,
+                        AbilityType.Distract,
                     }
                 },
                 {

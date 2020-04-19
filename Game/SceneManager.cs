@@ -10,7 +10,8 @@ namespace GameProject
     {
         protected GraphicsDevice _graphics;
         protected SpriteBatch _spriteBatch;
-        protected int _internalScore;
+        
+        public static long InternalScore;
 
         protected Random _rng;
         protected GameManager _gameManager;
@@ -24,6 +25,10 @@ namespace GameProject
         protected bool _encounterTransition;
         protected bool _gameStarted;
 
+        protected int _currentWave;
+
+        protected AbilityType _playerSelectedAbility = AbilityType.None;
+
         protected List<Character> _heroCharacters
         {
             get { return _characters.Where(c => !c.Enemy).ToList(); }
@@ -36,20 +41,22 @@ namespace GameProject
 
         public SceneManager(GraphicsDevice graphics)
         {
+            InternalScore = 0;
+
             _graphics = graphics;
             _spriteBatch = new SpriteBatch(graphics);
             _rng = new Random();
 
             _slotPositions = new Vector2[8]
             {
-                new Vector2(50, 300), // player
-                new Vector2(200, 300), // wizard
-                new Vector2(350, 300), // archer
-                new Vector2(500, 300), // warrior
-                new Vector2(900, 300), // enemy 1
-                new Vector2(1050, 300), // enemy 2
-                new Vector2(1200, 300), // enemy 3
-                new Vector2(1350, 300), // enemy 4
+                new Vector2(100, 400), // player
+                new Vector2(250, 400), // wizard
+                new Vector2(400, 400), // archer
+                new Vector2(550, 400), // warrior
+                new Vector2(950, 400), // enemy 1
+                new Vector2(1100, 400), // enemy 2
+                new Vector2(1250, 400), // enemy 3
+                new Vector2(1400, 400), // enemy 4
             };
 
             _characters = new List<Character>();
@@ -67,7 +74,7 @@ namespace GameProject
 
         public GameStateType Update(GameTime gameTime)
         {
-            _internalScore += gameTime.ElapsedGameTime.Milliseconds;
+            InternalScore += gameTime.ElapsedGameTime.Milliseconds;
 
             for (var i = 0; i < _characters.Count; i++)
             {
@@ -158,6 +165,9 @@ namespace GameProject
                 if (enemySlot >= _slotPositions.Length)
                     continue;
             }
+
+            _currentWave += 1;
+            _uiManager.CurrentWave = _currentWave;
 
             return false;
         }

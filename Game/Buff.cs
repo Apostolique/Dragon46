@@ -22,6 +22,7 @@ namespace GameProject
 
         // effects
         public int AddArmour { get; set; }
+        public int AddMagicResistance { get; set; }
 
         public Buff(Character owner, int duration, string name)
         {
@@ -56,6 +57,9 @@ namespace GameProject
         {
             if (AddArmour > 0)
                 _owner.AddedArmour += AddArmour;
+
+            if (AddMagicResistance > 0)
+                _owner.AddedMagicResistance += AddMagicResistance;
         }
 
         public void Finish()
@@ -65,6 +69,13 @@ namespace GameProject
                 _owner.AddedArmour -= AddArmour;
                 if (_owner.AddedArmour < 0)
                     _owner.AddedArmour = 0;
+            }
+
+            if (AddMagicResistance > 0)
+            {
+                _owner.AddedMagicResistance -= AddMagicResistance;
+                if (_owner.AddedMagicResistance < 0)
+                    _owner.AddedMagicResistance = 0;
             }
         }
     }

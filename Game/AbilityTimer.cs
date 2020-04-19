@@ -7,6 +7,11 @@ namespace GameProject
         protected Character _caster;
         protected Character _target;
 
+        public Character Caster { get => _caster; }
+        public Character Target { get => _target; }
+
+        public bool TargettingSelf { get => _caster.Slot == _target.Slot; }
+
         /// <summary>
         /// In milliseconds
         /// </summary>
