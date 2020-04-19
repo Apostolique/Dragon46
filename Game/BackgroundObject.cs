@@ -44,9 +44,7 @@ namespace GameProject {
         }
 
         public void Draw(SpriteBatch s) {
-            //s.Draw(Texture, AABB, Texture.Bounds, Color.White, Angle, new Vector2(AABB.Width / 2, AABB.Height), SpriteEffects.None, 0);
             s.Draw(Texture, AABB, Texture.Bounds, Color.White, Angle, new Vector2(Texture.Width / 2, Texture.Height), SpriteEffects.None, 0);
-            //s.Draw(Texture, AABB, Texture.Bounds, Color.White, Angle, Vector2.Zero, SpriteEffects.None, 0);
         }
 
         Rectangle _aabb;
