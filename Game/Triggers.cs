@@ -18,7 +18,7 @@ namespace GameProject
             new ConditionComposite(
                 new ConditionSet(new ConditionKeyboard(Keys.Right))
             );
-        public static ConditionComposite CameraUp =
+        public static ConditionComposite CameraNext =
             new ConditionComposite(
                 new ConditionSet(new ConditionKeyboard(Keys.Up))
             );
