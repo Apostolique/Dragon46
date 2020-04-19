@@ -4,8 +4,8 @@ namespace GameProject
 {
     public class CharacterSprite
     {
-        public Texture2D texture;
-        public Texture2D hitTexture;
+        public Texture2D Texture;
+        public Texture2D HitTexture;
 
         public CharacterSprite() { }
     }

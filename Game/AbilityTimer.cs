@@ -18,6 +18,8 @@ namespace GameProject
         protected bool _finished;
         public bool Finished { get => _finished; }
 
+        public string Name { get => _ability.Name; }
+
         public AbilityTimer(Character caster, Character target, Ability ability)
         {
             _caster = caster;

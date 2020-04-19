@@ -16,10 +16,18 @@ namespace GameProject
         protected bool _finished;
         public bool Finished { get => _finished; }
 
+        protected string _name;
+        public string Name { get => _name; }
+
         // effects
         public int AddArmour { get; set; }
 
-        public Buff(Character owner, int duration) { _owner = owner; _timeRemaining = duration; }
+        public Buff(Character owner, int duration, string name)
+        {
+            _owner = owner;
+            _timeRemaining = duration;
+            _name = name;
+        }
 
         public bool Update(GameTime gameTime)
         {

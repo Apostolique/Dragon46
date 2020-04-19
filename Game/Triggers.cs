@@ -1,8 +1,10 @@
 using Apos.Input;
 using Microsoft.Xna.Framework.Input;
 
-namespace GameProject {
-    public static class Triggers {
+namespace GameProject
+{
+    public static class Triggers
+    {
         public static ConditionComposite Quit =
             new ConditionComposite(
                 new ConditionSet(new ConditionKeyboard(Keys.Escape)),

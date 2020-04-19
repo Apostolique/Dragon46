@@ -4,41 +4,51 @@ using Microsoft.Xna.Framework.Input;
 using Apos.Input;
 
 namespace GameProject {
-    public class GameRoot : Game {
+    public class GameRoot : Game
+    {
         protected GameState _currentState;
+        protected GraphicsDeviceManager _graphics;
 
-        public GameRoot() {
-            _graphics = new GraphicsDeviceManager(this);
+        public GameRoot()
+        {
+            _graphics = new GraphicsDeviceManager(this)
+            {
+                GraphicsProfile = GraphicsProfile.HiDef,
+            };
+
             IsMouseVisible = true;
             Content.RootDirectory = "Content";
         }
 
-        protected override void Initialize() {
+        protected override void Initialize()
+        {
             // TODO: Add your initialization logic here
-            Window.AllowUserResizing = true;
+            //Window.AllowUserResizing = true;
+            Window.AllowUserResizing = false;
+
+            _graphics.PreferredBackBufferWidth = 1600;
+            _graphics.PreferredBackBufferHeight = 900;
+            _graphics.ApplyChanges();
 
             base.Initialize();
         }
 
-        protected override void LoadContent() {
+        protected override void LoadContent()
+        {
             InputHelper.Setup(this);
             Database.Load();
-
-            _currentState = new MainMenuState(GraphicsDevice);
-
-            _s = new SpriteBatch(GraphicsDevice);
-
             Assets.Setup(Content);
-            _backgrounds = new Backgrounds(GraphicsDevice);
+
+            //_currentState = new MainMenuState(GraphicsDevice);
+            _currentState = new InGameState(GraphicsDevice);
         }
 
-        protected override void Update(GameTime gameTime) {
+        protected override void Update(GameTime gameTime)
+        {
             InputHelper.UpdateSetup();
 
             if (Triggers.Quit.Pressed())
                 Exit();
-
-            Core.Update(gameTime);
 
             var nextState = _currentState.Update(gameTime);
 
@@ -55,25 +65,31 @@ namespace GameProject {
                         _currentState = new InGameState(GraphicsDevice);
                     }
                     break;
+
+                case GameStateType.GameOver:
+                    {
+                        _currentState = new GameOverState(GraphicsDevice);
+                    }
+                    break;
+
+                case GameStateType.PlayerWon:
+                    {
+                        _currentState = new PlayerWonState(GraphicsDevice);
+                    }
+                    break;
             }
 
             InputHelper.UpdateCleanup();
             base.Update(gameTime);
         }
 
-        protected override void Draw(GameTime gameTime) {
+        protected override void Draw(GameTime gameTime)
+        {
             GraphicsDevice.Clear(Color.Black);
 
             _currentState.Draw();
 
-            // TODO: Add your drawing code here
-            _backgrounds.Draw();
-
             base.Draw(gameTime);
         }
-
-        GraphicsDeviceManager _graphics;
-        SpriteBatch _s;
-        Backgrounds _backgrounds;
     }
 }

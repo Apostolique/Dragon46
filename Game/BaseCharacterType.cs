@@ -13,13 +13,23 @@ namespace GameProject
 
         protected int _baseArmour;
         public int BaseArmour { get => _baseArmour; }
+        protected int _baseMagicResistance;
+        public int BaseMagicResistance { get => _baseMagicResistance; }
 
-        public BaseCharacterType(CharacterType type, int maxHP, string name, int baseArmour)
+        protected int _baseStrength;
+        public int BaseStrength { get => _baseStrength; }
+        protected int _baseIntelligence;
+        public int BaseIntelligence { get => _baseIntelligence; }
+
+        public BaseCharacterType(CharacterType type, int maxHP, string name, int baseArmour, int baseMagicResistance, int baseStrength, int baseIntelligence)
         {
             _type = type;
             _maxHP = maxHP;
             _name = name;
             _baseArmour = baseArmour;
+            _baseStrength = baseStrength;
+            _baseIntelligence = baseIntelligence;
+            _baseMagicResistance = baseMagicResistance;
         }
     }
 }
