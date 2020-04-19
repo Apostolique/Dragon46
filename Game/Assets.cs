@@ -9,7 +9,7 @@ namespace GameProject {
         public static void Setup(ContentManager content) {
             Infinite = content.Load<Effect>("infinite");
             Sky = content.Load<Texture2D>("sky");
-            Ground = content.Load<Texture2D>("ground");
+            Ground = content.Load<Texture2D>("grass_and_path");
             Bush = content.Load<Texture2D>("bush");
 
             UIFont = DynamicSpriteFont.FromTtf(TitleContainer.OpenStream("Content/Lato-Bold.ttf"), 16);

@@ -15,10 +15,10 @@ namespace GameProject {
 
             _infiniteObjects.Add(new InfiniteObjects(Assets.Sky, _furthest, 10));
 
-            var groundScale = 6;
+            var groundScale = 1;
 
-            for (int i = _furthest + 1; i < 0; i++) {
-                for (int j = 0; j < mapLength; j += (Assets.Ground.Width - 40) * groundScale) {
+            for (int i = _furthest + 1; i <= 0; i++) {
+                for (int j = 0; j < mapLength; j += (Assets.Ground.Width - 100) * groundScale) {
                     Quadtree<BackgroundObjects>.Add(new BackgroundObjects(j, 0, i, groundScale, Assets.Ground, j));
                 }
             }
