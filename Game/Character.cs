@@ -20,6 +20,8 @@ namespace GameProject
         public Vector2 DrawPosition { get => _drawPosition; }
 
         protected Tween _scaleTween;
+        protected Tween _jumpUpTween;
+        protected Tween _jumpDownTween;
 
         protected const int _hitDuration = 600;
         protected bool _isHit;
@@ -122,12 +124,24 @@ namespace GameProject
                 _castingCooldownTimer -= gameTime.ElapsedGameTime.Milliseconds;
 
             _scaleTween.Update(gameTime);
+            if (_jumpUpTween != null)
+                if (_jumpUpTween.Update(gameTime))
+                    _jumpUpTween = null;
+            if (_jumpUpTween == null && _jumpDownTween != null)
+                if (_jumpDownTween.Update(gameTime))
+                    _jumpDownTween = null;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             var texture = _isHit ? Sprite.HitTexture : Sprite.Texture;
-            spriteBatch.Draw(texture, _drawPosition + new Vector2(0, texture.Height), null, Color.White, 0, new Vector2(texture.Width / 2, texture.Height), _scaleTween.Value, SpriteEffects.None, 0);
+            var jump = Vector2.Zero;
+            if (_jumpUpTween != null)
+                jump = new Vector2(0, _jumpUpTween.Value);
+            else if (_jumpDownTween != null)
+                jump = new Vector2(0, _jumpDownTween.Value);
+
+            spriteBatch.Draw(texture, _drawPosition + jump + new Vector2(0, texture.Height), null, Color.White, 0, new Vector2(texture.Width / 2, texture.Height), _scaleTween.Value, SpriteEffects.None, 0);
         }
 
         public void ApplyDamage(DamageType damageType, int damage)
@@ -213,6 +227,9 @@ namespace GameProject
                 return;
 
             _castingAbility = castAbility;
+
+            _jumpUpTween = new Tween(500, 0, -50, EasingFunctions.ElasticIn);
+            _jumpDownTween = new Tween(500, -50, 0, EasingFunctions.BounceOut);
         }
 
         public bool ApplyStatusEffect(StatusEffect effect)
