@@ -24,12 +24,10 @@ namespace GameProject
         Silence, // stop enemy abilities
         Distract, // slow down current ability timer
 
-        // party abilities
+        // other abilities
         Defend,
         BasicAttack,
         PoisonArrow,
-        // enemy abilities
-        BasicEnemyAttack,
     }
 
     public enum StatusEffectType
@@ -69,7 +67,7 @@ namespace GameProject
                         {
                             new AbilityEffect()
                             {
-                                HitStun = 1000
+                                TargetHeal = 50
                             }
                         }
                     }
@@ -250,14 +248,16 @@ namespace GameProject
                     CharacterType.GoblinMinion,
                     new List<AbilityType>()
                     {
-                        AbilityType.Defend
+                        AbilityType.Defend,
+                        AbilityType.BasicAttack
                     }
                 },
                 {
                     CharacterType.GoblinBrute,
                     new List<AbilityType>()
                     {
-                        AbilityType.Defend
+                        AbilityType.Defend,
+                        AbilityType.BasicAttack
                     }
                 },
                 {

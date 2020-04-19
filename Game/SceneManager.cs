@@ -135,39 +135,39 @@ namespace GameProject
 
         public void CheckInput()
         {
-            if (!_player.IsCasting)
+            if (Triggers.PlayerSkill1.Released())
             {
-                if (Triggers.PlayerSkill1.Released())
-                {
-                    _uiManager.PlayerSelectedAbility = 1;
-                    _playerSelectedAbility = _playerAbilities[0];
-                }
-                else if (Triggers.PlayerSkill2.Released())
-                {
-                    _uiManager.PlayerSelectedAbility = 2;
-                    _playerSelectedAbility = _playerAbilities[1];
-                }
-                else if (Triggers.PlayerSkill3.Released())
-                {
-                    _uiManager.PlayerSelectedAbility = 3;
-                    _playerSelectedAbility = _playerAbilities[2];
-                }
-                else if (Triggers.PlayerSkill4.Released())
-                {
-                    _uiManager.PlayerSelectedAbility = 4;
-                    _playerSelectedAbility = _playerAbilities[3];
-                }
-                else if (Triggers.PlayerSkill5.Released())
-                {
-                    _uiManager.PlayerSelectedAbility = 5;
-                    _playerSelectedAbility = _playerAbilities[4];
-                }
-                else if (Triggers.PlayerSkill6.Released())
-                {
-                    _uiManager.PlayerSelectedAbility = 6;
-                    _playerSelectedAbility = _playerAbilities[5];
-                }
+                _uiManager.PlayerSelectedAbility = 1;
+                _playerSelectedAbility = _playerAbilities[0];
+            }
+            else if (Triggers.PlayerSkill2.Released())
+            {
+                _uiManager.PlayerSelectedAbility = 2;
+                _playerSelectedAbility = _playerAbilities[1];
+            }
+            else if (Triggers.PlayerSkill3.Released())
+            {
+                _uiManager.PlayerSelectedAbility = 3;
+                _playerSelectedAbility = _playerAbilities[2];
+            }
+            else if (Triggers.PlayerSkill4.Released())
+            {
+                _uiManager.PlayerSelectedAbility = 4;
+                _playerSelectedAbility = _playerAbilities[3];
+            }
+            else if (Triggers.PlayerSkill5.Released())
+            {
+                _uiManager.PlayerSelectedAbility = 5;
+                _playerSelectedAbility = _playerAbilities[4];
+            }
+            else if (Triggers.PlayerSkill6.Released())
+            {
+                _uiManager.PlayerSelectedAbility = 6;
+                _playerSelectedAbility = _playerAbilities[5];
+            }
 
+            if (!_player.IsCasting && !_encounterTransition)
+            {
                 if (_playerSelectedAbility != null)
                 {
                     if (Triggers.MouseLeftClick.Released())
@@ -277,7 +277,7 @@ namespace GameProject
                 if (!character.Enemy)
                 {
                     if (nextAbility.TargetFriendly)
-                        target = heroes.Count > 0 ? heroes[_rng.Next(0, enemies.Count)] : null;
+                        target = heroes.Count > 0 ? heroes[_rng.Next(0, heroes.Count)] : null;
                     else
                         target = enemies.Count > 0 ? enemies[_rng.Next(0, enemies.Count)] : null;
                 }
@@ -286,7 +286,7 @@ namespace GameProject
                     if (nextAbility.TargetFriendly)
                         target = enemies.Count > 0 ? enemies[_rng.Next(0, enemies.Count)] : null;
                     else
-                        target = heroes.Count > 0 ? heroes[_rng.Next(0, enemies.Count)] : null;
+                        target = heroes.Count > 0 ? heroes[_rng.Next(0, heroes.Count)] : null;
                 }
             }
 
