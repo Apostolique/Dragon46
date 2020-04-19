@@ -26,8 +26,8 @@ namespace GameProject
 
         public void Draw(SpriteBatch spriteBatch, List<Character> characters)
         {
-            var heroSkillPosition = new Vector2(50, 650);
-            var enemySkillPosition = new Vector2(900, 650);
+            var heroSkillPosition = new Vector2(50, 625);
+            var enemySkillPosition = new Vector2(900, 625);
 
             Assets.UIFont.Size = 20;
 
@@ -58,7 +58,7 @@ namespace GameProject
 
                 var skillString = "";
                 if (character.IsCasting)
-                    skillString = character.CastingAbility.Name + " " + character.CastingAbility.TimeRemaining;
+                    skillString = character.CastingAbility.Name + " " + ((float)character.CastingAbility.TimeRemaining / 1000).ToString("0.0") + "s";
 
                 spriteBatch.DrawString(Assets.UIFont, character.Name + ": " + skillString, skillPosition, Color.White);
             }
