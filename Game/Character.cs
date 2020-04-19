@@ -19,6 +19,8 @@ namespace GameProject
         protected Vector2 _drawPosition = Vector2.Zero;
         public Vector2 DrawPosition { get => _drawPosition; }
 
+        protected Tween _scaleTween;
+
         protected const int _hitDuration = 600;
         protected bool _isHit;
         protected int _hitTimer;
@@ -86,6 +88,8 @@ namespace GameProject
 
             _buffs = new List<Buff>();
             _statusEffects = new List<StatusEffect>();
+
+            _scaleTween = new Tween(1500, 1f, 0.95f, EasingFunctions.ExponentialInOut, true);
         }
 
         public void Update(GameTime gameTime)
@@ -116,11 +120,14 @@ namespace GameProject
 
             if (_castingCooldownTimer > 0)
                 _castingCooldownTimer -= gameTime.ElapsedGameTime.Milliseconds;
+
+            _scaleTween.Update(gameTime);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_isHit ? Sprite.HitTexture : Sprite.Texture, _drawPosition, Color.White);
+            var texture = _isHit ? Sprite.HitTexture : Sprite.Texture;
+            spriteBatch.Draw(texture, _drawPosition + new Vector2(0, texture.Height), null, Color.White, 0, new Vector2(texture.Width / 2, texture.Height), _scaleTween.Value, SpriteEffects.None, 0);
         }
 
         public void ApplyDamage(DamageType damageType, int damage)
