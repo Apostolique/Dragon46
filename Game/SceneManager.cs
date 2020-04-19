@@ -199,7 +199,7 @@ namespace GameProject
 
         public void Draw()
         {
-            _spriteBatch.Begin(sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend);
+            _spriteBatch.Begin(sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
 
             for (var i = 0; i < _characters.Count; i++)
             {
@@ -231,8 +231,6 @@ namespace GameProject
                 var newEnemy = new Character(enemy.EnemyType, true, enemySlot, _slotPositions[enemySlot]);
                 _characters.Add(newEnemy);
                 enemySlot++;
-
-                Console.WriteLine("New enemy: " + newEnemy.Name);
 
                 if (enemySlot >= _slotPositions.Length)
                     continue;
