@@ -3,15 +3,15 @@ using Microsoft.Xna.Framework;
 
 namespace GameProject {
     public class Tween {
-        public Tween(float duration, float start, float target, Func<float, float> easing, bool bounce = false) {
+        public Tween(float duration, float start, float target, Func<float, float> easing, bool repeat = false) {
             Duration = duration;
             Start = start;
             Target = target;
             Easing = easing;
-            Bounce = bounce;
+            Repeat = repeat;
         }
 
-        public bool Bounce {
+        public bool Repeat {
             get;
             set;
         }
@@ -43,7 +43,7 @@ namespace GameProject {
             CurrentTime += gameTime.ElapsedGameTime.Milliseconds;
 
             if (CurrentTime > Duration) {
-                if (Bounce) {
+                if (Repeat) {
                     swap();
                 } else {
                     return true;
