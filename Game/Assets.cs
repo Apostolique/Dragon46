@@ -5,11 +5,22 @@ using Microsoft.Xna.Framework.Graphics;
 using SpriteFontPlus;
 
 namespace GameProject {
+    public enum SoundType
+    {
+        Music, SFX, UI
+    }
+
     public static class Assets {
         public static ContentManager Content;
+        public static SoundManager SoundManager;
 
         public static void Setup(ContentManager content) {
             Content = content;
+
+            SoundManager = new SoundManager();
+            SoundManager.SetVolume((int)SoundType.Music, 0.5f);
+            SoundManager.SetVolume((int)SoundType.SFX, 0.5f);
+            SoundManager.SetVolume((int)SoundType.UI, 0.5f);
 
             Infinite = content.Load<Effect>("infinite");
             Sky = content.Load<Texture2D>("sky");
