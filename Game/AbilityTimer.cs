@@ -41,7 +41,7 @@ namespace GameProject
             {
                 _finished = true;
                 _ability.Apply(_caster, _target);
-                _caster.AbilityFinished();
+                _caster.AbilityFinished(_ability);
             }
 
             return _finished;

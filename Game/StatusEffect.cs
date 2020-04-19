@@ -6,6 +6,7 @@ namespace GameProject
     {
         public Character Owner;
 
+        protected int _totalDuration;
         protected int _timeRemaining;
         public int TimeRemaining { get => _timeRemaining; }
 
@@ -19,6 +20,7 @@ namespace GameProject
 
         public StatusEffect(Character owner, int duration)
         {
+            _totalDuration = duration;
             _timeRemaining = duration;
             Owner = owner;
         }
@@ -34,6 +36,11 @@ namespace GameProject
                 _finished = true;
 
             return _finished;
+        }
+
+        public virtual void ResetTimer()
+        {
+            _timeRemaining = _totalDuration;
         }
     }
 
