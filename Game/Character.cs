@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GameProject
 {
@@ -40,6 +41,9 @@ namespace GameProject
         protected bool _enemy;
         public bool Enemy { get => _enemy; }
 
+        protected bool _player;
+        public bool Player { get => _player; }
+
         public int Slot;
 
         protected AbilityTimer _castingAbility;
@@ -50,12 +54,13 @@ namespace GameProject
         protected int _castingCooldownTimer;
         public bool CastingCooldown { get => _castingCooldownTimer > 0; }
 
-        protected StatusEffect _statusEffect;
-        public StatusEffect StatusEffect { get => _statusEffect; }
+        protected List<StatusEffect> _statusEffects;
+        public List<StatusEffect> StatusEffects { get => _statusEffects; }
 
         protected List<Buff> _buffs;
+        public List<Buff> Buffs { get => _buffs; }
 
-        public Character(BaseCharacterType data, bool enemy, int slot, Vector2 drawPosition)
+        public Character(BaseCharacterType data, bool enemy, int slot, Vector2 drawPosition, bool player = false)
         {
             _enemy = enemy;
             _type = data.Type;
@@ -64,6 +69,7 @@ namespace GameProject
             _drawPosition = drawPosition;
             _name = data.Name;
             Slot = slot;
+            _player = player;
 
             _baseArmour = data.BaseArmour;
             _baseMagicResistance = data.BaseMagicResistance;
@@ -71,6 +77,7 @@ namespace GameProject
             Sprite = Assets.CharacterSprites[_type];
 
             _buffs = new List<Buff>();
+            _statusEffects = new List<StatusEffect>();
         }
 
         public void Update(GameTime gameTime)
@@ -82,9 +89,10 @@ namespace GameProject
             if (_castingAbility != null && _castingAbility.Finished)
                 _castingAbility = null;
 
-            _statusEffect?.Update(gameTime);
-            if (_statusEffect != null && _statusEffect.Finished)
-                _statusEffect = null;
+            for (var i = 0; i < _statusEffects.Count; i++)
+                _statusEffects[i]?.Update(gameTime);
+
+            _statusEffects.RemoveAll(s => s.Finished);
 
             for (var i = 0; i < _buffs.Count; i++)
                 _buffs[i].Update(gameTime);
@@ -142,7 +150,7 @@ namespace GameProject
             }
 
             _currentHP -= damageAfterArmour;
-            if (_currentHP < 0)
+            if (_currentHP <= 0)
             {
                 _currentHP = 0;
                 _dead = true;
@@ -164,10 +172,14 @@ namespace GameProject
                 _currentHP = _maxHP;
         }
 
-        public void ApplyBuff(Buff buff)
+        public bool ApplyBuff(Buff buff)
         {
+            if (_buffs.Where(e => e.Name == buff.Name).Count() > 0)
+                return false;
+
             buff.Apply();
             _buffs.Add(buff);
+            return true;
         }
 
         public void AbilityFinished()
@@ -184,18 +196,13 @@ namespace GameProject
             _castingAbility = castAbility;
         }
 
-        public void ApplyStatusEffect(StatusEffect effect)
+        public bool ApplyStatusEffect(StatusEffect effect)
         {
-            _statusEffect = effect;
-        }
+            if (_statusEffects.Where(e => e.Type == effect.Type).Count() > 0)
+                return false;
 
-        public void ApplyStatusEffect(StatusEffectType type)
-        {
-            if (_statusEffect != null || !_statusEffect.Finished)
-                return;
-
-            var e = Database.GetStatusEffect(type);
-            _statusEffect = (StatusEffect)Activator.CreateInstance(e, this);
+            _statusEffects.Add(effect);
+            return true;
         }
     }
 }

@@ -21,6 +21,7 @@ namespace GameProject
         // party abilities
         Defend,
         BasicAttack,
+        PoisonArrow,
         // enemy abilities
         BasicEnemyAttack,
     }
@@ -76,6 +77,23 @@ namespace GameProject
                         DamageType = DamageType.Physical,
                     }
                 },
+                {
+                    AbilityType.PoisonArrow,
+                    new Ability()
+                    {
+                        Name = "Poison Arrow",
+                        CastTime = 2000,
+                        Damage = 0,
+                        DamageType = DamageType.Magical,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                Poison = 5
+                            }
+                        }
+                    }
+                },
             };
 
             _castableAbilities = new Dictionary<CharacterType, List<AbilityType>>()
@@ -93,7 +111,8 @@ namespace GameProject
                     new List<AbilityType>()
                     {
                         AbilityType.Defend,
-                        AbilityType.BasicAttack
+                        AbilityType.BasicAttack,
+                        AbilityType.PoisonArrow
                     }
                 },
                 {

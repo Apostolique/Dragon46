@@ -34,8 +34,11 @@ namespace GameProject
             for (var i = 0; i < characters.Count; i++)
             {
                 var character = characters[i];
+                if (character.Dead)
+                    continue;
+
                 var namePosition = character.DrawPosition;
-                namePosition.Y -= 25;
+                namePosition.Y -= 50;
 
                 spriteBatch.DrawString(Assets.UIFont, character.Name, namePosition, Color.White);
 
@@ -43,6 +46,23 @@ namespace GameProject
                 hpPosition.Y += 20;
 
                 spriteBatch.DrawString(Assets.UIFont, character.CurrentHP + "/" + character.MaxHP, hpPosition, Color.White);
+
+                var statusPosition = hpPosition;
+                statusPosition.Y += 20;
+
+                var statusString = "";
+
+                for (var s = 0; s < character.StatusEffects.Count; s++)
+                    statusString += character.StatusEffects[s].Name + ", ";
+
+                for (var b = 0; b < character.Buffs.Count; b++)
+                    statusString += character.Buffs[b].Name + ", ";
+
+                if (statusString.Length > 0)
+                {
+                    statusString = statusString.Remove(statusString.Length - 2);
+                    spriteBatch.DrawString(Assets.UIFont, statusString, statusPosition, Color.White);
+                }
 
                 Vector2 skillPosition;
                 if (!character.Enemy)

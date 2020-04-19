@@ -13,6 +13,7 @@ namespace GameProject
         // offensive vs target
         public int LifeLeech { get; set; }
         public int HitStun { get; set; }
+        public int Poison { get; set; }
 
         // defensive on target
         public int AddTargetArmour { get; set; }
@@ -34,6 +35,18 @@ namespace GameProject
             if (LifeLeech > 0)
                 caster.ApplyHeal(LifeLeech);
 
+            if (Poison > 0)
+            {
+                var poisonEffect = new PoisonStatus(target, 5000)
+                {
+                    DamagePerTick = Poison,
+                };
+
+                poisonEffect.Start(1000);
+
+                target.ApplyStatusEffect(poisonEffect);
+            }
+
             if (SelfDamage > 0)
                 caster.ApplyDamage(DamageType.Pure, SelfDamage);
 
@@ -41,10 +54,10 @@ namespace GameProject
                 target.ApplyHeal(TargetHeal);
 
             if (AddTargetArmour > 0)
-                result.Buff = new Buff(target, Duration) { AddArmour = AddTargetArmour };
+                result.Buff = new Buff(target, Duration, ability.Name) { AddArmour = AddTargetArmour };
 
             if (AddCasterArmour > 0)
-                result.Buff = new Buff(caster, Duration) { AddArmour = AddCasterArmour };
+                result.Buff = new Buff(caster, Duration, ability.Name) { AddArmour = AddCasterArmour };
 
             return result;
         }

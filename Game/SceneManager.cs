@@ -49,7 +49,7 @@ namespace GameProject
 
             _characters = new List<Character>();
 
-            _characters.Add(new Character(Database.GetHero(CharacterType.Cleric), false, 0, _slotPositions[0]));
+            _characters.Add(new Character(Database.GetHero(CharacterType.Cleric), false, 0, _slotPositions[0], true));
             _characters.Add(new Character(Database.GetHero(CharacterType.Wizard), false, 1, _slotPositions[1]));
             _characters.Add(new Character(Database.GetHero(CharacterType.Archer), false, 2, _slotPositions[2]));
             _characters.Add(new Character(Database.GetHero(CharacterType.Warrior), false, 3, _slotPositions[3]));
@@ -155,12 +155,14 @@ namespace GameProject
                 return;
             if (character.CastingCooldown)
                 return;
+            if (character.Player)
+                return;
 
             var abilities = Database.GetCharacterAbilities(character.Type);
             var nextAbility = abilities[_rng.Next(0, abilities.Count)];
 
-            var heroes = _heroCharacters;
-            var enemies = _enemyCharacters;
+            var heroes = _heroCharacters.Where(c => !c.Dead).ToList();
+            var enemies = _enemyCharacters.Where(c => !c.Dead).ToList();
 
             Character target;
             if (nextAbility.TargetSelf)

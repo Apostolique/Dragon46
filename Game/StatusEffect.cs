@@ -4,8 +4,7 @@ namespace GameProject
 {
     public class StatusEffect
     {
-        protected Character _owner;
-        public Character Owner { get => _owner; }
+        public Character Owner;
 
         protected int _timeRemaining;
         public int TimeRemaining { get => _timeRemaining; }
@@ -13,9 +12,15 @@ namespace GameProject
         protected bool _finished;
         public bool Finished { get => _finished; }
 
-        public StatusEffect(Character owner)
+        protected string _name;
+        public string Name { get => _name; }
+
+        public StatusEffectType Type { get; set; }
+
+        public StatusEffect(Character owner, int duration)
         {
-            _owner = owner;
+            _timeRemaining = duration;
+            Owner = owner;
         }
 
         public virtual bool Update(GameTime gameTime)
@@ -37,7 +42,13 @@ namespace GameProject
         protected int _tickDuration;
         protected int _currentTickCounter;
 
-        public StatusEffectOverTime(Character owner) : base(owner) { }
+        public StatusEffectOverTime(Character owner, int duration) : base(owner, duration) { }
+
+        public void Start(int tickDuration)
+        {
+            _tickDuration = tickDuration;
+            _currentTickCounter = tickDuration;
+        }
 
         public override bool Update(GameTime gameTime)
         {
@@ -59,25 +70,33 @@ namespace GameProject
 
     public class PoisonStatus : StatusEffectOverTime
     {
-        protected int _damagePerTick;
+        public int DamagePerTick;
 
-        public PoisonStatus(Character owner) : base(owner) { }
+        public PoisonStatus(Character owner, int duration) : base(owner, duration)
+        {
+            Type = StatusEffectType.Poison;
+            _name = "Poison";
+        }
 
         public override void Tick()
         {
-            _owner.ApplyDamage(DamageType.Magical, _damagePerTick);
+            Owner.ApplyDamage(DamageType.Magical, DamagePerTick);
         }
     }
 
     public class HealOverTimeStatus : StatusEffectOverTime
     {
-        protected int _healPerTick;
+        public int HealPerTick;
 
-        public HealOverTimeStatus(Character owner) : base(owner) { }
+        public HealOverTimeStatus(Character owner, int duration) : base(owner, duration)
+        {
+            Type = StatusEffectType.HealOverTime;
+            _name = "HoT";
+        }
 
         public override void Tick()
         {
-            _owner.ApplyHeal(_healPerTick);
+            Owner.ApplyHeal(HealPerTick);
         }
     }
 }
