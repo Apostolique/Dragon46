@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 namespace GameProject {
     public static class CameraWrapper {
         static CameraWrapper() {
-            Camera = new Camera(new Vector2(0, 0));
+            Camera = new Camera(new Vector2(2800, -50));
         }
 
         public static void Update(GameTime gameTime) {
