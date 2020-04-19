@@ -1,8 +1,8 @@
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using SpriteFontPlus;
-using System.Collections.Generic;
-using System.IO;
 
 namespace GameProject {
     public static class Assets {
@@ -12,7 +12,7 @@ namespace GameProject {
             Ground = content.Load<Texture2D>("ground");
             Bush = content.Load<Texture2D>("bush");
 
-            UIFont = DynamicSpriteFont.FromTtf(File.ReadAllBytes("Content/Lato-Bold.ttf"), 16);
+            UIFont = DynamicSpriteFont.FromTtf(TitleContainer.OpenStream("Content/Lato-Bold.ttf"), 16);
 
             CharacterSprites = new Dictionary<CharacterType, CharacterSprite>()
             {
