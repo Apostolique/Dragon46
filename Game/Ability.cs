@@ -4,6 +4,7 @@ namespace GameProject
 {
     public class Ability
     {
+        public AbilityType AbilityType;
         public DamageType DamageType;
 
         /// <summary>

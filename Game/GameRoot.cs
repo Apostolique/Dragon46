@@ -8,6 +8,7 @@ namespace GameProject {
     {
         protected GameState _currentState;
         protected GraphicsDeviceManager _graphics;
+        protected SpriteBatch _spriteBatch;
 
         public GameRoot()
         {
@@ -38,6 +39,8 @@ namespace GameProject {
             InputHelper.Setup(this);
             Database.Load();
             Assets.Setup(Content);
+
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //_currentState = new MainMenuState(GraphicsDevice);
             _currentState = new InGameState(GraphicsDevice);
@@ -80,6 +83,7 @@ namespace GameProject {
             }
 
             Assets.SoundManager.Update();
+            ScreenEffectsManager.Update(gameTime);
 
             InputHelper.UpdateCleanup();
             base.Update(gameTime);
@@ -90,6 +94,10 @@ namespace GameProject {
             GraphicsDevice.Clear(Color.Black);
 
             _currentState.Draw();
+
+            _spriteBatch.Begin(sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend);
+            ScreenEffectsManager.Draw(_spriteBatch);
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }

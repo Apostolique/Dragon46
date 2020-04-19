@@ -8,7 +8,7 @@ namespace GameProject
 
     public class AbilityEffect
     {
-        public int Duration;
+        public int Duration = 5000;
 
         // offensive vs target
         public int LifeLeech { get; set; }

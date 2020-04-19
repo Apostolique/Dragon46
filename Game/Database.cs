@@ -61,6 +61,7 @@ namespace GameProject
                     AbilityType.HealingLight,
                     new Ability()
                     {
+                        AbilityType = AbilityType.HealingLight,
                         Name = "Healing Light",
                         CastTime = 5000,
                         TargetFriendly = true,
@@ -77,6 +78,7 @@ namespace GameProject
                     AbilityType.Regeneration,
                     new Ability()
                     {
+                        AbilityType = AbilityType.Regeneration,
                         Name = "Regeneration",
                         CastTime = 2500,
                         TargetFriendly = true,
@@ -93,6 +95,7 @@ namespace GameProject
                     AbilityType.StoneSkin,
                     new Ability()
                     {
+                        AbilityType = AbilityType.StoneSkin,
                         Name = "Stone Skin",
                         CastTime = 2000,
                         TargetFriendly = true,
@@ -109,8 +112,10 @@ namespace GameProject
                     AbilityType.MagicShield,
                     new Ability()
                     {
+                        AbilityType = AbilityType.MagicShield,
                         Name = "Magic Shield",
                         CastTime = 2000,
+                        TargetFriendly = true,
                         OnHitEffects = new List<AbilityEffect>()
                         {
                             new AbilityEffect()
@@ -124,6 +129,7 @@ namespace GameProject
                     AbilityType.Silence,
                     new Ability()
                     {
+                        AbilityType = AbilityType.Silence,
                         Name = "Silence",
                         CastTime = 2500,
                         OnHitEffects = new List<AbilityEffect>()
@@ -139,6 +145,7 @@ namespace GameProject
                     AbilityType.Distract,
                     new Ability()
                     {
+                        AbilityType = AbilityType.Distract,
                         Name = "Distract",
                         CastTime = 2500,
                         OnHitEffects = new List<AbilityEffect>()
@@ -156,6 +163,7 @@ namespace GameProject
                     AbilityType.Defend,
                     new Ability()
                     {
+                        AbilityType = AbilityType.Defend,
                         Name = "Defend",
                         CastTime = 2000,
                         TargetSelf = true,
@@ -173,6 +181,7 @@ namespace GameProject
                     AbilityType.BasicAttack,
                     new Ability()
                     {
+                        AbilityType = AbilityType.BasicAttack,
                         Name = "Basic Attack",
                         CastTime = 2500,
                         Damage = 10,
@@ -183,6 +192,7 @@ namespace GameProject
                     AbilityType.PoisonArrow,
                     new Ability()
                     {
+                        AbilityType = AbilityType.PoisonArrow,
                         Name = "Poison Arrow",
                         CastTime = 2000,
                         Damage = 0,

@@ -1,3 +1,4 @@
+using Apos.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -27,7 +28,9 @@ namespace GameProject
 
         protected int _currentWave;
 
-        protected AbilityType _playerSelectedAbility = AbilityType.None;
+        protected Ability _playerSelectedAbility;
+        protected Character _player;
+        protected List<Ability> _playerAbilities;
 
         protected List<Character> _heroCharacters
         {
@@ -65,6 +68,9 @@ namespace GameProject
             _characters.Add(new Character(Database.GetHero(CharacterType.Wizard), false, 1, _slotPositions[1]));
             _characters.Add(new Character(Database.GetHero(CharacterType.Archer), false, 2, _slotPositions[2]));
             _characters.Add(new Character(Database.GetHero(CharacterType.Warrior), false, 3, _slotPositions[3]));
+
+            _player = _characters[0];
+            _playerAbilities = Database.GetCharacterAbilities(CharacterType.Cleric);
 
             _gameManager = new GameManager();
             _gameManager.Load(_rng);
@@ -122,7 +128,73 @@ namespace GameProject
 
             _uiManager.Update(gameTime);
 
+            CheckInput();
+
             return GameStateType.None;
+        }
+
+        public void CheckInput()
+        {
+            if (!_player.IsCasting)
+            {
+                if (Triggers.PlayerSkill1.Released())
+                {
+                    _uiManager.PlayerSelectedAbility = 1;
+                    _playerSelectedAbility = _playerAbilities[0];
+                }
+                else if (Triggers.PlayerSkill2.Released())
+                {
+                    _uiManager.PlayerSelectedAbility = 2;
+                    _playerSelectedAbility = _playerAbilities[1];
+                }
+                else if (Triggers.PlayerSkill3.Released())
+                {
+                    _uiManager.PlayerSelectedAbility = 3;
+                    _playerSelectedAbility = _playerAbilities[2];
+                }
+                else if (Triggers.PlayerSkill4.Released())
+                {
+                    _uiManager.PlayerSelectedAbility = 4;
+                    _playerSelectedAbility = _playerAbilities[3];
+                }
+                else if (Triggers.PlayerSkill5.Released())
+                {
+                    _uiManager.PlayerSelectedAbility = 5;
+                    _playerSelectedAbility = _playerAbilities[4];
+                }
+                else if (Triggers.PlayerSkill6.Released())
+                {
+                    _uiManager.PlayerSelectedAbility = 6;
+                    _playerSelectedAbility = _playerAbilities[5];
+                }
+
+                if (_playerSelectedAbility != null)
+                {
+                    if (Triggers.MouseLeftClick.Released())
+                    {
+                        var mousePosition = new Vector2(InputHelper.NewMouse.X, InputHelper.NewMouse.Y);
+
+                        Character clickedCharacter = null;
+
+                        for (var i = 0; i < _characters.Count; i++)
+                            if (_characters[i].PointInCharacter(mousePosition))
+                                clickedCharacter = _characters[i];
+
+                        if (clickedCharacter != null)
+                        {
+                            if (_playerSelectedAbility.TargetFriendly && clickedCharacter.Enemy)
+                                return;
+                            if (!_playerSelectedAbility.TargetFriendly && !clickedCharacter.Enemy)
+                                return;
+
+                            var abilityTimer = new AbilityTimer(_player, clickedCharacter, _playerSelectedAbility);
+                            _player.CastAbility(abilityTimer);
+                            _uiManager.PlayerSelectedAbility = -1;
+                            _playerSelectedAbility = null;
+                        }
+                    }
+                }
+            }
         }
 
         public void Draw()

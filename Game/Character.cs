@@ -178,6 +178,15 @@ namespace GameProject
                     damageAfterArmour = 1;
             }
 
+            ScreenEffectsManager.AddScreenText(new ScreenText()
+            {
+                Text = damageAfterArmour.ToString(),
+                Colour = Color.Red,
+                Duration = 3500,
+                Position = _drawPosition - new Vector2(0, 75),
+                Velocity = new Vector2(0, -30f)
+            });
+
             _currentHP -= damageAfterArmour;
             if (_currentHP <= 0)
             {
@@ -195,6 +204,15 @@ namespace GameProject
         {
             if (_dead)
                 return;
+
+            ScreenEffectsManager.AddScreenText(new ScreenText()
+            {
+                Text = heal.ToString(),
+                Colour = Color.LightGreen,
+                Duration = 3500,
+                Position = _drawPosition - new Vector2(0, 75),
+                Velocity = new Vector2(0, -30f)
+            });
 
             _currentHP += heal;
             if (_currentHP > _maxHP)
@@ -242,6 +260,22 @@ namespace GameProject
             }
 
             _statusEffects.Add(effect);
+            return true;
+        }
+
+        public bool PointInCharacter(Vector2 point)
+        {
+            var characterRect = new Rectangle((int)_drawPosition.X - (Sprite.Texture.Width / 2), (int)_drawPosition.Y, Sprite.Texture.Width, Sprite.Texture.Height);
+            
+            if (point.X < characterRect.X)
+                return false;
+            if (point.Y < characterRect.Y)
+                return false;
+            if (point.X > (characterRect.X + characterRect.Width))
+                return false;
+            if (point.Y > (characterRect.Y + characterRect.Height))
+                return false;
+
             return true;
         }
     }
