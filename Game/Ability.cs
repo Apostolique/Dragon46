@@ -4,6 +4,8 @@ namespace GameProject
 {
     public class Ability
     {
+        public DamageType DamageType;
+
         /// <summary>
         /// In milliseconds
         /// </summary>
@@ -16,7 +18,11 @@ namespace GameProject
         public List<AbilityEffect> OnCastEffects = new List<AbilityEffect>();
         public List<AbilityEffect> OnHitEffects = new List<AbilityEffect>();
 
-        public Ability() { }
+        public Ability()
+        {
+            OnCastEffects = new List<AbilityEffect>();
+            OnHitEffects = new List<AbilityEffect>();
+        }
 
         public void Cast(Character caster, Character target)
         {
@@ -30,7 +36,7 @@ namespace GameProject
         public void Apply(Character caster, Character target)
         {
             if (Damage > 0)
-                target.ApplyDamage(Damage);
+                target.ApplyDamage(DamageType, Damage);
 
             for (var i = 0; i < OnHitEffects.Count; i++)
             {

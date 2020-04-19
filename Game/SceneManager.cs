@@ -172,18 +172,21 @@ namespace GameProject
                 if (!character.Enemy)
                 {
                     if (nextAbility.TargetFriendly)
-                        target = heroes[_rng.Next(0, enemies.Count)];
+                        target = heroes.Count > 0 ? heroes[_rng.Next(0, enemies.Count)] : null;
                     else
-                        target = enemies[_rng.Next(0, enemies.Count)];
+                        target = enemies.Count > 0 ? enemies[_rng.Next(0, enemies.Count)] : null;
                 }
                 else
                 {
                     if (nextAbility.TargetFriendly)
-                        target = enemies[_rng.Next(0, enemies.Count)];
+                        target = enemies.Count > 0 ? enemies[_rng.Next(0, enemies.Count)] : null;
                     else
-                        target = heroes[_rng.Next(0, enemies.Count)];
+                        target = heroes.Count > 0 ? heroes[_rng.Next(0, enemies.Count)] : null;
                 }
             }
+
+            if (target == null)
+                return;
 
             var abilityTimer = new AbilityTimer(character, target, nextAbility);
             character.CastAbility(abilityTimer);

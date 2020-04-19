@@ -20,6 +20,7 @@ namespace GameProject
         Silence,
         // party abilities
         Defend,
+        BasicAttack,
         // enemy abilities
         BasicEnemyAttack,
     }
@@ -27,6 +28,13 @@ namespace GameProject
     public enum StatusEffectType
     {
         Sleep, Stun, Poison, HealOverTime
+    }
+
+    public enum DamageType
+    {
+        Pure,
+        Physical,
+        Magical
     }
 
     public static class Database
@@ -58,6 +66,16 @@ namespace GameProject
                         }
                     }
                 },
+                {
+                    AbilityType.BasicAttack,
+                    new Ability()
+                    {
+                        Name = "Basic Attack",
+                        CastTime = 2500,
+                        Damage = 10,
+                        DamageType = DamageType.Physical,
+                    }
+                },
             };
 
             _castableAbilities = new Dictionary<CharacterType, List<AbilityType>>()
@@ -66,14 +84,16 @@ namespace GameProject
                     CharacterType.Warrior,
                     new List<AbilityType>()
                     {
-                        AbilityType.Defend
+                        AbilityType.Defend,
+                        AbilityType.BasicAttack
                     }
                 },
                 {
                     CharacterType.Archer,
                     new List<AbilityType>()
                     {
-                        AbilityType.Defend
+                        AbilityType.Defend,
+                        AbilityType.BasicAttack
                     }
                 },
                 {
@@ -129,19 +149,31 @@ namespace GameProject
             {
                 {
                     CharacterType.GoblinMinion,
-                    new EnemyType(type: CharacterType.GoblinMinion, maxHP: 100, name: "Goblin Minion", baseArmour: 5, difficultyScore: 1)
+                    new EnemyType(
+                        type: CharacterType.GoblinMinion, maxHP: 100, name: "Goblin Minion", baseArmour: 5, baseMagicResistance: 0, difficultyScore: 1,
+                        baseStrength: 0, baseIntelligence: 0
+                    )
                 },
                 {
                     CharacterType.GoblinBrute,
-                    new EnemyType(type: CharacterType.GoblinBrute, maxHP: 200, name: "Goblin Brute", baseArmour: 10, difficultyScore: 2)
+                    new EnemyType(
+                        type: CharacterType.GoblinBrute, maxHP: 200, name: "Goblin Brute", baseArmour: 10, baseMagicResistance: 0, difficultyScore: 2,
+                        baseStrength: 0, baseIntelligence: 0
+                    )
                 },
                 {
                     CharacterType.GoblinShaman,
-                    new EnemyType(type: CharacterType.GoblinShaman, maxHP: 150, name: "Goblin Shaman", baseArmour: 5, difficultyScore: 2)
+                    new EnemyType(
+                        type: CharacterType.GoblinShaman, maxHP: 150, name: "Goblin Shaman", baseArmour: 5, baseMagicResistance: 0, difficultyScore: 2,
+                        baseStrength: 0, baseIntelligence: 0
+                    )
                 },
                 {
                     CharacterType.Dragon,
-                    new EnemyType(type: CharacterType.Dragon, maxHP: 2000, name: "Dragon", baseArmour: 20, difficultyScore: 10)
+                    new EnemyType(
+                        type: CharacterType.Dragon, maxHP: 2000, name: "Dragon", baseArmour: 20, baseMagicResistance: 0, difficultyScore: 10,
+                        baseStrength: 0, baseIntelligence: 0
+                    )
                 },
             };
 
@@ -149,19 +181,31 @@ namespace GameProject
             {
                 {
                     CharacterType.Cleric,
-                    new HeroType(type: CharacterType.Cleric, maxHP: 100, name: "Cleric", baseArmour: 5)
+                    new HeroType(
+                        type: CharacterType.Cleric, maxHP: 100, name: "Cleric", baseArmour: 5, baseMagicResistance: 0,
+                        baseStrength: 0, baseIntelligence: 0
+                    )
                 },
                 {
                     CharacterType.Wizard,
-                    new HeroType(type: CharacterType.Wizard, maxHP: 90, name: "Wizard", baseArmour: 5)
+                    new HeroType(
+                        type: CharacterType.Wizard, maxHP: 90, name: "Wizard", baseArmour: 5, baseMagicResistance: 0,
+                        baseStrength: 0, baseIntelligence: 0
+                    )
                 },
                 {
                     CharacterType.Archer,
-                    new HeroType(type: CharacterType.Archer, maxHP: 120, name: "Archer", baseArmour: 10)
+                    new HeroType(
+                        type: CharacterType.Archer, maxHP: 120, name: "Archer", baseArmour: 10, baseMagicResistance: 0,
+                        baseStrength: 0, baseIntelligence: 0
+                    )
                 },
                 {
                     CharacterType.Warrior,
-                    new HeroType(type: CharacterType.Warrior, maxHP: 200, name: "Warrior", baseArmour: 20)
+                    new HeroType(
+                        type: CharacterType.Warrior, maxHP: 200, name: "Warrior", baseArmour: 20, baseMagicResistance: 0,
+                        baseStrength: 0, baseIntelligence: 0
+                    )
                 }
             };
         }

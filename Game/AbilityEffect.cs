@@ -35,7 +35,7 @@ namespace GameProject
                 caster.ApplyHeal(LifeLeech);
 
             if (SelfDamage > 0)
-                caster.ApplyDamage(SelfDamage);
+                caster.ApplyDamage(DamageType.Pure, SelfDamage);
 
             if (TargetHeal > 0)
                 target.ApplyHeal(TargetHeal);

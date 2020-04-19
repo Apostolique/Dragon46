@@ -24,12 +24,15 @@ namespace GameProject
 
         protected int _maxHP;
         protected int _baseArmour;
+        protected int _baseMagicResistance;
         protected int _currentHP;
         public int MaxHP { get => _maxHP; }
         public int CurrentHP { get => _currentHP; }
         public int BaseArmour { get => _baseArmour; }
+        public int BaseMagicResistance { get => _baseMagicResistance; }
 
         public int AddedArmour { get; set; }
+        public int AddedMagicResistance { get; set; }
 
         protected bool _dead;
         public bool Dead { get => _dead; }
@@ -61,6 +64,9 @@ namespace GameProject
             _drawPosition = drawPosition;
             _name = data.Name;
             Slot = slot;
+
+            _baseArmour = data.BaseArmour;
+            _baseMagicResistance = data.BaseMagicResistance;
 
             Sprite = Assets.CharacterSprites[_type];
 
@@ -101,22 +107,39 @@ namespace GameProject
             spriteBatch.Draw(_isHit ? Sprite.HitTexture : Sprite.Texture, _drawPosition, Color.White);
         }
 
-        public void ApplyDamage(int damage)
+        public void ApplyDamage(DamageType damageType, int damage)
         {
             if (_dead)
                 return;
             if (damage <= 0)
                 return;
 
-            float appliedArmour = BaseArmour + AddedArmour;
+            var damageAfterArmour = damage;
 
-            if (appliedArmour > 80)
-                appliedArmour = 80;
+            if (damageType == DamageType.Physical)
+            {
+                float appliedArmour = BaseArmour + AddedArmour;
 
-            int damageAfterArmour = (int)(damage - (damage * (appliedArmour / 100f)));
+                if (appliedArmour > 80)
+                    appliedArmour = 80;
 
-            if (damageAfterArmour < 1)
-                damageAfterArmour = 1;
+                damageAfterArmour = (int)(damage - (damage * (appliedArmour / 100f)));
+
+                if (damageAfterArmour < 1)
+                    damageAfterArmour = 1;
+            }
+            else if (damageType == DamageType.Magical)
+            {
+                float appliedArmour = BaseMagicResistance + AddedMagicResistance;
+
+                if (appliedArmour > 80)
+                    appliedArmour = 80;
+
+                damageAfterArmour = (int)(damage - (damage * (appliedArmour / 100f)));
+
+                if (damageAfterArmour < 1)
+                    damageAfterArmour = 1;
+            }
 
             _currentHP -= damageAfterArmour;
             if (_currentHP < 0)

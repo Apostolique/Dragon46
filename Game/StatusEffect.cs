@@ -65,7 +65,7 @@ namespace GameProject
 
         public override void Tick()
         {
-            _owner.ApplyDamage(_damagePerTick);
+            _owner.ApplyDamage(DamageType.Magical, _damagePerTick);
         }
     }
 
