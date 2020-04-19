@@ -8,8 +8,6 @@ namespace GameProject {
             Start = start;
             Target = target;
             Bounce = bounce;
-
-            Interpolation = (a, b, c) => MathHelper.Lerp(a, b, c);
         }
 
         public bool Bounce {
@@ -24,7 +22,7 @@ namespace GameProject {
             get;
             set;
         }
-        public float Value => Interpolation(Start, Target, _percent);
+        public float Value => MathHelper.Lerp(Start, Target, Easing(_percent));
         public float Start {
             get;
             set;
@@ -33,10 +31,11 @@ namespace GameProject {
             get;
             set;
         }
-        public Func<float, float, float, float> Interpolation {
+
+        public Func<float, float> Easing {
             get;
             set;
-        }
+        } = EasingFunctions.QuadraticInOut;
 
         /// <returns>true when animation is done.</returns>
         public bool Update(GameTime gameTime) {
