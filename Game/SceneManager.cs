@@ -22,6 +22,7 @@ namespace GameProject
         protected const int _encounterTransitionDuration = 2000;
         protected int _encounterTransitionTimer;
         protected bool _encounterTransition;
+        protected bool _gameStarted;
 
         protected List<Character> _heroCharacters
         {
@@ -101,6 +102,7 @@ namespace GameProject
                             return GameStateType.PlayerWon;
 
                         _encounterTransition = false;
+                        _gameStarted = true;
                     }
                 }
                 else
@@ -162,6 +164,8 @@ namespace GameProject
 
         protected void CheckNextCharacterAbility(Character character)
         {
+            if (!_gameStarted)
+                return;
             if (_encounterTransition)
                 return;
             if (character == null)
