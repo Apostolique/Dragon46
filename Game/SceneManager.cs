@@ -11,7 +11,7 @@ namespace GameProject
     {
         protected GraphicsDevice _graphics;
         protected SpriteBatch _spriteBatch;
-        
+
         public static long InternalScore;
 
         protected Random _rng;
@@ -65,9 +65,9 @@ namespace GameProject
             _characters = new List<Character>();
 
             _characters.Add(new Character(Database.GetHero(CharacterType.Cleric), false, 0, _slotPositions[0], true));
-            _characters.Add(new Character(Database.GetHero(CharacterType.Wizard), false, 1, _slotPositions[1]));
-            _characters.Add(new Character(Database.GetHero(CharacterType.Archer), false, 2, _slotPositions[2]));
             _characters.Add(new Character(Database.GetHero(CharacterType.Warrior), false, 3, _slotPositions[3]));
+            _characters.Add(new Character(Database.GetHero(CharacterType.Archer), false, 2, _slotPositions[2]));
+            _characters.Add(new Character(Database.GetHero(CharacterType.Wizard), false, 1, _slotPositions[1]));
 
             _player = _characters[0];
             _playerAbilities = Database.GetCharacterAbilities(CharacterType.Cleric);
