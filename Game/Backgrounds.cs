@@ -20,10 +20,11 @@ namespace GameProject {
             var maxDepth = 0;
 
             for (int i = _furthest + 1; i <= 0; i++) {
-                for (int j = 0; j < mapLength; j += (Assets.Ground.Width - 100) * groundScale) {
-                    maxDepth++;
-                    Quadtree<BackgroundObjects>.Add(new BackgroundObjects(j, 0, i, groundScale, Assets.Ground, false, maxDepth));
-                }
+                //for (int j = 0; j < mapLength; j += (Assets.Ground.Width - 100) * groundScale) {
+                //    maxDepth++;
+                    _infiniteObjects.Add(new InfiniteObjects(Assets.Ground, i, 1, new Vector2(0, 0), 1));
+                    //Quadtree<BackgroundObjects>.Add(new BackgroundObjects(j, 0, i, groundScale, Assets.Ground, false, maxDepth));
+                //}
             }
 
             for (int i = 0; i < 130; i++) {
