@@ -60,7 +60,7 @@ namespace GameProject
             _uiManager = new InGameUIManager(_graphics);
         }
 
-        public void Update(GameTime gameTime)
+        public GameStateType Update(GameTime gameTime)
         {
             _internalScore += gameTime.ElapsedGameTime.Milliseconds;
 
@@ -77,8 +77,7 @@ namespace GameProject
 
             if (heroesAlive == 0)
             {
-                GameOver();
-                return;
+                return GameStateType.GameOver;
             }
 
             var enemiesAlive = 0;
@@ -87,9 +86,12 @@ namespace GameProject
                     enemiesAlive += 1;
 
             if (enemiesAlive == 0)
-                MoveNextEncounter();
+                if (MoveNextEncounter())
+                    return GameStateType.PlayerWon;
 
             _uiManager.Update(gameTime);
+
+            return GameStateType.None;
         }
 
         public void Draw()
@@ -107,14 +109,13 @@ namespace GameProject
             _spriteBatch.End();
         }
 
-        protected void MoveNextEncounter()
+        protected bool MoveNextEncounter()
         {
             var nextEncounter = _gameManager.NextEncounter();
 
             if (nextEncounter == null)
             {
-                PlayerWon();
-                return;
+                return true;
             }
 
             _characters.RemoveAll(c => c.Enemy);
@@ -133,16 +134,8 @@ namespace GameProject
                 if (enemySlot >= _slotPositions.Length)
                     continue;
             }
-        }
 
-        protected void PlayerWon()
-        {
-            throw new NotImplementedException("Player won");
-        }
-
-        protected void GameOver()
-        {
-            throw new NotImplementedException("Game over");
+            return false;
         }
 
         protected void CheckNextCharacterAbility(Character character)

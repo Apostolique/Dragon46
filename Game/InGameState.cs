@@ -22,8 +22,9 @@ namespace GameProject
         {
             Core.Update(gameTime);
 
-            _sceneManager.Update(gameTime);
-            return GameStateType.None;
+            var newState = _sceneManager.Update(gameTime);
+
+            return newState;
         }
 
         public override void Draw()

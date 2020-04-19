@@ -65,6 +65,18 @@ namespace GameProject {
                         _currentState = new InGameState(GraphicsDevice);
                     }
                     break;
+
+                case GameStateType.GameOver:
+                    {
+                        _currentState = new GameOverState(GraphicsDevice);
+                    }
+                    break;
+
+                case GameStateType.PlayerWon:
+                    {
+                        _currentState = new PlayerWonState(GraphicsDevice);
+                    }
+                    break;
             }
 
             InputHelper.UpdateCleanup();
