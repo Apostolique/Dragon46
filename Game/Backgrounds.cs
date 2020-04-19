@@ -12,7 +12,8 @@ namespace GameProject {
 
             _s = new SpriteBatch(g);
 
-            _infiniteObjects.Add(new InfiniteObjects(Assets.Sky, _furthest, 10));
+            _infiniteObjects.Add(new InfiniteObjects(Assets.Sky, _furthest - 10, 100, Vector2.Zero));
+            _infiniteObjects.Add(new InfiniteObjects(Assets.Mountains, _furthest, 2, new Vector2(0, 450), -260));
 
             var groundScale = 1;
 

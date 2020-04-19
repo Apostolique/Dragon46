@@ -3,11 +3,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject {
     public class InfiniteObjects {
-        public InfiniteObjects(Texture2D texture, float z, float scale, float? limitY = null) {
+        public InfiniteObjects(Texture2D texture, float z, float scale, Vector2 offset, float? limitY = null) {
             Texture = texture;
             Z = z;
             Scale = scale;
             LimitY = limitY;
+            Offset = offset;
         }
 
         public Texture2D Texture {
@@ -26,6 +27,10 @@ namespace GameProject {
             get;
             set;
         }
+        public Vector2 Offset {
+            get;
+            set;
+        }
 
         public void Draw(SpriteBatch s) {
             Rectangle view = s.GraphicsDevice.Viewport.Bounds;
@@ -39,12 +44,11 @@ namespace GameProject {
             }
 
             Vector2 size = new Vector2(Texture.Width, Texture.Height);
-            var posOffset = new Vector2(0, 0);
 
             Matrix m =
                 Matrix.CreateScale(Scale) *
                 Matrix.CreateScale(size.X, size.Y, 1) *
-                Matrix.CreateTranslation(posOffset.X, posOffset.Y, 1) *
+                Matrix.CreateTranslation(Offset.X, Offset.Y, 1) *
                 CameraWrapper.Camera.View(Z) *
                 Matrix.CreateScale(1f / size.X, 1f / size.Y, 1);
 

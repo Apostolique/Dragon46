@@ -24,6 +24,7 @@ namespace GameProject {
 
             Infinite = content.Load<Effect>("infinite");
             Sky = content.Load<Texture2D>("sky");
+            Mountains = content.Load<Texture2D>("mountains_2");
             Ground = content.Load<Texture2D>("grass_and_path");
             Bush = content.Load<Texture2D>("bush");
             Tree = content.Load<Texture2D>("tree");
@@ -102,6 +103,7 @@ namespace GameProject {
 
         public static Effect Infinite;
         public static Texture2D Sky;
+        public static Texture2D Mountains;
         public static Texture2D Ground;
         public static Texture2D Bush;
         public static Texture2D Tree;
