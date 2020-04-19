@@ -19,6 +19,10 @@ namespace GameProject
         protected Vector2[] _slotPositions;
         protected List<Character> _characters;
 
+        protected const int _encounterTransitionDuration = 2000;
+        protected int _encounterTransitionTimer;
+        protected bool _encounterTransition;
+
         protected List<Character> _heroCharacters
         {
             get { return _characters.Where(c => !c.Enemy).ToList(); }
@@ -86,8 +90,26 @@ namespace GameProject
                     enemiesAlive += 1;
 
             if (enemiesAlive == 0)
-                if (MoveNextEncounter())
-                    return GameStateType.PlayerWon;
+            {
+                if (_encounterTransition)
+                {
+                    _encounterTransitionTimer -= gameTime.ElapsedGameTime.Milliseconds;
+
+                    if (_encounterTransitionTimer <= 0)
+                    {
+                        if (MoveNextEncounter())
+                            return GameStateType.PlayerWon;
+
+                        _encounterTransition = false;
+                    }
+                }
+                else
+                {
+                    CameraWrapper.GoToNextEncounter(_encounterTransitionDuration);
+                    _encounterTransitionTimer = _encounterTransitionDuration;
+                    _encounterTransition = true;
+                }
+            }
 
             _uiManager.Update(gameTime);
 
@@ -140,6 +162,8 @@ namespace GameProject
 
         protected void CheckNextCharacterAbility(Character character)
         {
+            if (_encounterTransition)
+                return;
             if (character == null)
                 return;
             if (character.IsCasting)
