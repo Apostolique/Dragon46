@@ -8,7 +8,8 @@ namespace GameProject
         // hero
         Warrior, Archer, Wizard, Cleric,
         // enemy
-        Goblin,
+        GoblinMinion, GoblinBrute, GoblinShaman,
+        Dragon
     }
 
     public enum AbilityType
@@ -45,12 +46,14 @@ namespace GameProject
                     new Ability()
                     {
                         Name = "Defend",
+                        CastTime = 2000,
+                        TargetSelf = true,
                         OnHitEffects = new List<AbilityEffect>()
                         {
                             new AbilityEffect()
                             {
                                 AddCasterArmour = 5,
-                                Duration = 10000
+                                Duration = 5000
                             }
                         }
                     }
@@ -66,6 +69,55 @@ namespace GameProject
                         AbilityType.Defend
                     }
                 },
+                {
+                    CharacterType.Archer,
+                    new List<AbilityType>()
+                    {
+                        AbilityType.Defend
+                    }
+                },
+                {
+                    CharacterType.Wizard,
+                    new List<AbilityType>()
+                    {
+                        AbilityType.Defend
+                    }
+                },
+                {
+                    CharacterType.Cleric,
+                    new List<AbilityType>()
+                    {
+                        AbilityType.Defend
+                    }
+                },
+                {
+                    CharacterType.GoblinMinion,
+                    new List<AbilityType>()
+                    {
+                        AbilityType.Defend
+                    }
+                },
+                {
+                    CharacterType.GoblinBrute,
+                    new List<AbilityType>()
+                    {
+                        AbilityType.Defend
+                    }
+                },
+                {
+                    CharacterType.GoblinShaman,
+                    new List<AbilityType>()
+                    {
+                        AbilityType.Defend
+                    }
+                },
+                {
+                    CharacterType.Dragon,
+                    new List<AbilityType>()
+                    {
+                        AbilityType.Defend
+                    }
+                },
             }; // CastableAbilities
 
             _statusEffects = new Dictionary<StatusEffectType, Type>()
@@ -76,28 +128,40 @@ namespace GameProject
             _enemies = new Dictionary<CharacterType, EnemyType>()
             {
                 {
-                    CharacterType.Goblin,
-                    new EnemyType(type: CharacterType.Goblin, maxHP: 100, name: "Goblin", baseArmour: 0)
-                }
+                    CharacterType.GoblinMinion,
+                    new EnemyType(type: CharacterType.GoblinMinion, maxHP: 100, name: "Goblin Minion", baseArmour: 5, difficultyScore: 1)
+                },
+                {
+                    CharacterType.GoblinBrute,
+                    new EnemyType(type: CharacterType.GoblinBrute, maxHP: 200, name: "Goblin Brute", baseArmour: 10, difficultyScore: 2)
+                },
+                {
+                    CharacterType.GoblinShaman,
+                    new EnemyType(type: CharacterType.GoblinShaman, maxHP: 150, name: "Goblin Shaman", baseArmour: 5, difficultyScore: 2)
+                },
+                {
+                    CharacterType.Dragon,
+                    new EnemyType(type: CharacterType.Dragon, maxHP: 2000, name: "Dragon", baseArmour: 20, difficultyScore: 10)
+                },
             };
 
             _heroes = new Dictionary<CharacterType, HeroType>()
             {
                 {
                     CharacterType.Cleric,
-                    new HeroType(type: CharacterType.Cleric, maxHP: 100, name: "Cleric", baseArmour: 0)
+                    new HeroType(type: CharacterType.Cleric, maxHP: 100, name: "Cleric", baseArmour: 5)
                 },
                 {
                     CharacterType.Wizard,
-                    new HeroType(type: CharacterType.Wizard, maxHP: 90, name: "Wizard", baseArmour: 0)
+                    new HeroType(type: CharacterType.Wizard, maxHP: 90, name: "Wizard", baseArmour: 5)
                 },
                 {
                     CharacterType.Archer,
-                    new HeroType(type: CharacterType.Archer, maxHP: 120, name: "Archer", baseArmour: 0)
+                    new HeroType(type: CharacterType.Archer, maxHP: 120, name: "Archer", baseArmour: 10)
                 },
                 {
                     CharacterType.Warrior,
-                    new HeroType(type: CharacterType.Warrior, maxHP: 200, name: "Warrior", baseArmour: 0)
+                    new HeroType(type: CharacterType.Warrior, maxHP: 200, name: "Warrior", baseArmour: 20)
                 }
             };
         }
@@ -139,6 +203,21 @@ namespace GameProject
                 throw new Exception("Enemy not defined: " + type.ToString());
 
             return _enemies[type];
+        }
+
+        public static EnemyType GetRandomEnemy(Random rng)
+        {
+            var index = rng.Next(0, _enemies.Count);
+            var counter = 0;
+
+            foreach (var enemy in _enemies)
+            {
+                if (counter == index)
+                    return enemy.Value;
+                counter++;
+            }
+
+            return null;
         }
 
         public static HeroType GetHero(CharacterType type)

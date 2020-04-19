@@ -5,8 +5,6 @@ namespace GameProject
 {
     public class GameManager
     {
-        public const int EncounterCount = 10;
-
         protected Random _rng;
         protected List<Encounter> _encounters;
         protected int _currentEncounter;
@@ -17,7 +15,7 @@ namespace GameProject
             _rng = rng;
             _encounters = new List<Encounter>();
 
-            for (var i = 0; i < EncounterCount; i++)
+            for (var i = 0; i < Encounter.Waves.Count; i++)
                 _encounters.Add(CreateEncounter(i));
         }
 
@@ -30,8 +28,8 @@ namespace GameProject
 
         public Encounter CreateEncounter(int index)
         {
-            var encounter = new Encounter();
-
+            var encounter = new Encounter(index);
+            _encounters.Add(encounter);
             return encounter;
         }
     }

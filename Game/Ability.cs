@@ -10,6 +10,8 @@ namespace GameProject
         public int CastTime { get; set; }
         public int Damage { get; set; }
         public string Name { get; set; }
+        public bool TargetFriendly { get; set; }
+        public bool TargetSelf { get; set; }
 
         public List<AbilityEffect> OnCastEffects = new List<AbilityEffect>();
         public List<AbilityEffect> OnHitEffects = new List<AbilityEffect>();

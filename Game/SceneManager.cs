@@ -8,10 +8,13 @@ namespace GameProject
 {
     public class SceneManager
     {
+        protected GraphicsDevice _graphics;
+        protected SpriteBatch _spriteBatch;
         protected int _internalScore;
 
         protected Random _rng;
         protected GameManager _gameManager;
+        protected InGameUIManager _uiManager;
 
         protected Vector2[] _slotPositions;
         protected List<Character> _characters;
@@ -26,20 +29,22 @@ namespace GameProject
             get { return _characters.Where(c => c.Enemy).ToList(); }
         }
 
-        public SceneManager()
+        public SceneManager(GraphicsDevice graphics)
         {
+            _graphics = graphics;
+            _spriteBatch = new SpriteBatch(graphics);
             _rng = new Random();
 
             _slotPositions = new Vector2[8]
             {
-                new Vector2(0, 0), // player
-                new Vector2(0, 0), // wizard
-                new Vector2(0, 0), // archer
-                new Vector2(0, 0), // warrior
-                new Vector2(0, 0), // enemy 1
-                new Vector2(0, 0), // enemy 2
-                new Vector2(0, 0), // enemy 3
-                new Vector2(0, 0), // enemy 4
+                new Vector2(50, 300), // player
+                new Vector2(200, 300), // wizard
+                new Vector2(350, 300), // archer
+                new Vector2(500, 300), // warrior
+                new Vector2(900, 300), // enemy 1
+                new Vector2(1050, 300), // enemy 2
+                new Vector2(1200, 300), // enemy 3
+                new Vector2(1350, 300), // enemy 4
             };
 
             _characters = new List<Character>();
@@ -51,6 +56,8 @@ namespace GameProject
 
             _gameManager = new GameManager();
             _gameManager.Load(_rng);
+            
+            _uiManager = new InGameUIManager(_graphics);
         }
 
         public void Update(GameTime gameTime)
@@ -81,15 +88,23 @@ namespace GameProject
 
             if (enemiesAlive == 0)
                 MoveNextEncounter();
+
+            _uiManager.Update(gameTime);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw()
         {
+            _spriteBatch.Begin(sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+
             for (var i = 0; i < _characters.Count; i++)
             {
                 if (!_characters[i].Dead)
-                    _characters[i].Draw(spriteBatch);
+                    _characters[i].Draw(_spriteBatch);
             }
+
+            _uiManager.Draw(_spriteBatch, _characters);
+
+            _spriteBatch.End();
         }
 
         protected void MoveNextEncounter()
@@ -112,6 +127,8 @@ namespace GameProject
                 var newEnemy = new Character(enemy.EnemyType, true, enemySlot, _slotPositions[enemySlot]);
                 _characters.Add(newEnemy);
                 enemySlot++;
+
+                Console.WriteLine("New enemy: " + newEnemy.Name);
 
                 if (enemySlot >= _slotPositions.Length)
                     continue;
@@ -142,10 +159,29 @@ namespace GameProject
 
             var heroes = _heroCharacters;
             var enemies = _enemyCharacters;
-            
-            var target = heroes[_rng.Next(0, heroes.Count)];
-            if (!character.Enemy)
-                target = enemies[_rng.Next(0, enemies.Count)];
+
+            Character target;
+            if (nextAbility.TargetSelf)
+            {
+                target = character;
+            }
+            else
+            {
+                if (!character.Enemy)
+                {
+                    if (nextAbility.TargetFriendly)
+                        target = heroes[_rng.Next(0, enemies.Count)];
+                    else
+                        target = enemies[_rng.Next(0, enemies.Count)];
+                }
+                else
+                {
+                    if (nextAbility.TargetFriendly)
+                        target = enemies[_rng.Next(0, enemies.Count)];
+                    else
+                        target = heroes[_rng.Next(0, enemies.Count)];
+                }
+            }
 
             var abilityTimer = new AbilityTimer(character, target, nextAbility);
             character.CastAbility(abilityTimer);

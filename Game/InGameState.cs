@@ -6,22 +6,31 @@ namespace GameProject
 {
     public class InGameState : GameState
     {
+        protected SpriteBatch _spriteBatch;
         protected SceneManager _sceneManager;
+        protected Backgrounds _backgrounds;
 
         public InGameState(GraphicsDevice graphics) : base(graphics)
         {
-            _sceneManager = new SceneManager();
+            _spriteBatch = new SpriteBatch(graphics);
+            _sceneManager = new SceneManager(graphics);
+
+            _backgrounds = new Backgrounds(graphics);
         }
         
         public override GameStateType Update(GameTime gameTime)
         {
+            Core.Update(gameTime);
+
             _sceneManager.Update(gameTime);
             return GameStateType.None;
         }
 
         public override void Draw()
         {
-            throw new NotImplementedException("Draw _sceneManager");
+            _backgrounds.Draw();
+            _sceneManager.Draw();
+            //TODO : draw scene manager
         }
     }
 }

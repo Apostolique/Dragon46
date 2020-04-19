@@ -187,6 +187,9 @@
 /processorParam:DebugMode=Auto
 /build:infinite.fx
 
+#begin Lato-Bold.ttf
+/copy:Lato-Bold.ttf
+
 #begin sky.png
 /importer:TextureImporter
 /processor:TextureProcessor

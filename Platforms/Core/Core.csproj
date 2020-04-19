@@ -25,6 +25,7 @@
     <PackageReference Include="Dcrew.ObjectPool" Version="1.0.1" />
     <PackageReference Include="MonoGame.Extended" Version="3.7.0" />
     <PackageReference Include="MonoGame.Extended.Tweening" Version="3.7.0" />
+	<PackageReference Include="SpriteFontPlus" Version="0.7.6.34" />
   </ItemGroup>
 
   <ItemGroup>

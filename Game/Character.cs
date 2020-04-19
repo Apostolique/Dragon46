@@ -16,10 +16,16 @@ namespace GameProject
         public CharacterSprite Sprite;
 
         protected Vector2 _drawPosition = Vector2.Zero;
+        public Vector2 DrawPosition { get => _drawPosition; }
+
+        protected const int _hitDuration = 300;
+        protected bool _isHit;
+        protected int _hitTimer;
 
         protected int _maxHP;
         protected int _baseArmour;
         protected int _currentHP;
+        public int MaxHP { get => _maxHP; }
         public int CurrentHP { get => _currentHP; }
         public int BaseArmour { get => _baseArmour; }
 
@@ -35,6 +41,7 @@ namespace GameProject
 
         protected AbilityTimer _castingAbility;
         public AbilityTimer CastingAbility { get => _castingAbility; }
+        public bool IsCasting { get => (_castingAbility == null || _castingAbility.Finished) ? false : true; }
 
         protected StatusEffect _statusEffect;
         public StatusEffect StatusEffect { get => _statusEffect; }
@@ -46,9 +53,14 @@ namespace GameProject
             _enemy = enemy;
             _type = data.Type;
             _maxHP = data.MaxHP;
+            _currentHP = _maxHP;
             _drawPosition = drawPosition;
             _name = data.Name;
             Slot = slot;
+
+            Sprite = Assets.CharacterSprites[_type];
+
+            _buffs = new List<Buff>();
         }
 
         public void Update(GameTime gameTime)
@@ -68,23 +80,47 @@ namespace GameProject
                 _buffs[i].Update(gameTime);
 
             _buffs.RemoveAll(b => b.Finished);
+
+            if (_isHit)
+            {
+                _hitTimer -= gameTime.ElapsedGameTime.Milliseconds;
+                if (_hitTimer <= 0)
+                    _isHit = false;
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-
+            spriteBatch.Draw(_isHit ? Sprite.HitTexture : Sprite.Texture, _drawPosition, Color.White);
         }
 
         public void ApplyDamage(int damage)
         {
             if (_dead)
                 return;
+            if (damage <= 0)
+                return;
 
-            _currentHP -= damage;
+            float appliedArmour = BaseArmour + AddedArmour;
+
+            if (appliedArmour > 80)
+                appliedArmour = 80;
+
+            int damageAfterArmour = (int)(damage - (damage * (appliedArmour / 100f)));
+
+            if (damageAfterArmour < 1)
+                damageAfterArmour = 1;
+
+            _currentHP -= damageAfterArmour;
             if (_currentHP < 0)
             {
                 _currentHP = 0;
                 _dead = true;
+            }
+            else
+            {
+                _hitTimer = _hitDuration;
+                _isHit = true;
             }
         }
 
