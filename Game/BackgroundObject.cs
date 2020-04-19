@@ -1,7 +1,6 @@
 using Dcrew.MonoGame._2D_Spatial_Partition;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
 
 namespace GameProject {
     public class BackgroundObjects : IAABB {
@@ -29,8 +28,12 @@ namespace GameProject {
             set;
         }
 
+        public void Update(GameTime gameTime) {
+
+        }
+
         public void Draw(SpriteBatch s) {
-            s.Draw(Texture, AABB, Texture.Bounds, Color.White);
+            s.Draw(Texture, AABB, Texture.Bounds, Color.White, Angle, Vector2.Zero, SpriteEffects.None, 0);
         }
 
         Rectangle _aabb;

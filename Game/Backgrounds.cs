@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Dcrew.MonoGame._2D_Spatial_Partition;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject {
@@ -25,6 +26,11 @@ namespace GameProject {
             for (int i = 0; i < 300; i++) {
                 Quadtree<BackgroundObjects>.Add(new BackgroundObjects(_r.Next(0, mapLength), -Assets.Bush.Height, _r.Next(_furthest + 1, 0), 1f, Assets.Bush));
             }
+        }
+
+        public void Update(GameTime gameTime) {
+            foreach (var e in Quadtree<BackgroundObjects>.Query(Quadtree<BackgroundObjects>.Bounds))
+                e.Update(gameTime);
         }
 
         public void Draw() {
