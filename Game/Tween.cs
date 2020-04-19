@@ -1,9 +1,64 @@
+using System;
+using Microsoft.Xna.Framework;
+
 namespace GameProject {
     public class Tween {
-        public Tween() {
+        public Tween(float duration, float start, float target, bool bounce = false) {
+            Duration = duration;
+            Start = start;
+            Target = target;
+            Bounce = bounce;
 
+            Interpolation = (a, b) => MathHelper.Lerp(a, b, _percent);
         }
 
-        // TODO: A tween is aware of it's duration, start value, end value and it's current time position within the duration.
+        public bool Bounce {
+            get;
+            set;
+        }
+        public float Duration {
+            get;
+            set;
+        }
+        public float CurrentTime {
+            get;
+            set;
+        }
+        public float Value => Interpolation(Start, Target);
+        public float Start {
+            get;
+            set;
+        }
+        public float Target {
+            get;
+            set;
+        }
+        public Func<float, float, float> Interpolation {
+            get;
+            set;
+        }
+
+        /// <returns>true when animation is done.</returns>
+        public bool Update(GameTime gameTime) {
+            CurrentTime += gameTime.ElapsedGameTime.Milliseconds;
+
+            if (CurrentTime > Duration) {
+                if (Bounce) {
+                    swap();
+                } else {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void swap() {
+            var temp = Start;
+            Start = Target;
+            Target = temp;
+            CurrentTime = 0;
+        }
+
+        private float _percent => CurrentTime / Duration;
     }
 }
