@@ -25,10 +25,10 @@ namespace GameProject {
         }
 
         public static void GoToPrevEncounter(float duration, float distance = 2000) {
-            CameraTween = new Tween(duration, Camera.X, Camera.X - distance, false);
+            CameraTween = new Tween(duration, Camera.X, Camera.X - distance, EasingFunctions.QuadraticInOut, false);
         }
         public static void GoToNextEncounter(float duration, float distance = 2000) {
-            CameraTween = new Tween(duration, Camera.X, Camera.X + distance, false);
+            CameraTween = new Tween(duration, Camera.X, Camera.X + distance, EasingFunctions.QuadraticInOut, false);
         }
 
         public static Camera Camera;

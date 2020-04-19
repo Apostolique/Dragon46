@@ -3,10 +3,11 @@ using Microsoft.Xna.Framework;
 
 namespace GameProject {
     public class Tween {
-        public Tween(float duration, float start, float target, bool bounce = false) {
+        public Tween(float duration, float start, float target, Func<float, float> easing, bool bounce = false) {
             Duration = duration;
             Start = start;
             Target = target;
+            Easing = easing;
             Bounce = bounce;
         }
 
@@ -35,7 +36,7 @@ namespace GameProject {
         public Func<float, float> Easing {
             get;
             set;
-        } = EasingFunctions.QuadraticInOut;
+        }
 
         /// <returns>true when animation is done.</returns>
         public bool Update(GameTime gameTime) {
