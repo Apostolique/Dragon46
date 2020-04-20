@@ -11,6 +11,8 @@ namespace GameProject
         protected string _name;
         public string Name { get => _name; }
 
+        public int CollisionOrder = 0;
+
         protected CharacterType _type;
         public CharacterType Type { get => _type; }
 
