@@ -19,6 +19,7 @@ namespace GameProject
         public int TimeRemaining { get => _timeRemaining; }
 
         protected Ability _ability = null;
+        public Ability Ability { get => _ability; }
 
         protected bool _finished;
         public bool Finished { get => _finished; }
@@ -46,7 +47,7 @@ namespace GameProject
             {
                 _finished = true;
                 _ability.Apply(_caster, _target);
-                _caster.AbilityFinished(_ability);
+                _caster.AbilityFinished(this);
             }
 
             return _finished;

@@ -114,6 +114,14 @@ namespace GameProject {
                     }
                 },
             };
+
+            AbilitySpecialEffectTextures = new Dictionary<AbilitySpecialEffectType, Texture2D>()
+            {
+                {
+                    AbilitySpecialEffectType.Shield,
+                    content.Load<Texture2D>("effect_shield")
+                }
+            };
         }
 
         public static Effect Infinite;
@@ -130,5 +138,6 @@ namespace GameProject {
         public static DynamicSpriteFont UIFont;
 
         public static Dictionary<CharacterType, CharacterSprite> CharacterSprites;
+        public static Dictionary<AbilitySpecialEffectType, Texture2D> AbilitySpecialEffectTextures;
     }
 }

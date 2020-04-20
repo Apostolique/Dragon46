@@ -200,7 +200,7 @@ namespace GameProject
             ScreenEffectsManager.AddCharacterFadeEffect(new CharacterFadeEffect()
             {
                 TargetTransparency = 80,
-                Duration = 250,
+                Duration = 100,
                 Character = this,
             });
 
@@ -269,12 +269,13 @@ namespace GameProject
             _castingAbility = null;
         }
 
-        public void AbilityFinished(Ability ability)
+        public void AbilityFinished(AbilityTimer abilityTimer)
         {
             _castingAbility = null;
-            _castingCooldownTimer = ability.CooldownDuration;
+            _castingCooldownTimer = abilityTimer.Ability.CooldownDuration;
 
             Assets.SoundManager.PlaySound(_abilitySound, (int)SoundType.SFX);
+            ScreenEffectsManager.AddAbilitySpecialEffect(abilityTimer);
         }
 
         public void CastAbility(AbilityTimer castAbility)

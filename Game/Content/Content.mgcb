@@ -98,6 +98,18 @@
 /processorParam:TextureFormat=Color
 /build:dragon_hit.png
 
+#begin effect_shield.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:effect_shield.png
+
 #begin goblin_brute.png
 /importer:TextureImporter
 /processor:TextureProcessor

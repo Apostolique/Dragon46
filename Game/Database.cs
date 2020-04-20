@@ -349,7 +349,7 @@ namespace GameProject
                     {
                         AbilityType = AbilityType.MinionSpear,
                         Name = "Spear",
-                        CastTime = 2500,
+                        CastTime = 2000,
                         DamageType = DamageType.Physical,
                         Damage = 10,
                     }
@@ -379,7 +379,7 @@ namespace GameProject
                     {
                         AbilityType = AbilityType.BruteSmash,
                         Name = "Smashing Blow",
-                        CastTime = 2500,
+                        CastTime = 2000,
                         DamageType = DamageType.Physical,
                         Damage = 20,
                     }

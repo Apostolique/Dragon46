@@ -50,6 +50,8 @@ namespace GameProject
             if (TargetTransparency < (float)Colour.A)
                 _fadeDirection = FadeDirection.FadeOut;
 
+            _fadeTransparency = Colour.A;
+
             float totalFadeChange = TargetTransparency - Colour.A;
             if (totalFadeChange < 0)
                 totalFadeChange *= -1;
@@ -107,10 +109,74 @@ namespace GameProject
         }
     }
 
+    public enum AbilitySpecialEffectType
+    {
+        Shield,
+    }
+
+    public class AbilitySpecialEffect
+    {
+        public int Duration;
+        public bool Finished;
+
+        public Character Target;
+
+        public virtual void Start() { }
+        public virtual void Update(GameTime gameTime) { }
+        public virtual void Draw(SpriteBatch spriteBatch) { }
+    }
+
+    public class ShieldAbilityEffect : AbilitySpecialEffect
+    {
+        public Texture2D Texture;
+
+        protected float _fadeTransparency = 255f;
+        protected float _fadeChangePerSecond = 0.0f;
+        protected Color _colour = Color.White;
+
+        protected Vector2 _position;
+
+        public override void Start()
+        {
+            _position.X = Target.DrawPosition.X + (Target.Sprite.Texture.Width / 2) - (Texture.Width / 2) - (Target.Sprite.Texture.Width / 2);
+            _position.Y = Target.DrawPosition.Y + (Target.Sprite.Texture.Height / 2) - (Texture.Height / 2);
+
+            float totalFadeChange = 255f;
+
+            _fadeChangePerSecond = totalFadeChange / (Duration / 1000.0f);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            if (Finished)
+                return;
+
+            _fadeTransparency -= _fadeChangePerSecond * ((float)gameTime.ElapsedGameTime.Milliseconds / 1000.0f);
+
+            if (_fadeTransparency <= 0)
+            {
+                _fadeTransparency = 0;
+                Finished = true;
+            }
+
+            _colour.A = (byte)_fadeTransparency;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            if (Finished)
+                return;
+
+            spriteBatch.Draw(Texture, _position, _colour);
+        }
+    }
+
     public static class ScreenEffectsManager
     {
         private static List<ScreenText> _screenText = new List<ScreenText>();
         private static List<CharacterFadeEffect> _characterFadeEffects = new List<CharacterFadeEffect>();
+
+        private static List<AbilitySpecialEffect> _abilityEffects = new List<AbilitySpecialEffect>();
 
         public static void AddScreenText(ScreenText screenText)
         {
@@ -126,6 +192,32 @@ namespace GameProject
             _characterFadeEffects.Add(fadeEffect);
         }
 
+        public static void AddAbilitySpecialEffect(AbilityTimer abilityTimer)
+        {
+            AbilitySpecialEffect newEffect = null;
+
+            switch (abilityTimer.Ability.AbilityType)
+            {
+                case AbilityType.Barrier:
+                case AbilityType.BruteDefend:
+                case AbilityType.WarriorDefend:
+                case AbilityType.WizardBarrier:
+                    {
+                        newEffect = new ShieldAbilityEffect()
+                        {
+                            Target = abilityTimer.Target,
+                            Duration = abilityTimer.Ability.CooldownDuration,
+                            Texture = Assets.AbilitySpecialEffectTextures[AbilitySpecialEffectType.Shield]
+                        };
+                        newEffect.Start();
+                    }
+                    break;
+            }
+
+            if (newEffect != null)
+                _abilityEffects.Add(newEffect);
+        }
+
         public static void Draw(SpriteBatch spriteBatch)
         {
             for (var i = 0; i < _screenText.Count; i++)
@@ -134,6 +226,9 @@ namespace GameProject
                 Assets.UIFont.Size = screenText.TextSize;
                 spriteBatch.DrawString(Assets.UIFont, screenText.Text, screenText.Position, screenText.Colour);
             }
+
+            for (var i = 0; i < _abilityEffects.Count; i++)
+                _abilityEffects[i]?.Draw(spriteBatch);
         }
 
         public static void Update(GameTime gameTime)
@@ -153,8 +248,12 @@ namespace GameProject
             for (var i = 0; i < _characterFadeEffects.Count; i++)
                 _characterFadeEffects[i]?.Update(gameTime);
 
+            for (var i = 0; i < _abilityEffects.Count; i++)
+                _abilityEffects[i]?.Update(gameTime);
+
             _screenText.RemoveAll(t => t.Finished);
             _characterFadeEffects.RemoveAll(e => e.Finished);
+            _abilityEffects.RemoveAll(e => e.Finished);
         }
     }
 }
