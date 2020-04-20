@@ -5,7 +5,10 @@ namespace GameProject
 {
     public class GameOverState : GameState
     {
-        public GameOverState(GraphicsDevice graphics) : base(graphics) { }
+        public GameOverState(GraphicsDevice graphics) : base(graphics)
+        {
+            Assets.SoundManager.StopAll();
+        }
 
         public override GameStateType Update(GameTime gameTime)
         {

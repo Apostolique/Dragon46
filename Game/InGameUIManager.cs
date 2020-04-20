@@ -13,26 +13,10 @@ namespace GameProject
         public List<Ability> PlayerAbilities;
         public int PlayerSelectedAbility = -1;
 
-        protected Texture2D _textBackground;
-
         public InGameUIManager(GraphicsDevice graphics)
         {
             _graphics = graphics;
-
             PlayerAbilities = Database.GetCharacterAbilities(CharacterType.Cleric);
-
-            var textBGColour = new Color(0, 0, 0, 80);
-
-            var tempBG = new RenderTarget2D(graphics, graphics.PresentationParameters.BackBufferWidth, graphics.PresentationParameters.BackBufferHeight);
-            graphics.SetRenderTarget(tempBG);
-            graphics.Clear(textBGColour);
-            graphics.SetRenderTarget(null);
-            _textBackground = (Texture2D)tempBG;
-        }
-
-        ~InGameUIManager()
-        {
-            _textBackground?.Dispose();
         }
 
         public void UpdateUISize()
@@ -57,7 +41,7 @@ namespace GameProject
                 var waveSize = Assets.UIFont.MeasureString(waveString);
                 var wavePosition = new Vector2((_graphics.PresentationParameters.BackBufferWidth / 2) - (waveSize.X / 2), 50);
 
-                DrawText(spriteBatch, waveString, wavePosition, Color.White, 42);
+                UIHelper.DrawText(spriteBatch, waveString, wavePosition, Color.White, 42);
             }
 
             for (var i = 0; i < PlayerAbilities.Count; i++)
@@ -72,7 +56,7 @@ namespace GameProject
                 }
 
                 var skillString = "(" + (i + 1) + ") " + ability.Name + " - " + ((float)ability.CastTime / 1000).ToString("0.0") + "s";
-                DrawText(spriteBatch, skillString, playerSkillbarPosition, color);
+                UIHelper.DrawText(spriteBatch, skillString, playerSkillbarPosition, color);
 
                 playerSkillbarPosition.Y += 30;
             }
@@ -86,7 +70,7 @@ namespace GameProject
                 var namePosition = character.DrawPosition;
                 namePosition.Y -= 75;
 
-                DrawText(spriteBatch, character.Name, namePosition, Color.White);
+                UIHelper.DrawText(spriteBatch, character.Name, namePosition, Color.White);
 
                 var hpPosition = namePosition;
                 hpPosition.Y += 25;
@@ -95,7 +79,7 @@ namespace GameProject
                 if (character.CurrentHP <= (character.MaxHP / 2))
                     hpColor = Color.Red;
 
-                DrawText(spriteBatch, character.CurrentHP + "/" + character.MaxHP, hpPosition, hpColor);
+                UIHelper.DrawText(spriteBatch, character.CurrentHP + "/" + character.MaxHP, hpPosition, hpColor);
 
                 var statusPosition = hpPosition;
                 statusPosition.Y += 25;
@@ -111,7 +95,7 @@ namespace GameProject
                 if (statusString.Length > 0)
                 {
                     statusString = statusString.Remove(statusString.Length - 2);
-                    DrawText(spriteBatch, statusString, statusPosition, Color.White);
+                    UIHelper.DrawText(spriteBatch, statusString, statusPosition, Color.White);
                 }
 
                 var skillPosition = statusPosition;
@@ -121,25 +105,8 @@ namespace GameProject
                 if (character.IsCasting)
                     skillString = character.CastingAbility.Name + " " + ((float)character.CastingAbility.TimeRemaining / 1000).ToString("0.0") + "s";
 
-                DrawText(spriteBatch, skillString, skillPosition, Color.White);
+                UIHelper.DrawText(spriteBatch, skillString, skillPosition, Color.White);
             }
-        }
-
-        public void DrawText(SpriteBatch spriteBatch, string text, Vector2 position, Color colour, int size = 20)
-        {
-            if (text.Length == 0)
-                return;
-
-            Assets.UIFont.Size = size;
-            var padding = 3;
-
-            var textSize = Assets.UIFont.MeasureString(text);
-
-            var textBGPosition = position - new Vector2(padding, padding);
-            var textBGRect = new Rectangle((int)textBGPosition.X, (int)textBGPosition.Y, (int)textSize.X + (padding * 2), (int)textSize.Y + (padding * 2));
-
-            spriteBatch.Draw(_textBackground, textBGPosition, textBGRect, Color.White);
-            spriteBatch.DrawString(Assets.UIFont, text, position, colour);
         }
     }
 }

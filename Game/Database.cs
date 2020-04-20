@@ -88,7 +88,7 @@ namespace GameProject
                     {
                         AbilityType = AbilityType.HealingLight,
                         Name = "Healing Light",
-                        CastTime = 5000,
+                        CastTime = 4500,
                         TargetFriendly = true,
                         OnHitEffects = new List<AbilityEffect>()
                         {

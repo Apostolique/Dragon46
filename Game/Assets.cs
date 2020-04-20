@@ -18,9 +18,9 @@ namespace GameProject {
             Content = content;
 
             SoundManager = new SoundManager();
-            SoundManager.SetVolume((int)SoundType.Music, 0.1f);
-            SoundManager.SetVolume((int)SoundType.SFX, 0.25f);
-            SoundManager.SetVolume((int)SoundType.UI, 0.25f);
+            SoundManager.SetVolume((int)SoundType.Music, 0.05f);
+            SoundManager.SetVolume((int)SoundType.SFX, 0.2f);
+            SoundManager.SetVolume((int)SoundType.UI, 0.2f);
 
             Infinite = content.Load<Effect>("infinite");
             Sky = content.Load<Texture2D>("sky");

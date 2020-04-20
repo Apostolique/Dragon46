@@ -11,8 +11,6 @@ namespace GameProject
         protected Backgrounds _backgrounds;
         protected Foregrounds _foregrounds;
 
-        protected int _gameMusic = -1;
-
         public InGameState(GraphicsDevice graphics) : base(graphics)
         {
             _spriteBatch = new SpriteBatch(graphics);
@@ -21,7 +19,8 @@ namespace GameProject
             _backgrounds = new Backgrounds(graphics);
             _foregrounds = new Foregrounds(graphics);
 
-            _gameMusic = Assets.SoundManager.PlaySound("music_test", (int)SoundType.Music, true);
+            UIHelper.Clear();
+            // add buttons
         }
 
         public override GameStateType Update(GameTime gameTime)
@@ -32,9 +31,6 @@ namespace GameProject
 
             _backgrounds.Update(gameTime);
             _foregrounds.Update(gameTime);
-
-            if (newState != GameStateType.None)
-                Assets.SoundManager.StopByID(_gameMusic);
 
             return newState;
         }

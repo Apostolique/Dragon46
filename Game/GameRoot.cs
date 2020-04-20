@@ -6,12 +6,16 @@ using Apos.Input;
 namespace GameProject {
     public class GameRoot : Game
     {
+        public static GameRoot Instance;
+
         protected GameState _currentState;
         protected GraphicsDeviceManager _graphics;
         protected SpriteBatch _spriteBatch;
 
         public GameRoot()
         {
+            Instance = this;
+
             _graphics = new GraphicsDeviceManager(this)
             {
                 GraphicsProfile = GraphicsProfile.HiDef,
@@ -19,6 +23,22 @@ namespace GameProject {
 
             IsMouseVisible = true;
             Content.RootDirectory = "Content";
+        }
+
+        ~GameRoot()
+        {
+            Cleanup();
+        }
+
+        public void ExitGame()
+        {
+            Cleanup();
+            Exit();
+        }
+
+        public void Cleanup()
+        {
+            UIHelper.Cleanup();
         }
 
         protected override void Initialize()
@@ -39,11 +59,12 @@ namespace GameProject {
             InputHelper.Setup(this);
             Database.Load();
             Assets.Setup(Content);
+            UIHelper.Setup(GraphicsDevice);
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            //_currentState = new MainMenuState(GraphicsDevice);
-            _currentState = new InGameState(GraphicsDevice);
+            _currentState = new MainMenuState(GraphicsDevice);
+            //_currentState = new InGameState(GraphicsDevice);
         }
 
         protected override void Update(GameTime gameTime)
@@ -80,6 +101,12 @@ namespace GameProject {
                         _currentState = new PlayerWonState(GraphicsDevice);
                     }
                     break;
+
+                case GameStateType.HowToPlay:
+                    {
+                        _currentState = new HowToPlayState(GraphicsDevice);
+                    }
+                    break;
             }
 
             Assets.SoundManager.Update();
@@ -97,6 +124,7 @@ namespace GameProject {
 
             _spriteBatch.Begin(sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend);
             ScreenEffectsManager.Draw(_spriteBatch);
+            UIHelper.Draw(_spriteBatch);
             _spriteBatch.End();
 
             base.Draw(gameTime);
