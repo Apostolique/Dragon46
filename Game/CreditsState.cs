@@ -30,7 +30,7 @@ namespace GameProject
             helpLabel2.CenterX(graphics);
             helpLabel2.Position.Y = 305;
 
-            var helpLabel3 = new UILabel("Art by Sarah Plowman", 42, 5);
+            var helpLabel3 = new UILabel("Art by Sarah Plowman (@Sarah_Plowman)", 42, 5);
             helpLabel3.CenterX(graphics);
             helpLabel3.Position.Y = 360;
 
