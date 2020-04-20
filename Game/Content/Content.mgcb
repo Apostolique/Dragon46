@@ -254,6 +254,12 @@
 /processorParam:Quality=Best
 /build:sfx_minion.wav
 
+#begin sfx_player.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sfx_player.wav
+
 #begin sfx_shaman.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

@@ -21,7 +21,10 @@ namespace GameProject {
         {
             SoundManager.SetVolume((int)SoundType.Music, MusicVolume);
             SoundManager.SetVolume((int)SoundType.SFX, SFXVolume);
-            SoundManager.SetVolume((int)SoundType.UI, 0.2f);
+            var uiVolume = (SFXVolume == 0 ? 0 : SFXVolume + 0.2f);
+            if (uiVolume > 1)
+                uiVolume = 1;
+            SoundManager.SetVolume((int)SoundType.UI, uiVolume);
         }
 
         public static void Setup(ContentManager content) {

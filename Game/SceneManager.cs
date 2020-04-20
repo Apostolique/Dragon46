@@ -187,6 +187,7 @@ namespace GameProject
 
                             var abilityTimer = new AbilityTimer(_player, clickedCharacter, _playerSelectedAbility);
                             _player.CastAbility(abilityTimer);
+                            Assets.SoundManager.PlaySound("sfx_player", (int)SoundType.UI);
                             _uiManager.PlayerSelectedAbility = -1;
                             _playerSelectedAbility = null;
                         }

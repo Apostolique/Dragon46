@@ -147,7 +147,7 @@ namespace GameProject
             else if (_jumpDownTween != null)
                 jump = new Vector2(0, _jumpDownTween.Value);
 
-            spriteBatch.Draw(texture, _drawPosition + jump + new Vector2(0, texture.Height), null, Color.White, 0, new Vector2(texture.Width / 2, texture.Height), _scaleTween.Value, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, _drawPosition + jump + new Vector2(0, texture.Height), null, Sprite.Colour, 0, new Vector2(texture.Width / 2, texture.Height), _scaleTween.Value, SpriteEffects.None, 0);
         }
 
         public void ApplyDamage(DamageType damageType, int damage)
@@ -191,6 +191,13 @@ namespace GameProject
                 Duration = 3500,
                 Position = _drawPosition - new Vector2(0, 75),
                 Velocity = new Vector2(0, -30f)
+            });
+
+            ScreenEffectsManager.AddCharacterFadeEffect(new CharacterFadeEffect()
+            {
+                TargetTransparency = 80,
+                Duration = 250,
+                Character = this,
             });
 
             _currentHP -= damageAfterArmour;
