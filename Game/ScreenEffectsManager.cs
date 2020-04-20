@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SpriteFontPlus;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -113,6 +114,12 @@ namespace GameProject
     {
         Shield,
         Slash,
+        Fireball,
+        Fire,
+        Poison,
+        Magic,
+        Arrow,
+        Heal
     }
 
     public class AbilitySpecialEffect
@@ -173,10 +180,106 @@ namespace GameProject
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            spriteBatch.Draw(Texture, _position + Offset, null, _colour, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
+        }
+    }
+
+    public class HealAbilityEffect : AbilitySpecialEffect
+    {
+        protected Random _rng = new Random();
+
+        public Texture2D ParticleTexture;
+
+        protected int _particles;
+        protected int _particlesCreated;
+        protected int _timePerParticle;
+        protected int _timePerParticleCounter;
+
+        public Vector2 SpawnPosition;
+
+        public override void Start()
+        {
+            _particles = _rng.Next(10, 15);
+            _timePerParticle = Duration / _particles;
+            _timePerParticleCounter = _timePerParticle;
+
+            SpawnPosition.X = Target.DrawPosition.X + (Target.Sprite.Texture.Width / 2) - (Target.Sprite.Texture.Width / 2);
+            SpawnPosition.Y = Target.DrawPosition.Y + (Target.Sprite.Texture.Height / 2);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            _timePerParticleCounter -= gameTime.ElapsedGameTime.Milliseconds;
+
+            if (_timePerParticleCounter <= 0)
+            {
+                _timePerParticleCounter = _timePerParticle;
+                _particlesCreated += 1;
+
+                ScreenEffectsManager.AddScreenParticle(new ScreenParticle(ParticleTexture)
+                {
+                    Duration = Duration,
+                    Position = SpawnPosition + new Vector2(_rng.Next(-50, 50), _rng.Next(-50, 50)),
+                    Velocity = new Vector2(0, -75f),
+                });
+            }
+
+            if (_particlesCreated == _particles)
+                Finished = true;
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+
+        }
+    }
+
+    public class MagicProjectileEffect : AbilitySpecialEffect
+    {
+
+    }
+
+    public class ScreenParticle
+    {
+        public float Scale = 1f;
+        public float Rotation = 0f;
+        public Texture2D Texture;
+        public bool Finished;
+
+        public int Duration;
+        public Color Colour = Color.White;
+
+        public Vector2 Position;
+        public Vector2 Velocity;
+        public Vector2 Origin;
+
+        public ScreenParticle(Texture2D texture)
+        {
+            Texture = texture;
+
+            Origin = new Vector2(Texture.Width / 2, Texture.Height / 2);
+        }
+
+        public void Update(GameTime gameTime)
+        {
             if (Finished)
                 return;
 
-            spriteBatch.Draw(Texture, _position + Offset, null, _colour, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
+            var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Position += (Velocity * delta);
+
+            Duration -= gameTime.ElapsedGameTime.Milliseconds;
+
+            if (Duration <= 0)
+            {
+                Duration = 0;
+                Finished = true;
+            }
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(Texture, Position, null, Colour, Rotation, Origin, Scale, SpriteEffects.None, 0f);
         }
     }
 
@@ -186,6 +289,12 @@ namespace GameProject
         private static List<CharacterFadeEffect> _characterFadeEffects = new List<CharacterFadeEffect>();
 
         private static List<AbilitySpecialEffect> _abilityEffects = new List<AbilitySpecialEffect>();
+        private static List<ScreenParticle> _screenParticles = new List<ScreenParticle>();
+
+        public static void AddScreenParticle(ScreenParticle screenParticle)
+        {
+            _screenParticles.Add(screenParticle);
+        }
 
         public static void AddScreenText(ScreenText screenText)
         {
@@ -244,6 +353,23 @@ namespace GameProject
                         }
                     }
                     break;
+
+                case AbilityType.DragonHeal:
+                case AbilityType.HealingLight:
+                case AbilityType.ShamanHeal:
+                case AbilityType.BruteRegen:
+                case AbilityType.MinionRegen:
+                case AbilityType.Regeneration:
+                    {
+                        newEffect = new HealAbilityEffect()
+                        {
+                            Target = abilityTimer.Target,
+                            Duration = abilityTimer.Ability.CooldownDuration,
+                            ParticleTexture = Assets.AbilitySpecialEffectTextures[AbilitySpecialEffectType.Heal],
+                        };
+                        newEffect.Start();
+                    }
+                    break;
             }
 
             if (newEffect != null)
@@ -261,6 +387,9 @@ namespace GameProject
 
             for (var i = 0; i < _abilityEffects.Count; i++)
                 _abilityEffects[i]?.Draw(spriteBatch);
+
+            for (var i = 0; i < _screenParticles.Count; i++)
+                _screenParticles[i]?.Draw(spriteBatch);
         }
 
         public static void Update(GameTime gameTime)
@@ -283,9 +412,13 @@ namespace GameProject
             for (var i = 0; i < _abilityEffects.Count; i++)
                 _abilityEffects[i]?.Update(gameTime);
 
+            for (var i = 0; i < _screenParticles.Count; i++)
+                _screenParticles[i]?.Update(gameTime);
+
             _screenText.RemoveAll(t => t.Finished);
             _characterFadeEffects.RemoveAll(e => e.Finished);
             _abilityEffects.RemoveAll(e => e.Finished);
+            _screenParticles.RemoveAll(p => p.Finished);
         }
     }
 }

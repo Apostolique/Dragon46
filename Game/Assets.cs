@@ -124,6 +124,30 @@ namespace GameProject {
                 {
                     AbilitySpecialEffectType.Slash,
                     content.Load<Texture2D>("effect_slash")
+                },
+                {
+                    AbilitySpecialEffectType.Fireball,
+                    content.Load<Texture2D>("effect_fireball")
+                },
+                {
+                    AbilitySpecialEffectType.Fire,
+                    content.Load<Texture2D>("effect_fire")
+                },
+                {
+                    AbilitySpecialEffectType.Poison,
+                    content.Load<Texture2D>("effect_poison")
+                },
+                {
+                    AbilitySpecialEffectType.Magic,
+                    content.Load<Texture2D>("effect_magic")
+                },
+                {
+                    AbilitySpecialEffectType.Arrow,
+                    content.Load<Texture2D>("effect_arrow")
+                },
+                {
+                    AbilitySpecialEffectType.Heal,
+                    content.Load<Texture2D>("effect_heal")
                 }
             };
         }

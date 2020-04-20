@@ -172,24 +172,31 @@ namespace GameProject
                     {
                         var mousePosition = new Vector2(InputHelper.NewMouse.X, InputHelper.NewMouse.Y);
 
-                        Character clickedCharacter = null;
+                        List<Character> clickedCharacters = new List<Character>();
 
                         for (var i = 0; i < _characters.Count; i++)
                             if (_characters[i].PointInCharacter(mousePosition))
-                                clickedCharacter = _characters[i];
+                                clickedCharacters.Add(_characters[i]);
 
-                        if (clickedCharacter != null)
+                        var abilityCast = false;
+
+                        for (var i = 0; i < clickedCharacters.Count; i++)
                         {
-                            if (_playerSelectedAbility.TargetFriendly && clickedCharacter.Enemy)
-                                return;
-                            if (!_playerSelectedAbility.TargetFriendly && !clickedCharacter.Enemy)
-                                return;
+                            var clickedCharacter = clickedCharacters[i];
+                            if (clickedCharacter != null && !abilityCast)
+                            {
+                                if (_playerSelectedAbility.TargetFriendly && clickedCharacter.Enemy)
+                                    return;
+                                if (!_playerSelectedAbility.TargetFriendly && !clickedCharacter.Enemy)
+                                    return;
 
-                            var abilityTimer = new AbilityTimer(_player, clickedCharacter, _playerSelectedAbility);
-                            _player.CastAbility(abilityTimer);
-                            Assets.SoundManager.PlaySound("sfx_player", (int)SoundType.UI);
-                            _uiManager.PlayerSelectedAbility = -1;
-                            _playerSelectedAbility = null;
+                                var abilityTimer = new AbilityTimer(_player, clickedCharacter, _playerSelectedAbility);
+                                _player.CastAbility(abilityTimer);
+                                Assets.SoundManager.PlaySound("sfx_player", (int)SoundType.UI);
+                                _uiManager.PlayerSelectedAbility = -1;
+                                _playerSelectedAbility = null;
+                                abilityCast = true;
+                            }
                         }
                     }
                 }
