@@ -78,8 +78,8 @@ namespace GameProject {
         {
             InputHelper.UpdateSetup();
 
-            if (Triggers.Quit.Pressed())
-                Exit();
+            //if (Triggers.Quit.Pressed())
+            //    Exit();
 
             var nextState = _currentState.Update(gameTime);
 
