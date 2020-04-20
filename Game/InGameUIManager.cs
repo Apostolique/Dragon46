@@ -73,7 +73,7 @@ namespace GameProject
                     continue;
 
                 var namePosition = character.DrawPosition;
-                namePosition.Y -= 50;
+                namePosition.Y -= 75;
 
                 spriteBatch.DrawString(Assets.UIFont, "#" + character.Slot + " " + character.Name, namePosition, Color.White);
 
@@ -99,23 +99,14 @@ namespace GameProject
                     spriteBatch.DrawString(Assets.UIFont, statusString, statusPosition, Color.White);
                 }
 
-                Vector2 skillPosition;
-                if (!character.Enemy)
-                {
-                    skillPosition = heroSkillPosition;
-                    heroSkillPosition.Y += 35;
-                }
-                else
-                {
-                    skillPosition = enemySkillPosition;
-                    enemySkillPosition.Y += 35;
-                }
-
+                var skillPosition = statusPosition;
+                skillPosition.Y += 20;
+                
                 var skillString = "";
                 if (character.IsCasting)
-                    skillString = character.CastingAbility.Name + " " + ((float)character.CastingAbility.TimeRemaining / 1000).ToString("0.0") + "s - Target " + (character.CastingAbility.TargettingSelf ? "Self" : "#" + character.CastingAbility.Target.Slot);
+                    skillString = character.CastingAbility.Name + " " + ((float)character.CastingAbility.TimeRemaining / 1000).ToString("0.0") + "s";
 
-                spriteBatch.DrawString(Assets.UIFont, "#" + character.Slot + " " + character.Name + ": " + skillString, skillPosition, Color.White);
+                spriteBatch.DrawString(Assets.UIFont, skillString, skillPosition, Color.White);
             }
         }
     }

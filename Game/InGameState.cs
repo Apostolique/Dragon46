@@ -35,8 +35,9 @@ namespace GameProject
         public override void Draw()
         {
             _backgrounds.Draw();
-            _sceneManager.Draw();
+            _sceneManager.DrawGame();
             _foregrounds.Draw();
+            _sceneManager.DrawUI();
         }
     }
 }
