@@ -25,8 +25,12 @@ namespace GameProject {
             Infinite = content.Load<Effect>("infinite");
             Sky = content.Load<Texture2D>("sky");
             Mountains = content.Load<Texture2D>("mountains_2");
+            Clouds = content.Load<Texture2D>("clouds");
             Ground = content.Load<Texture2D>("grass_and_path");
-            Bush = content.Load<Texture2D>("bush");
+            Shrub1 = content.Load<Texture2D>("shrub_1");
+            Shrub2 = content.Load<Texture2D>("shrub_2");
+            Shrub3 = content.Load<Texture2D>("shrub_3");
+            Shrub4 = content.Load<Texture2D>("shrub_4");
             Tree = content.Load<Texture2D>("tree");
 
             UIFont = DynamicSpriteFont.FromTtf(TitleContainer.OpenStream("Content/Lato-Bold.ttf"), 16);
@@ -104,8 +108,12 @@ namespace GameProject {
         public static Effect Infinite;
         public static Texture2D Sky;
         public static Texture2D Mountains;
+        public static Texture2D Clouds;
         public static Texture2D Ground;
-        public static Texture2D Bush;
+        public static Texture2D Shrub1;
+        public static Texture2D Shrub2;
+        public static Texture2D Shrub3;
+        public static Texture2D Shrub4;
         public static Texture2D Tree;
 
         public static DynamicSpriteFont UIFont;

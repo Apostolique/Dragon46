@@ -5,13 +5,17 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject {
     public class BackgroundObjects : IAABB {
-        public BackgroundObjects(int x, int y, float z, float scale, Texture2D texture, bool animated, int depth = 0) {
+        public BackgroundObjects(int x, int y, float z, float scale, Texture2D texture, Core.AnimationStyle style, int depth = 0) {
             Z = z;
             Texture = texture;
             _aabb = new Rectangle(x, y + (int)(Texture.Height * scale), (int)(Texture.Width * scale), (int)(Texture.Height * scale));
             Depth = depth;
 
-            if (animated) {
+            _animationStyle = style;
+
+            if (style == Core.AnimationStyle.Cloud) {
+                _tween = new Tween(1000000, x, x - 20000, EasingFunctions.Linear);
+            } else if (style == Core.AnimationStyle.Tree) {
                 _tween = new Tween(Core.R.Next(6000, 10000), -MathF.PI / 32, MathF.PI / 32, EasingFunctions.CubicInOut, true);
             }
         }
@@ -39,7 +43,11 @@ namespace GameProject {
         public void Update(GameTime gameTime) {
             if (_tween != null) {
                 _tween.Update(gameTime);
-                Angle = _tween.Value;
+                if (_animationStyle == Core.AnimationStyle.Cloud) {
+                    _aabb.X = (int)_tween.Value;
+                } else if (_animationStyle == Core.AnimationStyle.Tree) {
+                    Angle = _tween.Value;
+                }
             }
         }
 
@@ -49,5 +57,6 @@ namespace GameProject {
 
         Rectangle _aabb;
         Tween _tween;
+        Core.AnimationStyle _animationStyle;
     }
 }

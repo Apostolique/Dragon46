@@ -9,6 +9,7 @@ namespace GameProject
         protected SpriteBatch _spriteBatch;
         protected SceneManager _sceneManager;
         protected Backgrounds _backgrounds;
+        protected Foregrounds _foregrounds;
 
         public InGameState(GraphicsDevice graphics) : base(graphics)
         {
@@ -16,6 +17,7 @@ namespace GameProject
             _sceneManager = new SceneManager(graphics);
 
             _backgrounds = new Backgrounds(graphics);
+            _foregrounds = new Foregrounds(graphics);
         }
 
         public override GameStateType Update(GameTime gameTime)
@@ -25,6 +27,7 @@ namespace GameProject
             var newState = _sceneManager.Update(gameTime);
 
             _backgrounds.Update(gameTime);
+            _foregrounds.Update(gameTime);
 
             return newState;
         }
@@ -33,7 +36,7 @@ namespace GameProject
         {
             _backgrounds.Draw();
             _sceneManager.Draw();
-            //TODO : draw scene manager
+            _foregrounds.Draw();
         }
     }
 }
