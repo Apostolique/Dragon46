@@ -29,7 +29,7 @@ namespace GameProject
             helpLabel1.CenterX(graphics);
             helpLabel1.Position.Y = 250;
 
-            var helpLabel2 = new UILabel("User number keys 1-5 to select a spell and then click on your target.", 42, 5);
+            var helpLabel2 = new UILabel("Use the number keys 1-5 to select a spell and then click on your target.", 42, 5);
             helpLabel2.CenterX(graphics);
             helpLabel2.Position.Y = 305;
 
