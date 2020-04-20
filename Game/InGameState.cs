@@ -8,25 +8,40 @@ namespace GameProject
     {
         protected SpriteBatch _spriteBatch;
         protected SceneManager _sceneManager;
+
+        protected GameStateType _newState = GameStateType.None;
+
         public InGameState(GraphicsDevice graphics) : base(graphics)
         {
             _spriteBatch = new SpriteBatch(graphics);
             _sceneManager = new SceneManager(graphics);
 
             UIHelper.Clear();
-            // add buttons
+
+            var startButton = new UIButton("< Back to Menu", 32, 5)
+            {
+                OnClick = () => { _newState = GameStateType.MainMenu; }
+            };
+            startButton.CenterX(graphics);
+            startButton.PinTop(graphics, 50);
+            startButton.PinRight(graphics, 50);
+
+            UIHelper.AddButton(startButton);
         }
 
         public override GameStateType Update(GameTime gameTime)
         {
             Core.Update(gameTime);
 
-            var newState = _sceneManager.Update(gameTime);
+            var sceneState = _sceneManager.Update(gameTime);
 
             GameRoot.Instance.Backgrounds.Update(gameTime);
             GameRoot.Instance.Foregrounds.Update(gameTime);
 
-            return newState;
+            if (sceneState != GameStateType.None)
+                _newState = sceneState;
+
+            return _newState;
         }
 
         public override void Draw()
