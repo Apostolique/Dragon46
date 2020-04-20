@@ -144,6 +144,12 @@ namespace GameProject
             _position.X = Target.DrawPosition.X + (Target.Sprite.Texture.Width / 2) - (Texture.Width / 2) - (Target.Sprite.Texture.Width / 2);
             _position.Y = Target.DrawPosition.Y + (Target.Sprite.Texture.Height / 2) - (Texture.Height / 2);
 
+            if (Target.Type == CharacterType.Dragon)
+            {
+                _position.Y -= 250;
+                _position.X += 100;
+            }
+
             float totalFadeChange = 255f;
 
             _fadeChangePerSecond = totalFadeChange / (Duration / 1000.0f);
