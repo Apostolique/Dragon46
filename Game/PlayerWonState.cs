@@ -24,7 +24,7 @@ namespace GameProject
             startButton.CenterX(graphics);
             startButton.Position.Y = 350;
 
-            var exitButton = new UIButton("< Exit Game", 42, 5)
+            var exitButton = new UIButton("> Exit Game", 42, 5)
             {
                 OnClick = () => { GameRoot.Instance.ExitGame(); }
             };

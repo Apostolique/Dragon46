@@ -9,8 +9,6 @@ namespace GameProject
 
         public GameOverState(GraphicsDevice graphics) : base(graphics)
         {
-            //Assets.SoundManager.StopAll();
-
             UIHelper.Clear();
 
             var titleLabel = new UILabel("Game Over", 60, 5);
@@ -24,7 +22,7 @@ namespace GameProject
             startButton.CenterX(graphics);
             startButton.Position.Y = 350;
 
-            var exitButton = new UIButton("< Exit Game", 42, 5)
+            var exitButton = new UIButton("> Exit Game", 42, 5)
             {
                 OnClick = () => { GameRoot.Instance.ExitGame(); }
             };

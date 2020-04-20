@@ -53,6 +53,11 @@ namespace GameProject
 
         public UILabel(string text, int size = 20, int padding = 5)
         {
+            UpdateLabel(text, size, padding);
+        }
+
+        public void UpdateLabel(string text, int size = 20, int padding = 5)
+        {
             Size = size;
             Padding = padding;
             Assets.UIFont.Size = Size;

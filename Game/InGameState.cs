@@ -18,7 +18,7 @@ namespace GameProject
 
             UIHelper.Clear();
 
-            var startButton = new UIButton("< Back to Menu", 32, 5)
+            var startButton = new UIButton("> Back to Menu", 32, 5)
             {
                 OnClick = () => { _newState = GameStateType.MainMenu; }
             };

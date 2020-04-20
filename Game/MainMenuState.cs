@@ -27,21 +27,29 @@ namespace GameProject
             startButton.CenterX(graphics);
             startButton.Position.Y = 350;
 
+            var settingsButton = new UIButton("> Settings", 42, 5)
+            {
+                OnClick = () => { _newState = GameStateType.Settings; }
+            };
+            settingsButton.CenterX(graphics);
+            settingsButton.Position.Y = 425;
+
             var creditsButton = new UIButton("> Credits", 42, 5)
             {
                 OnClick = () => { _newState = GameStateType.Credits; }
             };
             creditsButton.CenterX(graphics);
-            creditsButton.Position.Y = 425;
+            creditsButton.Position.Y = 500;
 
-            var exitButton = new UIButton("< Exit Game", 42, 5)
+            var exitButton = new UIButton("> Exit Game", 42, 5)
             {
                 OnClick = () => { GameRoot.Instance.ExitGame(); }
             };
             exitButton.CenterX(graphics);
-            exitButton.Position.Y = 500;
+            exitButton.Position.Y = 575;
 
             UIHelper.AddButton(startButton);
+            UIHelper.AddButton(settingsButton);
             UIHelper.AddButton(creditsButton);
             UIHelper.AddButton(exitButton);
             UIHelper.AddLabel(titleLabel);
