@@ -73,6 +73,8 @@ namespace GameProject
         protected List<Buff> _buffs;
         public List<Buff> Buffs { get => _buffs; }
 
+        protected string _abilitySound;
+
         public Character(BaseCharacterType data, bool enemy, int slot, Vector2 drawPosition, bool player = false)
         {
             _enemy = enemy;
@@ -85,6 +87,7 @@ namespace GameProject
             _player = player;
             _baseStrength = data.BaseStrength;
             _baseIntelligence = data.BaseIntelligence;
+            _abilitySound = data.AbilitySound;
 
             _baseArmour = data.BaseArmour;
             _baseMagicResistance = data.BaseMagicResistance;
@@ -250,10 +253,17 @@ namespace GameProject
             return true;
         }
 
+        public void CancelCasting()
+        {
+            _castingAbility = null;
+        }
+
         public void AbilityFinished(Ability ability)
         {
             _castingAbility = null;
             _castingCooldownTimer = ability.CooldownDuration;
+
+            Assets.SoundManager.PlaySound(_abilitySound, (int)SoundType.SFX);
         }
 
         public void CastAbility(AbilityTimer castAbility)

@@ -5,8 +5,8 @@ namespace GameProject
         protected int _difficultyScore;
         public int DifficultyScore { get => _difficultyScore; }
 
-        public EnemyType(CharacterType type, int maxHP, string name, int baseArmour, int baseMagicResistance, int difficultyScore, int baseStrength, int baseIntelligence)
-            : base(type, maxHP, name, baseArmour, baseMagicResistance, baseStrength, baseIntelligence)
+        public EnemyType(CharacterType type, int maxHP, string name, int baseArmour, int baseMagicResistance, int difficultyScore, int baseStrength, int baseIntelligence, string abilitySound)
+            : base(type, maxHP, name, baseArmour, baseMagicResistance, baseStrength, baseIntelligence, abilitySound)
         {
             _difficultyScore = difficultyScore;
         }

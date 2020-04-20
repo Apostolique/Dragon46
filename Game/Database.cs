@@ -366,7 +366,7 @@ namespace GameProject
                         {
                             new AbilityEffect()
                             {
-                                HealOverTime = 2
+                                HealOverTime = 1
                             }
                         }
                     }
@@ -431,7 +431,7 @@ namespace GameProject
                         {
                             new AbilityEffect()
                             {
-                                HealOverTime = 5
+                                HealOverTime = 3
                             }
                         }
                     }
@@ -473,7 +473,7 @@ namespace GameProject
                             new AbilityEffect()
                             {
                                 SelfDamage = 20,
-                                TargetHeal = 30,
+                                TargetHeal = 40,
                             }
                         }
                     }
@@ -539,7 +539,7 @@ namespace GameProject
                         {
                             new AbilityEffect()
                             {
-                                TargetHeal = 25
+                                TargetHeal = 20
                             }
                         }
                     }
@@ -657,28 +657,28 @@ namespace GameProject
                     CharacterType.GoblinMinion,
                     new EnemyType(
                         type: CharacterType.GoblinMinion, maxHP: 100, name: "Goblin Minion", baseArmour: 5, baseMagicResistance: 5, difficultyScore: 1,
-                        baseStrength: 10, baseIntelligence: 0
+                        baseStrength: 10, baseIntelligence: 0, abilitySound: "sfx_minion"
                     )
                 },
                 {
                     CharacterType.GoblinBrute,
                     new EnemyType(
                         type: CharacterType.GoblinBrute, maxHP: 200, name: "Goblin Brute", baseArmour: 10, baseMagicResistance: 10, difficultyScore: 2,
-                        baseStrength: 20, baseIntelligence: 0
+                        baseStrength: 20, baseIntelligence: 0, abilitySound: "sfx_brute"
                     )
                 },
                 {
                     CharacterType.GoblinShaman,
                     new EnemyType(
                         type: CharacterType.GoblinShaman, maxHP: 150, name: "Goblin Shaman", baseArmour: 15, baseMagicResistance: 15, difficultyScore: 2,
-                        baseStrength: 0, baseIntelligence: 20
+                        baseStrength: 0, baseIntelligence: 20, abilitySound: "sfx_shaman"
                     )
                 },
                 {
                     CharacterType.Dragon,
                     new EnemyType(
                         type: CharacterType.Dragon, maxHP: 2000, name: "Dragon", baseArmour: 35, baseMagicResistance: 35, difficultyScore: 10,
-                        baseStrength: 30, baseIntelligence: 30
+                        baseStrength: 30, baseIntelligence: 30, abilitySound: "sfx_dragon"
                     )
                 },
             };
@@ -689,28 +689,28 @@ namespace GameProject
                     CharacterType.Cleric,
                     new HeroType(
                         type: CharacterType.Cleric, maxHP: 100, name: "Cleric", baseArmour: 10, baseMagicResistance: 25,
-                        baseStrength: 0, baseIntelligence: 25
+                        baseStrength: 0, baseIntelligence: 25, abilitySound: "sfx_cleric"
                     )
                 },
                 {
                     CharacterType.Wizard,
                     new HeroType(
                         type: CharacterType.Wizard, maxHP: 90, name: "Wizard", baseArmour: 10, baseMagicResistance: 25,
-                        baseStrength: 0, baseIntelligence: 25
+                        baseStrength: 0, baseIntelligence: 25, abilitySound: "sfx_wizard"
                     )
                 },
                 {
                     CharacterType.Archer,
                     new HeroType(
                         type: CharacterType.Archer, maxHP: 120, name: "Archer", baseArmour: 15, baseMagicResistance: 15,
-                        baseStrength: 20, baseIntelligence: 20
+                        baseStrength: 20, baseIntelligence: 20, abilitySound: "sfx_archer"
                     )
                 },
                 {
                     CharacterType.Warrior,
                     new HeroType(
                         type: CharacterType.Warrior, maxHP: 200, name: "Warrior", baseArmour: 25, baseMagicResistance: 10,
-                        baseStrength: 25, baseIntelligence: 0
+                        baseStrength: 25, baseIntelligence: 0, abilitySound: "sfx_warrior"
                     )
                 }
             };

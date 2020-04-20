@@ -21,7 +21,10 @@ namespace GameProject
         protected int _baseIntelligence;
         public int BaseIntelligence { get => _baseIntelligence; }
 
-        public BaseCharacterType(CharacterType type, int maxHP, string name, int baseArmour, int baseMagicResistance, int baseStrength, int baseIntelligence)
+        protected string _abilitySound;
+        public string AbilitySound { get => _abilitySound; }
+
+        public BaseCharacterType(CharacterType type, int maxHP, string name, int baseArmour, int baseMagicResistance, int baseStrength, int baseIntelligence, string abilitySound)
         {
             _type = type;
             _maxHP = maxHP;
@@ -30,6 +33,7 @@ namespace GameProject
             _baseStrength = baseStrength;
             _baseIntelligence = baseIntelligence;
             _baseMagicResistance = baseMagicResistance;
+            _abilitySound = abilitySound;
         }
     }
 }

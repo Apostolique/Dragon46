@@ -91,7 +91,11 @@ namespace GameProject
                 var hpPosition = namePosition;
                 hpPosition.Y += 25;
 
-                DrawText(spriteBatch, character.CurrentHP + "/" + character.MaxHP, hpPosition, Color.White);
+                var hpColor = Color.White;
+                if (character.CurrentHP <= (character.MaxHP / 2))
+                    hpColor = Color.Red;
+
+                DrawText(spriteBatch, character.CurrentHP + "/" + character.MaxHP, hpPosition, hpColor);
 
                 var statusPosition = hpPosition;
                 statusPosition.Y += 25;

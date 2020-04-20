@@ -120,6 +120,9 @@ namespace GameProject
                 }
                 else
                 {
+                    for (var i = 0; i < _characters.Count; i++)
+                        _characters[i]?.CancelCasting();
+
                     CameraWrapper.GoToNextEncounter(_encounterTransitionDuration);
                     _encounterTransitionTimer = _encounterTransitionDuration;
                     _encounterTransition = true;
