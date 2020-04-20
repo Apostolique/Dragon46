@@ -56,9 +56,9 @@ namespace GameProject
                 new Vector2(250, 400), // wizard
                 new Vector2(400, 400), // archer
                 new Vector2(550, 400), // warrior
-                new Vector2(950, 400), // enemy 1
-                new Vector2(1100, 400), // enemy 2
-                new Vector2(1250, 400), // enemy 3
+                new Vector2(950, 100), // enemy 1
+                new Vector2(1100, 200), // enemy 2
+                new Vector2(1250, 300), // enemy 3
                 new Vector2(1400, 400), // enemy 4
             };
 
