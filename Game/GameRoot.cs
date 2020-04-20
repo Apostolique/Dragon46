@@ -113,6 +113,12 @@ namespace GameProject {
                         _currentState = new HowToPlayState(GraphicsDevice);
                     }
                     break;
+
+                case GameStateType.Credits:
+                    {
+                        _currentState = new CreditsState(GraphicsDevice);
+                    }
+                    break;
             }
 
             Assets.SoundManager.Update();

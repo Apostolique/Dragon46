@@ -5,7 +5,7 @@ namespace GameProject
 {
     public enum GameStateType
     {
-        None, MainMenu, InGame, GameOver, PlayerWon, HowToPlay
+        None, MainMenu, InGame, GameOver, PlayerWon, HowToPlay, Credits
     }
 
     public class GameState

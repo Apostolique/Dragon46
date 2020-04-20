@@ -16,7 +16,7 @@ namespace GameProject
 
             UIHelper.Clear();
 
-            var titleLabel = new UILabel("Magical Forest", 60, 5);
+            var titleLabel = new UILabel("Looking for Group", 60, 5);
             titleLabel.PinTop(graphics, 50);
             titleLabel.CenterX(graphics);
 
@@ -27,14 +27,22 @@ namespace GameProject
             startButton.CenterX(graphics);
             startButton.Position.Y = 350;
 
+            var creditsButton = new UIButton("> Credits", 42, 5)
+            {
+                OnClick = () => { _newState = GameStateType.Credits; }
+            };
+            creditsButton.CenterX(graphics);
+            creditsButton.Position.Y = 425;
+
             var exitButton = new UIButton("< Exit Game", 42, 5)
             {
                 OnClick = () => { GameRoot.Instance.ExitGame(); }
             };
             exitButton.CenterX(graphics);
-            exitButton.Position.Y = 425;
+            exitButton.Position.Y = 500;
 
             UIHelper.AddButton(startButton);
+            UIHelper.AddButton(creditsButton);
             UIHelper.AddButton(exitButton);
             UIHelper.AddLabel(titleLabel);
         }
