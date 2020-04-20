@@ -19,15 +19,42 @@ namespace GameProject
         // player abilities
         HealingLight, // burst heal with long cast time
         Regeneration, // heal over time with shorter cast time
-        StoneSkin, // add physical defence
-        MagicShield, // add magic resistance
+        Barrier, // add physical and magic defence
         Silence, // stop enemy abilities
         Distract, // slow down current ability timer
 
         // other abilities
-        Defend,
-        BasicAttack,
+        WarriorSword,
+        WarriorShieldBash,
+        WarriorDefend,
+
+        ArrowShot,
         PoisonArrow,
+        SilenceArrow,
+        StunArrow,
+
+        WizardStaff,
+        WizardBarrier,
+        WizardFireball,
+        WizardStun,
+
+        MinionSpear,
+        MinionRegen,
+
+        BruteSmash,
+        BruteStun,
+        BruteDefend,
+        BruteRegen,
+
+        ShamanStaff,
+        ShamanFireball,
+        ShamanHeal,
+        ShamanPoison,
+
+        DragonFire,
+        DragonStun,
+        DragonHeal,
+        DragonRoar,
     }
 
     public enum StatusEffectType
@@ -90,35 +117,19 @@ namespace GameProject
                     }
                 },
                 {
-                    AbilityType.StoneSkin,
+                    AbilityType.Barrier,
                     new Ability()
                     {
-                        AbilityType = AbilityType.StoneSkin,
-                        Name = "Stone Skin",
-                        CastTime = 2000,
+                        AbilityType = AbilityType.Barrier,
+                        Name = "Barrier",
+                        CastTime = 2500,
                         TargetFriendly = true,
                         OnHitEffects = new List<AbilityEffect>()
                         {
                             new AbilityEffect()
                             {
-                                AddTargetArmour = 35
-                            }
-                        }
-                    }
-                },
-                {
-                    AbilityType.MagicShield,
-                    new Ability()
-                    {
-                        AbilityType = AbilityType.MagicShield,
-                        Name = "Magic Shield",
-                        CastTime = 2000,
-                        TargetFriendly = true,
-                        OnHitEffects = new List<AbilityEffect>()
-                        {
-                            new AbilityEffect()
-                            {
-                                AddTargetMagicResistance = 1000
+                                AddTargetArmour = 40,
+                                AddTargetMagicResistance = 40
                             }
                         }
                     }
@@ -145,7 +156,9 @@ namespace GameProject
                     {
                         AbilityType = AbilityType.Distract,
                         Name = "Distract",
-                        CastTime = 2500,
+                        CastTime = 2000,
+                        Damage = 10,
+                        DamageType = DamageType.Magical,
                         OnHitEffects = new List<AbilityEffect>()
                         {
                             new AbilityEffect()
@@ -156,12 +169,41 @@ namespace GameProject
                     }
                 },
 
-                // other characters
+                // warrior
                 {
-                    AbilityType.Defend,
+                    AbilityType.WarriorSword,
                     new Ability()
                     {
-                        AbilityType = AbilityType.Defend,
+                        AbilityType = AbilityType.WarriorSword,
+                        Name = "Sword",
+                        CastTime = 2000,
+                        DamageType = DamageType.Physical,
+                        Damage = 15,
+                    }
+                },
+                {
+                    AbilityType.WarriorShieldBash,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.WarriorShieldBash,
+                        Name = "Shield Bash",
+                        CastTime = 3500,
+                        DamageType = DamageType.Physical,
+                        Damage = 5,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                HitStun = 1000
+                            }
+                        }
+                    }
+                },
+                {
+                    AbilityType.WarriorDefend,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.WarriorDefend,
                         Name = "Defend",
                         CastTime = 2000,
                         TargetSelf = true,
@@ -169,21 +211,22 @@ namespace GameProject
                         {
                             new AbilityEffect()
                             {
-                                AddCasterArmour = 20,
-                                Duration = 2500
+                                AddTargetArmour = 25
                             }
                         }
                     }
                 },
+
+                // archer
                 {
-                    AbilityType.BasicAttack,
+                    AbilityType.ArrowShot,
                     new Ability()
                     {
-                        AbilityType = AbilityType.BasicAttack,
-                        Name = "Basic Attack",
-                        CastTime = 2500,
-                        Damage = 10,
+                        AbilityType = AbilityType.ArrowShot,
+                        Name = "Arrow Shot",
+                        CastTime = 2000,
                         DamageType = DamageType.Physical,
+                        Damage = 15,
                     }
                 },
                 {
@@ -192,14 +235,329 @@ namespace GameProject
                     {
                         AbilityType = AbilityType.PoisonArrow,
                         Name = "Poison Arrow",
-                        CastTime = 2000,
-                        Damage = 0,
+                        CastTime = 2500,
+                        Damage = 5,
                         DamageType = DamageType.Magical,
                         OnHitEffects = new List<AbilityEffect>()
                         {
                             new AbilityEffect()
                             {
                                 Poison = 5
+                            }
+                        }
+                    }
+                },
+                {
+                    AbilityType.SilenceArrow,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.SilenceArrow,
+                        Name = "Silence Arrow",
+                        CastTime = 3500,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                Silence = 1000
+                            }
+                        }
+                    }
+                },
+                {
+                    AbilityType.StunArrow,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.StunArrow,
+                        Name = "Stun Arrow",
+                        CastTime = 3500,
+                        DamageType = DamageType.Physical,
+                        Damage = 5,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                HitStun = 1000
+                            }
+                        }
+                    }
+                },
+
+                // wizard
+                {
+                    AbilityType.WizardStaff,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.WizardStaff,
+                        Name = "Staff",
+                        CastTime = 2000,
+                        DamageType = DamageType.Physical,
+                        Damage = 10,
+                    }
+                },
+                {
+                    AbilityType.WizardBarrier,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.WizardBarrier,
+                        Name = "Barrier",
+                        CastTime = 3000,
+                        TargetFriendly = true,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                AddTargetArmour = 20,
+                                AddTargetMagicResistance = 20,
+                            }
+                        }
+                    }
+                },
+                {
+                    AbilityType.WizardFireball,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.WizardFireball,
+                        Name = "Fireball",
+                        CastTime = 3500,
+                        DamageType = DamageType.Magical,
+                        Damage = 25,
+                    }
+                },
+                {
+                    AbilityType.WizardStun,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.WizardStun,
+                        Name = "Stunning Light",
+                        CastTime = 3500,
+                        DamageType = DamageType.Magical,
+                        Damage = 5,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                HitStun = 1000
+                            }
+                        }
+                    }
+                },
+
+                // minion
+                {
+                    AbilityType.MinionSpear,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.MinionSpear,
+                        Name = "Spear",
+                        CastTime = 2500,
+                        DamageType = DamageType.Physical,
+                        Damage = 10,
+                    }
+                },
+                {
+                    AbilityType.MinionRegen,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.MinionRegen,
+                        Name = "Regenerate",
+                        CastTime = 3500,
+                        TargetSelf = true,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                HealOverTime = 2
+                            }
+                        }
+                    }
+                },
+
+                // brute
+                {
+                    AbilityType.BruteSmash,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.BruteSmash,
+                        Name = "Smashing Blow",
+                        CastTime = 2500,
+                        DamageType = DamageType.Physical,
+                        Damage = 20,
+                    }
+                },
+                {
+                    AbilityType.BruteStun,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.BruteStun,
+                        Name = "Stunning Blow",
+                        CastTime = 3000,
+                        DamageType = DamageType.Physical,
+                        Damage = 5,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                HitStun = 1000,
+                            }
+                        }
+                    }
+                },
+                {
+                    AbilityType.BruteDefend,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.BruteDefend,
+                        Name = "Defend",
+                        CastTime = 2000,
+                        TargetSelf = true,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                AddTargetArmour = 20,
+                            }
+                        }
+                    }
+                },
+                {
+                    AbilityType.BruteRegen,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.BruteRegen,
+                        Name = "Regenerate",
+                        CastTime = 3500,
+                        TargetSelf = true,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                HealOverTime = 5
+                            }
+                        }
+                    }
+                },
+
+                // shaman
+                {
+                    AbilityType.ShamanStaff,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.ShamanStaff,
+                        Name = "Staff Strike",
+                        CastTime = 2000,
+                        Damage = 15,
+                        DamageType = DamageType.Physical,
+                    }
+                },
+                {
+                    AbilityType.ShamanFireball,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.ShamanFireball,
+                        Name = "Fireball",
+                        CastTime = 3000,
+                        DamageType = DamageType.Magical,
+                        Damage = 25,
+                    }
+                },
+                {
+                    AbilityType.ShamanHeal,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.ShamanHeal,
+                        Name = "Blood Sacrifice",
+                        CastTime = 3500,
+                        TargetFriendly = true,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                SelfDamage = 20,
+                                TargetHeal = 30,
+                            }
+                        }
+                    }
+                },
+                {
+                    AbilityType.ShamanPoison,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.ShamanPoison,
+                        Name = "Poison Cloud",
+                        CastTime = 2500,
+                        Damage = 5,
+                        DamageType = DamageType.Magical,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                Poison = 5
+                            }
+                        }
+                    }
+                },
+
+                // dragon
+                {
+                    AbilityType.DragonFire,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.DragonFire,
+                        Name = "Dragon Fire",
+                        CastTime = 3000,
+                        Damage = 35,
+                        DamageType = DamageType.Magical,
+                    }
+                },
+                {
+                    AbilityType.DragonStun,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.DragonStun,
+                        Name = "Stunning Blow",
+                        CastTime = 2000,
+                        Damage = 15,
+                        DamageType = DamageType.Physical,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                HitStun = 1000
+                            }
+                        }
+                    }
+                },
+                {
+                    AbilityType.DragonHeal,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.DragonHeal,
+                        Name = "Heal",
+                        CastTime = 3500,
+                        TargetSelf = true,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                TargetHeal = 25
+                            }
+                        }
+                    }
+                },
+                {
+                    AbilityType.DragonRoar,
+                    new Ability()
+                    {
+                        AbilityType = AbilityType.DragonRoar,
+                        Name = "Roar",
+                        CastTime = 2500,
+                        Damage = 5,
+                        DamageType = DamageType.Physical,
+                        OnHitEffects = new List<AbilityEffect>()
+                        {
+                            new AbilityEffect()
+                            {
+                                Silence = 1000
                             }
                         }
                     }
@@ -212,24 +570,29 @@ namespace GameProject
                     CharacterType.Warrior,
                     new List<AbilityType>()
                     {
-                        AbilityType.Defend,
-                        AbilityType.BasicAttack
+                        AbilityType.WarriorSword,
+                        AbilityType.WarriorShieldBash,
+                        AbilityType.WarriorDefend,
                     }
                 },
                 {
                     CharacterType.Archer,
                     new List<AbilityType>()
                     {
-                        AbilityType.Defend,
-                        AbilityType.BasicAttack,
-                        AbilityType.PoisonArrow
+                        AbilityType.ArrowShot,
+                        AbilityType.PoisonArrow,
+                        AbilityType.SilenceArrow,
+                        AbilityType.StunArrow,
                     }
                 },
                 {
                     CharacterType.Wizard,
                     new List<AbilityType>()
                     {
-                        AbilityType.Defend
+                        AbilityType.WizardStaff,
+                        AbilityType.WizardBarrier,
+                        AbilityType.WizardFireball,
+                        AbilityType.WizardStun,
                     }
                 },
                 {
@@ -238,8 +601,7 @@ namespace GameProject
                     {
                         AbilityType.HealingLight,
                         AbilityType.Regeneration,
-                        AbilityType.StoneSkin,
-                        AbilityType.MagicShield,
+                        AbilityType.Barrier,
                         AbilityType.Silence,
                         AbilityType.Distract,
                     }
@@ -248,30 +610,38 @@ namespace GameProject
                     CharacterType.GoblinMinion,
                     new List<AbilityType>()
                     {
-                        AbilityType.Defend,
-                        AbilityType.BasicAttack
+                        AbilityType.MinionSpear,
+                        AbilityType.MinionRegen,
                     }
                 },
                 {
                     CharacterType.GoblinBrute,
                     new List<AbilityType>()
                     {
-                        AbilityType.Defend,
-                        AbilityType.BasicAttack
+                        AbilityType.BruteSmash,
+                        AbilityType.BruteStun,
+                        AbilityType.BruteDefend,
+                        AbilityType.BruteRegen,
                     }
                 },
                 {
                     CharacterType.GoblinShaman,
                     new List<AbilityType>()
                     {
-                        AbilityType.Defend
+                        AbilityType.ShamanStaff,
+                        AbilityType.ShamanFireball,
+                        AbilityType.ShamanHeal,
+                        AbilityType.ShamanPoison,
                     }
                 },
                 {
                     CharacterType.Dragon,
                     new List<AbilityType>()
                     {
-                        AbilityType.Defend
+                        AbilityType.DragonFire,
+                        AbilityType.DragonStun,
+                        AbilityType.DragonHeal,
+                        AbilityType.DragonRoar,
                     }
                 },
             }; // CastableAbilities
@@ -286,29 +656,29 @@ namespace GameProject
                 {
                     CharacterType.GoblinMinion,
                     new EnemyType(
-                        type: CharacterType.GoblinMinion, maxHP: 100, name: "Goblin Minion", baseArmour: 5, baseMagicResistance: 0, difficultyScore: 1,
-                        baseStrength: 0, baseIntelligence: 0
+                        type: CharacterType.GoblinMinion, maxHP: 100, name: "Goblin Minion", baseArmour: 5, baseMagicResistance: 5, difficultyScore: 1,
+                        baseStrength: 10, baseIntelligence: 0
                     )
                 },
                 {
                     CharacterType.GoblinBrute,
                     new EnemyType(
-                        type: CharacterType.GoblinBrute, maxHP: 200, name: "Goblin Brute", baseArmour: 10, baseMagicResistance: 0, difficultyScore: 2,
-                        baseStrength: 0, baseIntelligence: 0
+                        type: CharacterType.GoblinBrute, maxHP: 200, name: "Goblin Brute", baseArmour: 10, baseMagicResistance: 10, difficultyScore: 2,
+                        baseStrength: 20, baseIntelligence: 0
                     )
                 },
                 {
                     CharacterType.GoblinShaman,
                     new EnemyType(
-                        type: CharacterType.GoblinShaman, maxHP: 150, name: "Goblin Shaman", baseArmour: 5, baseMagicResistance: 0, difficultyScore: 2,
-                        baseStrength: 0, baseIntelligence: 0
+                        type: CharacterType.GoblinShaman, maxHP: 150, name: "Goblin Shaman", baseArmour: 15, baseMagicResistance: 15, difficultyScore: 2,
+                        baseStrength: 0, baseIntelligence: 20
                     )
                 },
                 {
                     CharacterType.Dragon,
                     new EnemyType(
-                        type: CharacterType.Dragon, maxHP: 2000, name: "Dragon", baseArmour: 20, baseMagicResistance: 0, difficultyScore: 10,
-                        baseStrength: 0, baseIntelligence: 0
+                        type: CharacterType.Dragon, maxHP: 2000, name: "Dragon", baseArmour: 35, baseMagicResistance: 35, difficultyScore: 10,
+                        baseStrength: 30, baseIntelligence: 30
                     )
                 },
             };
@@ -318,29 +688,29 @@ namespace GameProject
                 {
                     CharacterType.Cleric,
                     new HeroType(
-                        type: CharacterType.Cleric, maxHP: 100, name: "Cleric", baseArmour: 5, baseMagicResistance: 0,
-                        baseStrength: 0, baseIntelligence: 0
+                        type: CharacterType.Cleric, maxHP: 100, name: "Cleric", baseArmour: 10, baseMagicResistance: 25,
+                        baseStrength: 0, baseIntelligence: 25
                     )
                 },
                 {
                     CharacterType.Wizard,
                     new HeroType(
-                        type: CharacterType.Wizard, maxHP: 90, name: "Wizard", baseArmour: 5, baseMagicResistance: 0,
-                        baseStrength: 0, baseIntelligence: 0
+                        type: CharacterType.Wizard, maxHP: 90, name: "Wizard", baseArmour: 10, baseMagicResistance: 25,
+                        baseStrength: 0, baseIntelligence: 25
                     )
                 },
                 {
                     CharacterType.Archer,
                     new HeroType(
-                        type: CharacterType.Archer, maxHP: 120, name: "Archer", baseArmour: 10, baseMagicResistance: 0,
-                        baseStrength: 0, baseIntelligence: 0
+                        type: CharacterType.Archer, maxHP: 120, name: "Archer", baseArmour: 15, baseMagicResistance: 15,
+                        baseStrength: 20, baseIntelligence: 20
                     )
                 },
                 {
                     CharacterType.Warrior,
                     new HeroType(
-                        type: CharacterType.Warrior, maxHP: 200, name: "Warrior", baseArmour: 20, baseMagicResistance: 0,
-                        baseStrength: 0, baseIntelligence: 0
+                        type: CharacterType.Warrior, maxHP: 200, name: "Warrior", baseArmour: 25, baseMagicResistance: 10,
+                        baseStrength: 25, baseIntelligence: 0
                     )
                 }
             };

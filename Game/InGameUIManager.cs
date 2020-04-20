@@ -13,11 +13,26 @@ namespace GameProject
         public List<Ability> PlayerAbilities;
         public int PlayerSelectedAbility = -1;
 
+        protected Texture2D _textBackground;
+
         public InGameUIManager(GraphicsDevice graphics)
         {
             _graphics = graphics;
 
             PlayerAbilities = Database.GetCharacterAbilities(CharacterType.Cleric);
+
+            var textBGColour = new Color(0, 0, 0, 80);
+
+            var tempBG = new RenderTarget2D(graphics, graphics.PresentationParameters.BackBufferWidth, graphics.PresentationParameters.BackBufferHeight);
+            graphics.SetRenderTarget(tempBG);
+            graphics.Clear(textBGColour);
+            graphics.SetRenderTarget(null);
+            _textBackground = (Texture2D)tempBG;
+        }
+
+        ~InGameUIManager()
+        {
+            _textBackground?.Dispose();
         }
 
         public void UpdateUISize()
@@ -33,8 +48,6 @@ namespace GameProject
         public void Draw(SpriteBatch spriteBatch, List<Character> characters)
         {
             var playerSkillbarPosition = new Vector2(50, 50);
-            var heroSkillPosition = new Vector2(100, 725);
-            var enemySkillPosition = new Vector2(950, 725);
 
             if (CurrentWave > 0)
             {
@@ -44,10 +57,8 @@ namespace GameProject
                 var waveSize = Assets.UIFont.MeasureString(waveString);
                 var wavePosition = new Vector2((_graphics.PresentationParameters.BackBufferWidth / 2) - (waveSize.X / 2), 50);
 
-                spriteBatch.DrawString(Assets.UIFont, waveString, wavePosition, Color.White);
+                DrawText(spriteBatch, waveString, wavePosition, Color.White, 42);
             }
-
-            Assets.UIFont.Size = 20;
 
             for (var i = 0; i < PlayerAbilities.Count; i++)
             {
@@ -61,9 +72,9 @@ namespace GameProject
                 }
 
                 var skillString = "(" + (i + 1) + ") " + ability.Name + " - " + ((float)ability.CastTime / 1000).ToString("0.0") + "s";
-                spriteBatch.DrawString(Assets.UIFont, skillString, playerSkillbarPosition, color);
+                DrawText(spriteBatch, skillString, playerSkillbarPosition, color);
 
-                playerSkillbarPosition.Y += 25;
+                playerSkillbarPosition.Y += 30;
             }
 
             for (var i = 0; i < characters.Count; i++)
@@ -75,15 +86,15 @@ namespace GameProject
                 var namePosition = character.DrawPosition;
                 namePosition.Y -= 75;
 
-                spriteBatch.DrawString(Assets.UIFont, "#" + character.Slot + " " + character.Name, namePosition, Color.White);
+                DrawText(spriteBatch, character.Name, namePosition, Color.White);
 
                 var hpPosition = namePosition;
-                hpPosition.Y += 20;
+                hpPosition.Y += 25;
 
-                spriteBatch.DrawString(Assets.UIFont, character.CurrentHP + "/" + character.MaxHP, hpPosition, Color.White);
+                DrawText(spriteBatch, character.CurrentHP + "/" + character.MaxHP, hpPosition, Color.White);
 
                 var statusPosition = hpPosition;
-                statusPosition.Y += 20;
+                statusPosition.Y += 25;
 
                 var statusString = "";
 
@@ -96,18 +107,35 @@ namespace GameProject
                 if (statusString.Length > 0)
                 {
                     statusString = statusString.Remove(statusString.Length - 2);
-                    spriteBatch.DrawString(Assets.UIFont, statusString, statusPosition, Color.White);
+                    DrawText(spriteBatch, statusString, statusPosition, Color.White);
                 }
 
                 var skillPosition = statusPosition;
-                skillPosition.Y += 20;
+                skillPosition.Y += 25;
                 
                 var skillString = "";
                 if (character.IsCasting)
                     skillString = character.CastingAbility.Name + " " + ((float)character.CastingAbility.TimeRemaining / 1000).ToString("0.0") + "s";
 
-                spriteBatch.DrawString(Assets.UIFont, skillString, skillPosition, Color.White);
+                DrawText(spriteBatch, skillString, skillPosition, Color.White);
             }
+        }
+
+        public void DrawText(SpriteBatch spriteBatch, string text, Vector2 position, Color colour, int size = 20)
+        {
+            if (text.Length == 0)
+                return;
+
+            Assets.UIFont.Size = size;
+            var padding = 3;
+
+            var textSize = Assets.UIFont.MeasureString(text);
+
+            var textBGPosition = position - new Vector2(padding, padding);
+            var textBGRect = new Rectangle((int)textBGPosition.X, (int)textBGPosition.Y, (int)textSize.X + (padding * 2), (int)textSize.Y + (padding * 2));
+
+            spriteBatch.Draw(_textBackground, textBGPosition, textBGRect, Color.White);
+            spriteBatch.DrawString(Assets.UIFont, text, position, colour);
         }
     }
 }

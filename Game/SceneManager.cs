@@ -160,11 +160,6 @@ namespace GameProject
                 _uiManager.PlayerSelectedAbility = 5;
                 _playerSelectedAbility = _playerAbilities[4];
             }
-            else if (Triggers.PlayerSkill6.Released())
-            {
-                _uiManager.PlayerSelectedAbility = 6;
-                _playerSelectedAbility = _playerAbilities[5];
-            }
 
             if (!_player.IsCasting && !_encounterTransition)
             {
