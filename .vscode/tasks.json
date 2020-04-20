@@ -12,44 +12,12 @@
             "problemMatcher": "$tsc"
         },
         {
-            "label": "buildDirectX",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/Platforms/DirectX/DirectX.csproj"
-            ],
-            "problemMatcher": "$tsc"
-        },
-        {
-            "label": "buildPipeline",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/Platforms/Pipeline/Pipeline.csproj"
-            ],
-            "problemMatcher": "$tsc"
-        },
-        {
             "label": "publishCore",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "publish",
                 "${workspaceFolder}/Core/Core.csproj",
-                "-c",
-                "Release"
-            ],
-            "problemMatcher": "$tsc"
-        },
-        {
-            "label": "publishDirectX",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "publish",
-                "${workspaceFolder}/DirectX/DirectX.csproj",
                 "-c",
                 "Release"
             ],
