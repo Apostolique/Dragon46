@@ -12,6 +12,9 @@ namespace GameProject {
         protected GraphicsDeviceManager _graphics;
         protected SpriteBatch _spriteBatch;
 
+        public Backgrounds Backgrounds;
+        public Foregrounds Foregrounds;
+
         public GameRoot()
         {
             Instance = this;
@@ -60,6 +63,9 @@ namespace GameProject {
             Database.Load();
             Assets.Setup(Content);
             UIHelper.Setup(GraphicsDevice);
+
+            Backgrounds = new Backgrounds(GraphicsDevice);
+            Foregrounds = new Foregrounds(GraphicsDevice);
 
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 

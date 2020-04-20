@@ -6,17 +6,11 @@ namespace GameProject
     public class MainMenuState : GameState
     {
         protected SpriteBatch _spriteBatch;
-        protected Backgrounds _backgrounds;
-        protected Foregrounds _foregrounds;
-
         protected GameStateType _newState = GameStateType.None;
 
         public MainMenuState(GraphicsDevice graphics) : base(graphics)
         {
             _spriteBatch = new SpriteBatch(graphics);
-
-            _backgrounds = new Backgrounds(graphics);
-            _foregrounds = new Foregrounds(graphics);
 
             Assets.SoundManager.PlaySound("music_test", (int)SoundType.Music, true);
 
@@ -49,16 +43,16 @@ namespace GameProject
         {
             Core.Update(gameTime);
 
-            _backgrounds.Update(gameTime);
-            _foregrounds.Update(gameTime);
+            GameRoot.Instance.Backgrounds.Update(gameTime);
+            GameRoot.Instance.Foregrounds.Update(gameTime);
 
             return _newState;
         }
 
         public override void Draw()
         {
-            _backgrounds.Draw();
-            _foregrounds.Draw();
+            GameRoot.Instance.Backgrounds.Draw();
+            GameRoot.Instance.Foregrounds.Draw();
         }
     }
 }

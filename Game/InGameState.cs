@@ -8,16 +8,10 @@ namespace GameProject
     {
         protected SpriteBatch _spriteBatch;
         protected SceneManager _sceneManager;
-        protected Backgrounds _backgrounds;
-        protected Foregrounds _foregrounds;
-
         public InGameState(GraphicsDevice graphics) : base(graphics)
         {
             _spriteBatch = new SpriteBatch(graphics);
             _sceneManager = new SceneManager(graphics);
-
-            _backgrounds = new Backgrounds(graphics);
-            _foregrounds = new Foregrounds(graphics);
 
             UIHelper.Clear();
             // add buttons
@@ -29,17 +23,17 @@ namespace GameProject
 
             var newState = _sceneManager.Update(gameTime);
 
-            _backgrounds.Update(gameTime);
-            _foregrounds.Update(gameTime);
+            GameRoot.Instance.Backgrounds.Update(gameTime);
+            GameRoot.Instance.Foregrounds.Update(gameTime);
 
             return newState;
         }
 
         public override void Draw()
         {
-            _backgrounds.Draw();
+            GameRoot.Instance.Backgrounds.Draw();
             _sceneManager.DrawGame();
-            _foregrounds.Draw();
+            GameRoot.Instance.Foregrounds.Draw();
             _sceneManager.DrawUI();
         }
     }

@@ -7,9 +7,6 @@ namespace GameProject
     {
         protected SpriteBatch _spriteBatch;
 
-        protected Backgrounds _backgrounds;
-        protected Foregrounds _foregrounds;
-
         protected GameStateType _newState = GameStateType.None;
 
         public HowToPlayState(GraphicsDevice graphics) : base(graphics)
@@ -17,9 +14,6 @@ namespace GameProject
             _spriteBatch = new SpriteBatch(graphics);
 
             UIHelper.Clear();
-
-            _backgrounds = new Backgrounds(graphics);
-            _foregrounds = new Foregrounds(graphics);
 
             var titleLabel = new UILabel("How to Play", 60, 5);
             titleLabel.PinTop(graphics, 50);
@@ -53,16 +47,16 @@ namespace GameProject
 
         public override GameStateType Update(GameTime gameTime)
         {
-            _backgrounds.Update(gameTime);
-            _foregrounds.Update(gameTime);
+            GameRoot.Instance.Backgrounds.Update(gameTime);
+            GameRoot.Instance.Foregrounds.Update(gameTime);
 
             return _newState;
         }
 
         public override void Draw()
         {
-            _backgrounds.Draw();
-            _foregrounds.Draw();
+            GameRoot.Instance.Backgrounds.Draw();
+            GameRoot.Instance.Foregrounds.Draw();
         }
     }
 }
