@@ -21,6 +21,9 @@ namespace GameProject
         protected Vector2 _drawPosition = Vector2.Zero;
         public Vector2 DrawPosition { get => _drawPosition; }
 
+        public bool Hover;
+        public Vector2 CollisionOffset;
+
         protected Tween _scaleTween;
         protected Tween _jumpUpTween;
         protected Tween _jumpDownTween;
@@ -308,7 +311,12 @@ namespace GameProject
 
         public bool PointInCharacter(Vector2 point)
         {
-            var characterRect = new Rectangle((int)_drawPosition.X - (Sprite.Texture.Width / 2), (int)_drawPosition.Y, Sprite.Texture.Width, Sprite.Texture.Height);
+            var characterRect = new Rectangle(
+                (int)_drawPosition.X + (int)CollisionOffset.X - (Sprite.Texture.Width / 2),
+                (int)_drawPosition.Y + (int)CollisionOffset.Y,
+                Sprite.Texture.Width - (int)CollisionOffset.X,
+                Sprite.Texture.Height - (int)CollisionOffset.Y
+            );
             
             if (point.X < characterRect.X)
                 return false;

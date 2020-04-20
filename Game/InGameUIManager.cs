@@ -70,7 +70,7 @@ namespace GameProject
                 var namePosition = character.DrawPosition;
                 namePosition.Y -= 75;
 
-                UIHelper.DrawText(spriteBatch, character.Name, namePosition, Color.White);
+                UIHelper.DrawText(spriteBatch, character.Name, namePosition, character.Hover ? Color.Yellow : Color.White);
 
                 var hpPosition = namePosition;
                 hpPosition.Y += 25;

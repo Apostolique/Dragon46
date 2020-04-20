@@ -179,14 +179,27 @@ namespace GameProject
                 _playerSelectedAbility = _playerAbilities[4];
             }
 
+            var mousePosition = new Vector2(InputHelper.NewMouse.X, InputHelper.NewMouse.Y);
+
+            for (var i = 0; i < _characters.Count; i++)
+                _characters[i].Hover = false;
+
+            List<Character> hoverCharacters = new List<Character>();
+
+            for (var i = 0; i < _characters.Count; i++)
+                if (_characters[i].PointInCharacter(mousePosition))
+                    hoverCharacters.Add(_characters[i]);
+
+            hoverCharacters.Sort((i, j) => i.CollisionOrder.CompareTo(j.CollisionOrder));
+            if (hoverCharacters.Count > 0)
+                hoverCharacters[0].Hover = true;
+
             if (!_player.IsCasting && !_encounterTransition)
             {
                 if (_playerSelectedAbility != null)
                 {
                     if (Triggers.MouseLeftClick.Released())
                     {
-                        var mousePosition = new Vector2(InputHelper.NewMouse.X, InputHelper.NewMouse.Y);
-
                         List<Character> clickedCharacters = new List<Character>();
 
                         for (var i = 0; i < _characters.Count; i++)
@@ -259,6 +272,8 @@ namespace GameProject
             {
                 var enemy = nextEncounter.Enemies[i];
                 var newEnemy = new Character(enemy.EnemyType, true, enemySlot, _slotPositions[enemySlot]);
+                newEnemy.CollisionOrder = 20 - i;
+                newEnemy.CollisionOffset = enemy.EnemyType.CollisionOffset;
                 _characters.Add(newEnemy);
                 enemySlot++;
 

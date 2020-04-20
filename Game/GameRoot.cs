@@ -26,6 +26,7 @@ namespace GameProject {
 
             IsMouseVisible = true;
             Content.RootDirectory = "Content";
+            Window.Title = "Looking for Group";
         }
 
         ~GameRoot()

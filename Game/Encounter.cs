@@ -6,10 +6,6 @@ namespace GameProject
     {
         public static List<List<Enemy>> Waves = new List<List<Enemy>>()
         {
-            //new List<Enemy>()
-            //{
-            //    new Enemy(Database.GetEnemy(CharacterType.Dragon)),
-            //},
             new List<Enemy>()
             {
                 new Enemy(Database.GetEnemy(CharacterType.GoblinMinion)),
