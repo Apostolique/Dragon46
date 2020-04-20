@@ -26,7 +26,6 @@ namespace GameProject {
 
             IsMouseVisible = true;
             Content.RootDirectory = "Content";
-            Window.Title = "Looking for Group";
         }
 
         ~GameRoot()
@@ -76,6 +75,8 @@ namespace GameProject {
 
         protected override void Update(GameTime gameTime)
         {
+            Window.Title = "Looking for Group";
+
             InputHelper.UpdateSetup();
 
             if (Triggers.Quit.Pressed())
