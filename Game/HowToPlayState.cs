@@ -39,7 +39,7 @@ namespace GameProject
             helpLabel5.CenterX(graphics);
             helpLabel5.Position.Y = 470;
 
-            var startButton = new UIButton("Start Game", 42, 5)
+            var startButton = new UIButton("> Start Game", 42, 5)
             {
                 OnClick = () => { _newState = GameStateType.InGame; }
             };
