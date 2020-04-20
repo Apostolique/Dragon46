@@ -30,12 +30,12 @@ namespace GameProject
             _sfxVolumeLabel = new UILabel("", 60, 5);
             _sfxVolumeLabel.Position.Y = 425;
 
-            var startButton = new UIButton("> Back to Menu", 42, 5)
+            var backButton = new UIButton("> Back to Menu", 42, 5)
             {
                 OnClick = () => { _newState = GameStateType.MainMenu; }
             };
-            startButton.CenterX(graphics);
-            startButton.Position.Y = 550;
+            backButton.CenterX(graphics);
+            backButton.Position.Y = 500;
 
             _musicUp = new UIButton("+", 42, 5)
             {
@@ -73,7 +73,7 @@ namespace GameProject
                 }
             };
 
-            UIHelper.AddButton(startButton);
+            UIHelper.AddButton(backButton);
             UIHelper.AddButton(_musicUp);
             UIHelper.AddButton(_musicDown);
             UIHelper.AddButton(_sfxUp);
