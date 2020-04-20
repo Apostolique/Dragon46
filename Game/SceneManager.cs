@@ -197,7 +197,7 @@ namespace GameProject
             }
         }
 
-        public void Draw()
+        public void DrawGame()
         {
             _spriteBatch.Begin(sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
 
@@ -206,6 +206,13 @@ namespace GameProject
                 if (!_characters[i].Dead)
                     _characters[i].Draw(_spriteBatch);
             }
+
+            _spriteBatch.End();
+        }
+
+        public void DrawUI()
+        {
+            _spriteBatch.Begin(sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
 
             _uiManager.Draw(_spriteBatch, _characters);
 
