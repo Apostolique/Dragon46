@@ -522,7 +522,7 @@ namespace GameProject
                         {
                             new AbilityEffect()
                             {
-                                HitStun = 1000
+                                HitStun = 1500
                             }
                         }
                     }
@@ -557,7 +557,7 @@ namespace GameProject
                         {
                             new AbilityEffect()
                             {
-                                Silence = 1000
+                                Silence = 2000
                             }
                         }
                     }

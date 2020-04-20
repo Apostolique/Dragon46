@@ -147,7 +147,11 @@ namespace GameProject
             else if (_jumpDownTween != null)
                 jump = new Vector2(0, _jumpDownTween.Value);
 
-            spriteBatch.Draw(texture, _drawPosition + jump + new Vector2(0, texture.Height), null, Sprite.Colour, 0, new Vector2(texture.Width / 2, texture.Height), _scaleTween.Value, SpriteEffects.None, 0);
+            Vector2 origin = new Vector2(texture.Width / 2, texture.Height);
+            if (Type == CharacterType.Dragon)
+                origin = new Vector2(0 + 250, texture.Height + 250);
+
+            spriteBatch.Draw(texture, _drawPosition + jump + new Vector2(0, texture.Height), null, Sprite.Colour, 0, origin, _scaleTween.Value, SpriteEffects.None, 0);
         }
 
         public void ApplyDamage(DamageType damageType, int damage)

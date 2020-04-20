@@ -8,6 +8,10 @@ namespace GameProject
         {
             new List<Enemy>()
             {
+                new Enemy(Database.GetEnemy(CharacterType.Dragon)),
+            },
+            new List<Enemy>()
+            {
                 new Enemy(Database.GetEnemy(CharacterType.GoblinMinion)),
                 new Enemy(Database.GetEnemy(CharacterType.GoblinMinion)),
             },
