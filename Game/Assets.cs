@@ -120,6 +120,10 @@ namespace GameProject {
                 {
                     AbilitySpecialEffectType.Shield,
                     content.Load<Texture2D>("effect_shield")
+                },
+                {
+                    AbilitySpecialEffectType.Slash,
+                    content.Load<Texture2D>("effect_slash")
                 }
             };
         }

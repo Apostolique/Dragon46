@@ -112,12 +112,14 @@ namespace GameProject
     public enum AbilitySpecialEffectType
     {
         Shield,
+        Slash,
     }
 
     public class AbilitySpecialEffect
     {
         public int Duration;
         public bool Finished;
+        public float Scale = 1f;
 
         public Character Target;
 
@@ -129,6 +131,7 @@ namespace GameProject
     public class ShieldAbilityEffect : AbilitySpecialEffect
     {
         public Texture2D Texture;
+        public Vector2 Offset;
 
         protected float _fadeTransparency = 255f;
         protected float _fadeChangePerSecond = 0.0f;
@@ -167,7 +170,7 @@ namespace GameProject
             if (Finished)
                 return;
 
-            spriteBatch.Draw(Texture, _position, _colour);
+            spriteBatch.Draw(Texture, _position + Offset, null, _colour, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0f);
         }
     }
 
@@ -210,6 +213,29 @@ namespace GameProject
                             Texture = Assets.AbilitySpecialEffectTextures[AbilitySpecialEffectType.Shield]
                         };
                         newEffect.Start();
+                    }
+                    break;
+
+                case AbilityType.MinionSpear:
+                case AbilityType.BruteSmash:
+                case AbilityType.WizardStaff:
+                case AbilityType.WarriorSword:
+                case AbilityType.WarriorShieldBash:
+                case AbilityType.DragonStun:
+                case AbilityType.BruteStun:
+                case AbilityType.ShamanStaff:
+                    {
+                        {
+                            newEffect = new ShieldAbilityEffect()
+                            {
+                                Target = abilityTimer.Target,
+                                Duration = (int)(abilityTimer.Ability.CooldownDuration * 0.6),
+                                Texture = Assets.AbilitySpecialEffectTextures[AbilitySpecialEffectType.Slash],
+                                Scale = 2f,
+                                Offset = new Vector2(-50, -50),
+                            };
+                            newEffect.Start();
+                        }
                     }
                     break;
             }
