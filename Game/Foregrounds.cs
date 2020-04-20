@@ -24,7 +24,7 @@ namespace GameProject {
             for (int i = 0; i < 100; i++) {
                 var scale = (float)(Core.R.NextDouble() * 0.4 + 0.6) * 0.7f;
                 var type = items[Core.R.Next(0, items.Count)];
-                var z = Core.R.Next(0, 5) / 10f + 0.2f;
+                var z = Core.R.Next(0, 4) / 10f + 0.2f;
                 Quadtree<ForegroundObjects>.Add(new ForegroundObjects(Core.R.Next(0, mapLength), -(int)(type.Texture.Height * scale) + 350, z, scale, type.Texture, type.Style, maxDepth + (int)((1 - scale) * 100)));
             }
         }
