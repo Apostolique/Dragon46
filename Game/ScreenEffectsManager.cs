@@ -127,6 +127,7 @@ namespace GameProject
         public int Duration;
         public bool Finished;
         public float Scale = 1f;
+        public float Rotation = 0f;
 
         public Character Target;
 
@@ -236,7 +237,68 @@ namespace GameProject
 
     public class MagicProjectileEffect : AbilitySpecialEffect
     {
+        protected Random _rng = new Random();
 
+        public Texture2D ProjectileTexture;
+        public Texture2D ParticleTexture;
+        public Color Colour = Color.White;
+
+        public Vector2 Position;
+        public Vector2 Velocity;
+        public Vector2 ProfectileOffset = new Vector2(5, -125);
+
+        protected int _particles;
+        protected int _particlesCreated;
+        protected int _timePerParticle;
+        protected int _timePerParticleCounter;
+
+        public override void Start()
+        {
+            _particles = _rng.Next(20, 30);
+            _timePerParticle = Duration / _particles;
+            _timePerParticleCounter = _timePerParticle;
+
+            Position.X = Target.DrawPosition.X - 50;
+            Position.Y = Target.DrawPosition.Y - 50;
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            if (Finished)
+                return;
+
+            var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Position += (Velocity * delta);
+
+            Duration -= gameTime.ElapsedGameTime.Milliseconds;
+
+            _timePerParticleCounter -= gameTime.ElapsedGameTime.Milliseconds;
+
+            if (_timePerParticleCounter <= 0 && _particlesCreated < _particles)
+            {
+                _timePerParticleCounter = _timePerParticle;
+                _particlesCreated += 1;
+
+                ScreenEffectsManager.AddScreenParticle(new ScreenParticle(ParticleTexture)
+                {
+                    Duration = Duration,
+                    Position = Position + ProfectileOffset + new Vector2(_rng.Next(-8, 8), _rng.Next(-8, 8)),
+                    Velocity = new Vector2(-25, -75f),
+                    Scale = 2f,
+                });
+            }
+
+            if (Duration <= 0)
+            {
+                Duration = 0;
+                Finished = true;
+            }
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(ProjectileTexture, Position, null, Colour, Rotation, Vector2.Zero, Scale, SpriteEffects.None, 0f);
+        }
     }
 
     public class ScreenParticle
@@ -366,6 +428,114 @@ namespace GameProject
                             Target = abilityTimer.Target,
                             Duration = abilityTimer.Ability.CooldownDuration,
                             ParticleTexture = Assets.AbilitySpecialEffectTextures[AbilitySpecialEffectType.Heal],
+                        };
+                        newEffect.Start();
+                    }
+                    break;
+
+                case AbilityType.WizardStun:
+                case AbilityType.DragonRoar:
+                case AbilityType.Distract:
+                case AbilityType.Silence:
+                    {
+                        newEffect = new MagicProjectileEffect()
+                        {
+                            Target = abilityTimer.Target,
+                            Duration = abilityTimer.Ability.CooldownDuration,
+                            ProjectileTexture = Assets.AbilitySpecialEffectTextures[AbilitySpecialEffectType.Fireball],
+                            ParticleTexture = Assets.AbilitySpecialEffectTextures[AbilitySpecialEffectType.Magic],
+                            Colour = new Color(0, 0, 120, 120),
+                            Velocity = new Vector2(75f, 300f),
+                            Rotation = 180f,
+                        };
+                        newEffect.Start();
+                    }
+                    break;
+
+                case AbilityType.WizardFireball:
+                case AbilityType.ShamanFireball:
+                case AbilityType.DragonFire:
+                    {
+                        newEffect = new MagicProjectileEffect()
+                        {
+                            Target = abilityTimer.Target,
+                            Duration = abilityTimer.Ability.CooldownDuration,
+                            ProjectileTexture = Assets.AbilitySpecialEffectTextures[AbilitySpecialEffectType.Fireball],
+                            ParticleTexture = Assets.AbilitySpecialEffectTextures[AbilitySpecialEffectType.Fire],
+                            Colour = Color.White,
+                            Velocity = new Vector2(75f, 300f),
+                            Rotation = 180f,
+                        };
+                        newEffect.Start();
+                    }
+                    break;
+
+                case AbilityType.ShamanPoison:
+                    {
+                        newEffect = new MagicProjectileEffect()
+                        {
+                            Target = abilityTimer.Target,
+                            Duration = abilityTimer.Ability.CooldownDuration,
+                            ProjectileTexture = Assets.AbilitySpecialEffectTextures[AbilitySpecialEffectType.Fireball],
+                            ParticleTexture = Assets.AbilitySpecialEffectTextures[AbilitySpecialEffectType.Poison],
+                            Colour = Color.Green,
+                            Velocity = new Vector2(75f, 300f),
+                            Rotation = 180f,
+                        };
+                        newEffect.Start();
+                    }
+                    break;
+
+                case AbilityType.ArrowShot:
+                    {
+                        newEffect = new MagicProjectileEffect()
+                        {
+                            Target = abilityTimer.Target,
+                            Duration = abilityTimer.Ability.CooldownDuration,
+                            ProjectileTexture = Assets.AbilitySpecialEffectTextures[AbilitySpecialEffectType.Arrow],
+                            ParticleTexture = Assets.AbilitySpecialEffectTextures[AbilitySpecialEffectType.Fire],
+                            Colour = Color.White,
+                            Velocity = new Vector2(75f, 300f),
+                            Rotation = -250f,
+                            Scale = 0.5f,
+                            ProfectileOffset = new Vector2(0, 0)
+                        };
+                        newEffect.Start();
+                    }
+                    break;
+
+                case AbilityType.SilenceArrow:
+                case AbilityType.StunArrow:
+                    {
+                        newEffect = new MagicProjectileEffect()
+                        {
+                            Target = abilityTimer.Target,
+                            Duration = abilityTimer.Ability.CooldownDuration,
+                            ProjectileTexture = Assets.AbilitySpecialEffectTextures[AbilitySpecialEffectType.Arrow],
+                            ParticleTexture = Assets.AbilitySpecialEffectTextures[AbilitySpecialEffectType.Magic],
+                            Colour = Color.White,
+                            Velocity = new Vector2(75f, 300f),
+                            Rotation = -250f,
+                            Scale = 0.5f,
+                            ProfectileOffset = new Vector2(0, 0)
+                        };
+                        newEffect.Start();
+                    }
+                    break;
+
+                case AbilityType.PoisonArrow:
+                    {
+                        newEffect = new MagicProjectileEffect()
+                        {
+                            Target = abilityTimer.Target,
+                            Duration = abilityTimer.Ability.CooldownDuration,
+                            ProjectileTexture = Assets.AbilitySpecialEffectTextures[AbilitySpecialEffectType.Arrow],
+                            ParticleTexture = Assets.AbilitySpecialEffectTextures[AbilitySpecialEffectType.Poison],
+                            Colour = Color.White,
+                            Velocity = new Vector2(75f, 300f),
+                            Rotation = -250f,
+                            Scale = 0.5f,
+                            ProfectileOffset = new Vector2(0, 0)
                         };
                         newEffect.Start();
                     }
