@@ -11,7 +11,7 @@
     <TieredCompilation>false</TieredCompilation>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RuntimeIdentifiers>win10-x64;linux-x64;osx-x64</RuntimeIdentifiers>
-    <BeautyExcludes>SDL2*;libSDL2*;sdl2*;soft_oal*;openal*</BeautyExcludes>
+    <BeautyExcludes>SDL2*;libSDL2*;sdl2*;soft_oal*;openal*;MonoGame.Framework*</BeautyExcludes>
   </PropertyGroup>
 
   <ItemGroup>
