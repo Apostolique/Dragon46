@@ -29,7 +29,8 @@ jobs:
         sudo apt-get install --install-recommends winehq-stable
         ./mgfxc_wine_setup.sh
     - name: Set MGFXC_WINE_PATH environment variable
-      run: export MGFXC_WINE_PATH=$HOME/.winemonogame
+      env:
+        MGFXC_WINE_PATH: $HOME/.winemonogame
     - name: Build Windows
       run: dotnet publish Platforms/Core -r win-x64 -c Release --output build-windows
     - name: Build Osx
