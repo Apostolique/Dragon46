@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      MGFXC_WINE_PATH: ${{ HOME }}/.winemonogame
+      MGFXC_WINE_PATH: /github/home/.winemonogame
 
     steps:
     - uses: actions/checkout@v2
