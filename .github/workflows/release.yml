@@ -17,6 +17,15 @@ jobs:
       with:
         dotnet-version: 3.1.101
     - name: Setup Wine
+      run: sudo dpkg --add-architecture i386
+      run: sudo apt update
+      run: wget -qO- https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
+      run: sudo apt install software-properties-common
+      run: sudo apt-add-repository 'deb http://dl.winehq.org/wine-builds/ubuntu/ bionic main'
+      run: wget -qO- https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/Release.key | sudo apt-key add -
+      run: sudo sh -c 'echo "deb https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/ ./" > /etc/apt/sources.list.d/obs.list'
+      run: sudo apt update
+      run: sudo apt-get install --install-recommends winehq-stable
       run: ./mgfxc_wine_setup.sh
     - name: Build Windows
       run: dotnet publish Platforms/Core -r win-x64 -c Release --output build-windows
