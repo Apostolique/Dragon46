@@ -10,7 +10,6 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:InfinitespaceStudios.Pipeline.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -292,10 +291,7 @@
 
 #begin infinite.fx
 /importer:EffectImporter
-/processor:RemoteEffectProcessor
-/processorParam:RemoteAddress=pipeline.infinitespace-studios.co.uk
-/processorParam:RemotePort=443
-/processorParam:Protocol=https
+/processor:EffectProcessor
 /processorParam:DebugMode=Auto
 /build:infinite.fx
 
