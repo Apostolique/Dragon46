@@ -64,10 +64,25 @@ namespace GameProject
 
             _characters = new List<Character>();
 
-            _characters.Add(new Character(Database.GetHero(CharacterType.Cleric), false, 0, _slotPositions[0], true));
-            _characters.Add(new Character(Database.GetHero(CharacterType.Warrior), false, 3, _slotPositions[3]));
-            _characters.Add(new Character(Database.GetHero(CharacterType.Archer), false, 2, _slotPositions[2]));
-            _characters.Add(new Character(Database.GetHero(CharacterType.Wizard), false, 1, _slotPositions[1]));
+            _characters.Add(new Character(Database.GetHero(CharacterType.Cleric), false, 0, _slotPositions[0], true)
+            {
+                CollisionOrder = 10,
+            });
+
+            _characters.Add(new Character(Database.GetHero(CharacterType.Warrior), false, 3, _slotPositions[3])
+            {
+                CollisionOrder = 11,
+            });
+            
+            _characters.Add(new Character(Database.GetHero(CharacterType.Archer), false, 2, _slotPositions[2])
+            {
+                CollisionOrder = 5,
+            });
+            
+            _characters.Add(new Character(Database.GetHero(CharacterType.Wizard), false, 1, _slotPositions[1])
+            {
+                CollisionOrder = 1,
+            });
 
             _player = _characters[0];
             _playerAbilities = Database.GetCharacterAbilities(CharacterType.Cleric);
@@ -164,31 +179,54 @@ namespace GameProject
                 _playerSelectedAbility = _playerAbilities[4];
             }
 
+            var mousePosition = new Vector2(InputHelper.NewMouse.X, InputHelper.NewMouse.Y);
+
+            for (var i = 0; i < _characters.Count; i++)
+                _characters[i].Hover = false;
+
+            List<Character> hoverCharacters = new List<Character>();
+
+            for (var i = 0; i < _characters.Count; i++)
+                if (_characters[i].PointInCharacter(mousePosition))
+                    hoverCharacters.Add(_characters[i]);
+
+            hoverCharacters.Sort((i, j) => i.CollisionOrder.CompareTo(j.CollisionOrder));
+            if (hoverCharacters.Count > 0)
+                hoverCharacters[0].Hover = true;
+
             if (!_player.IsCasting && !_encounterTransition)
             {
                 if (_playerSelectedAbility != null)
                 {
                     if (Triggers.MouseLeftClick.Released())
                     {
-                        var mousePosition = new Vector2(InputHelper.NewMouse.X, InputHelper.NewMouse.Y);
-
-                        Character clickedCharacter = null;
+                        List<Character> clickedCharacters = new List<Character>();
 
                         for (var i = 0; i < _characters.Count; i++)
                             if (_characters[i].PointInCharacter(mousePosition))
-                                clickedCharacter = _characters[i];
+                                clickedCharacters.Add(_characters[i]);
 
-                        if (clickedCharacter != null)
+                        var abilityCast = false;
+
+                        clickedCharacters.Sort((i, j) => i.CollisionOrder.CompareTo(j.CollisionOrder));
+
+                        for (var i = 0; i < clickedCharacters.Count; i++)
                         {
-                            if (_playerSelectedAbility.TargetFriendly && clickedCharacter.Enemy)
-                                return;
-                            if (!_playerSelectedAbility.TargetFriendly && !clickedCharacter.Enemy)
-                                return;
+                            var clickedCharacter = clickedCharacters[i];
+                            if (clickedCharacter != null && !abilityCast)
+                            {
+                                if (_playerSelectedAbility.TargetFriendly && clickedCharacter.Enemy)
+                                    return;
+                                if (!_playerSelectedAbility.TargetFriendly && !clickedCharacter.Enemy)
+                                    return;
 
-                            var abilityTimer = new AbilityTimer(_player, clickedCharacter, _playerSelectedAbility);
-                            _player.CastAbility(abilityTimer);
-                            _uiManager.PlayerSelectedAbility = -1;
-                            _playerSelectedAbility = null;
+                                var abilityTimer = new AbilityTimer(_player, clickedCharacter, _playerSelectedAbility);
+                                _player.CastAbility(abilityTimer);
+                                Assets.SoundManager.PlaySound("sfx_player", (int)SoundType.UI);
+                                _uiManager.PlayerSelectedAbility = -1;
+                                _playerSelectedAbility = null;
+                                abilityCast = true;
+                            }
                         }
                     }
                 }
@@ -234,6 +272,8 @@ namespace GameProject
             {
                 var enemy = nextEncounter.Enemies[i];
                 var newEnemy = new Character(enemy.EnemyType, true, enemySlot, _slotPositions[enemySlot]);
+                newEnemy.CollisionOrder = 20 - i;
+                newEnemy.CollisionOffset = enemy.EnemyType.CollisionOffset;
                 _characters.Add(newEnemy);
                 enemySlot++;
 

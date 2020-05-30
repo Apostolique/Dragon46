@@ -14,13 +14,24 @@ namespace GameProject {
         public static ContentManager Content;
         public static SoundManager SoundManager;
 
+        public static float MusicVolume = 0.05f;
+        public static float SFXVolume = 0.2f;
+
+        public static void UpdateVolume()
+        {
+            SoundManager.SetVolume((int)SoundType.Music, MusicVolume);
+            SoundManager.SetVolume((int)SoundType.SFX, SFXVolume);
+            var uiVolume = (SFXVolume == 0 ? 0 : SFXVolume + 0.2f);
+            if (uiVolume > 1)
+                uiVolume = 1;
+            SoundManager.SetVolume((int)SoundType.UI, uiVolume);
+        }
+
         public static void Setup(ContentManager content) {
             Content = content;
 
             SoundManager = new SoundManager();
-            SoundManager.SetVolume((int)SoundType.Music, 0.05f);
-            SoundManager.SetVolume((int)SoundType.SFX, 0.2f);
-            SoundManager.SetVolume((int)SoundType.UI, 0.2f);
+            UpdateVolume();
 
             Infinite = content.Load<Effect>("infinite");
             Sky = content.Load<Texture2D>("sky");
@@ -103,6 +114,42 @@ namespace GameProject {
                     }
                 },
             };
+
+            AbilitySpecialEffectTextures = new Dictionary<AbilitySpecialEffectType, Texture2D>()
+            {
+                {
+                    AbilitySpecialEffectType.Shield,
+                    content.Load<Texture2D>("effect_shield")
+                },
+                {
+                    AbilitySpecialEffectType.Slash,
+                    content.Load<Texture2D>("effect_slash")
+                },
+                {
+                    AbilitySpecialEffectType.Fireball,
+                    content.Load<Texture2D>("effect_fireball")
+                },
+                {
+                    AbilitySpecialEffectType.Fire,
+                    content.Load<Texture2D>("effect_fire")
+                },
+                {
+                    AbilitySpecialEffectType.Poison,
+                    content.Load<Texture2D>("effect_poison")
+                },
+                {
+                    AbilitySpecialEffectType.Magic,
+                    content.Load<Texture2D>("effect_magic")
+                },
+                {
+                    AbilitySpecialEffectType.Arrow,
+                    content.Load<Texture2D>("effect_arrow")
+                },
+                {
+                    AbilitySpecialEffectType.Heal,
+                    content.Load<Texture2D>("effect_heal")
+                }
+            };
         }
 
         public static Effect Infinite;
@@ -119,5 +166,6 @@ namespace GameProject {
         public static DynamicSpriteFont UIFont;
 
         public static Dictionary<CharacterType, CharacterSprite> CharacterSprites;
+        public static Dictionary<AbilitySpecialEffectType, Texture2D> AbilitySpecialEffectTextures;
     }
 }

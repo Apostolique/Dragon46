@@ -75,10 +75,12 @@ namespace GameProject {
 
         protected override void Update(GameTime gameTime)
         {
+            Window.Title = "Looking for Group";
+
             InputHelper.UpdateSetup();
 
-            if (Triggers.Quit.Pressed())
-                Exit();
+            //if (Triggers.Quit.Pressed())
+            //    Exit();
 
             var nextState = _currentState.Update(gameTime);
 
@@ -117,6 +119,12 @@ namespace GameProject {
                 case GameStateType.Credits:
                     {
                         _currentState = new CreditsState(GraphicsDevice);
+                    }
+                    break;
+
+                case GameStateType.Settings:
+                    {
+                        _currentState = new SettingState(GraphicsDevice);
                     }
                     break;
             }

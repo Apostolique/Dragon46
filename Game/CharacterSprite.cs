@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject
@@ -6,6 +7,7 @@ namespace GameProject
     {
         public Texture2D Texture;
         public Texture2D HitTexture;
+        public Color Colour = Color.White;
 
         public CharacterSprite() { }
     }

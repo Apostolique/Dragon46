@@ -11,6 +11,8 @@ namespace GameProject
         protected string _name;
         public string Name { get => _name; }
 
+        public int CollisionOrder = 0;
+
         protected CharacterType _type;
         public CharacterType Type { get => _type; }
 
@@ -18,6 +20,9 @@ namespace GameProject
 
         protected Vector2 _drawPosition = Vector2.Zero;
         public Vector2 DrawPosition { get => _drawPosition; }
+
+        public bool Hover;
+        public Vector2 CollisionOffset;
 
         protected Tween _scaleTween;
         protected Tween _jumpUpTween;
@@ -147,7 +152,11 @@ namespace GameProject
             else if (_jumpDownTween != null)
                 jump = new Vector2(0, _jumpDownTween.Value);
 
-            spriteBatch.Draw(texture, _drawPosition + jump + new Vector2(0, texture.Height), null, Color.White, 0, new Vector2(texture.Width / 2, texture.Height), _scaleTween.Value, SpriteEffects.None, 0);
+            Vector2 origin = new Vector2(texture.Width / 2, texture.Height);
+            if (Type == CharacterType.Dragon)
+                origin = new Vector2(0 + 250, texture.Height + 250);
+
+            spriteBatch.Draw(texture, _drawPosition + jump + new Vector2(0, texture.Height), null, Sprite.Colour, 0, origin, _scaleTween.Value, SpriteEffects.None, 0);
         }
 
         public void ApplyDamage(DamageType damageType, int damage)
@@ -191,6 +200,13 @@ namespace GameProject
                 Duration = 3500,
                 Position = _drawPosition - new Vector2(0, 75),
                 Velocity = new Vector2(0, -30f)
+            });
+
+            ScreenEffectsManager.AddCharacterFadeEffect(new CharacterFadeEffect()
+            {
+                TargetTransparency = 80,
+                Duration = 100,
+                Character = this,
             });
 
             _currentHP -= damageAfterArmour;
@@ -258,12 +274,13 @@ namespace GameProject
             _castingAbility = null;
         }
 
-        public void AbilityFinished(Ability ability)
+        public void AbilityFinished(AbilityTimer abilityTimer)
         {
             _castingAbility = null;
-            _castingCooldownTimer = ability.CooldownDuration;
+            _castingCooldownTimer = abilityTimer.Ability.CooldownDuration;
 
             Assets.SoundManager.PlaySound(_abilitySound, (int)SoundType.SFX);
+            ScreenEffectsManager.AddAbilitySpecialEffect(abilityTimer);
         }
 
         public void CastAbility(AbilityTimer castAbility)
@@ -294,7 +311,12 @@ namespace GameProject
 
         public bool PointInCharacter(Vector2 point)
         {
-            var characterRect = new Rectangle((int)_drawPosition.X - (Sprite.Texture.Width / 2), (int)_drawPosition.Y, Sprite.Texture.Width, Sprite.Texture.Height);
+            var characterRect = new Rectangle(
+                (int)_drawPosition.X + (int)CollisionOffset.X - (Sprite.Texture.Width / 2),
+                (int)_drawPosition.Y + (int)CollisionOffset.Y,
+                Sprite.Texture.Width - (int)CollisionOffset.X,
+                Sprite.Texture.Height - (int)CollisionOffset.Y
+            );
             
             if (point.X < characterRect.X)
                 return false;

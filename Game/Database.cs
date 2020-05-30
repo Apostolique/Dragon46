@@ -349,7 +349,7 @@ namespace GameProject
                     {
                         AbilityType = AbilityType.MinionSpear,
                         Name = "Spear",
-                        CastTime = 2500,
+                        CastTime = 2000,
                         DamageType = DamageType.Physical,
                         Damage = 10,
                     }
@@ -379,7 +379,7 @@ namespace GameProject
                     {
                         AbilityType = AbilityType.BruteSmash,
                         Name = "Smashing Blow",
-                        CastTime = 2500,
+                        CastTime = 2000,
                         DamageType = DamageType.Physical,
                         Damage = 20,
                     }
@@ -522,7 +522,7 @@ namespace GameProject
                         {
                             new AbilityEffect()
                             {
-                                HitStun = 1000
+                                HitStun = 1500
                             }
                         }
                     }
@@ -557,7 +557,7 @@ namespace GameProject
                         {
                             new AbilityEffect()
                             {
-                                Silence = 1000
+                                Silence = 2000
                             }
                         }
                     }
@@ -658,28 +658,28 @@ namespace GameProject
                     new EnemyType(
                         type: CharacterType.GoblinMinion, maxHP: 100, name: "Goblin Minion", baseArmour: 5, baseMagicResistance: 5, difficultyScore: 1,
                         baseStrength: 10, baseIntelligence: 0, abilitySound: "sfx_minion"
-                    )
+                    ) { CollisionOffset = new Microsoft.Xna.Framework.Vector2(125, 0) }
                 },
                 {
                     CharacterType.GoblinBrute,
                     new EnemyType(
                         type: CharacterType.GoblinBrute, maxHP: 200, name: "Goblin Brute", baseArmour: 10, baseMagicResistance: 10, difficultyScore: 2,
                         baseStrength: 20, baseIntelligence: 0, abilitySound: "sfx_brute"
-                    )
+                    ) { CollisionOffset = new Microsoft.Xna.Framework.Vector2(125, 0) }
                 },
                 {
                     CharacterType.GoblinShaman,
                     new EnemyType(
                         type: CharacterType.GoblinShaman, maxHP: 150, name: "Goblin Shaman", baseArmour: 15, baseMagicResistance: 15, difficultyScore: 2,
                         baseStrength: 0, baseIntelligence: 20, abilitySound: "sfx_shaman"
-                    )
+                    ) { CollisionOffset = new Microsoft.Xna.Framework.Vector2(125, 0) }
                 },
                 {
                     CharacterType.Dragon,
                     new EnemyType(
                         type: CharacterType.Dragon, maxHP: 2000, name: "Dragon", baseArmour: 35, baseMagicResistance: 35, difficultyScore: 10,
                         baseStrength: 30, baseIntelligence: 30, abilitySound: "sfx_dragon"
-                    )
+                    ) { CollisionOffset = new Microsoft.Xna.Framework.Vector2(175, 0) }
                 },
             };
 

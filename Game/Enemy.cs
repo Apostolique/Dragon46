@@ -1,9 +1,13 @@
+using Microsoft.Xna.Framework;
+
 namespace GameProject
 {
     public class EnemyType : BaseCharacterType
     {
         protected int _difficultyScore;
         public int DifficultyScore { get => _difficultyScore; }
+
+        public Vector2 CollisionOffset;
 
         public EnemyType(CharacterType type, int maxHP, string name, int baseArmour, int baseMagicResistance, int difficultyScore, int baseStrength, int baseIntelligence, string abilitySound)
             : base(type, maxHP, name, baseArmour, baseMagicResistance, baseStrength, baseIntelligence, abilitySound)

@@ -16,7 +16,7 @@ namespace GameProject
         public bool TargetFriendly { get; set; }
         public bool TargetSelf { get; set; }
 
-        public int CooldownDuration { get; set; } = 600;
+        public int CooldownDuration { get; set; } = 1000;
 
         public List<AbilityEffect> OnCastEffects = new List<AbilityEffect>();
         public List<AbilityEffect> OnHitEffects = new List<AbilityEffect>();
