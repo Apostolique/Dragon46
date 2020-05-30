@@ -28,7 +28,6 @@ jobs:
         sudo apt update
         sudo apt-get install --install-recommends winehq-stable
         ./mgfxc_wine_setup.sh
-    - name: Set MGFXC_WINE_PATH environment variable
       env:
         MGFXC_WINE_PATH: $HOME/.winemonogame
     - name: Build Windows
