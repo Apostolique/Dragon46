@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Apos.Shapes;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -32,6 +33,11 @@ namespace GameProject {
 
             SoundManager = new SoundManager();
             UpdateVolume();
+
+            // The content manager keeps what it loads, so a sound loaded here doesn't stall the
+            // game the first time it plays.
+            foreach (var sound in _sounds)
+                content.Load<SoundEffect>(sound);
 
             Infinite = content.Load<Effect>("infinite");
             Sky = content.Load<Texture2D>("sky");
@@ -153,6 +159,19 @@ namespace GameProject {
                 }
             };
         }
+
+        private static readonly string[] _sounds = {
+            "music_test",
+            "sfx_archer",
+            "sfx_brute",
+            "sfx_cleric",
+            "sfx_dragon",
+            "sfx_minion",
+            "sfx_player",
+            "sfx_shaman",
+            "sfx_warrior",
+            "sfx_wizard",
+        };
 
         public static Effect Infinite;
         public static Texture2D Sky;
