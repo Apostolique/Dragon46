@@ -1,6 +1,6 @@
+using Apos.Shapes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SpriteFontPlus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -217,12 +217,7 @@ namespace GameProject
                 _timePerParticleCounter = _timePerParticle;
                 _particlesCreated += 1;
 
-                ScreenEffectsManager.AddScreenParticle(new ScreenParticle(ParticleTexture)
-                {
-                    Duration = Duration,
-                    Position = SpawnPosition + new Vector2(_rng.Next(-50, 50), _rng.Next(-50, 50)),
-                    Velocity = new Vector2(0, -75f),
-                });
+                ScreenEffectsManager.AddScreenParticle(ParticleTexture, Duration, SpawnPosition + new Vector2(_rng.Next(-50, 50), _rng.Next(-50, 50)), new Vector2(0, -75f));
             }
 
             if (_particlesCreated == _particles)
@@ -279,13 +274,7 @@ namespace GameProject
                 _timePerParticleCounter = _timePerParticle;
                 _particlesCreated += 1;
 
-                ScreenEffectsManager.AddScreenParticle(new ScreenParticle(ParticleTexture)
-                {
-                    Duration = Duration,
-                    Position = Position + ProfectileOffset + new Vector2(_rng.Next(-8, 8), _rng.Next(-8, 8)),
-                    Velocity = new Vector2(-25, -75f),
-                    Scale = 2f,
-                });
+                ScreenEffectsManager.AddScreenParticle(ParticleTexture, Duration, Position + ProfectileOffset + new Vector2(_rng.Next(-8, 8), _rng.Next(-8, 8)), new Vector2(-25, -75f), 2f);
             }
 
             if (Duration <= 0)
@@ -303,21 +292,28 @@ namespace GameProject
 
     public class ScreenParticle
     {
-        public float Scale = 1f;
-        public float Rotation = 0f;
+        public float Scale;
+        public float Rotation;
         public Texture2D Texture;
         public bool Finished;
 
         public int Duration;
-        public Color Colour = Color.White;
+        public Color Colour;
 
         public Vector2 Position;
         public Vector2 Velocity;
         public Vector2 Origin;
 
-        public ScreenParticle(Texture2D texture)
+        public void Start(Texture2D texture, int duration, Vector2 position, Vector2 velocity, float scale)
         {
             Texture = texture;
+            Duration = duration;
+            Position = position;
+            Velocity = velocity;
+            Scale = scale;
+            Rotation = 0f;
+            Colour = Color.White;
+            Finished = false;
 
             Origin = new Vector2(Texture.Width / 2, Texture.Height / 2);
         }
@@ -352,9 +348,12 @@ namespace GameProject
 
         private static List<AbilitySpecialEffect> _abilityEffects = new List<AbilitySpecialEffect>();
         private static List<ScreenParticle> _screenParticles = new List<ScreenParticle>();
+        private static Pool<ScreenParticle> _screenParticlePool = new Pool<ScreenParticle>();
 
-        public static void AddScreenParticle(ScreenParticle screenParticle)
+        public static void AddScreenParticle(Texture2D texture, int duration, Vector2 position, Vector2 velocity, float scale = 1f)
         {
+            var screenParticle = _screenParticlePool.Get();
+            screenParticle.Start(texture, duration, position, velocity, scale);
             _screenParticles.Add(screenParticle);
         }
 
@@ -548,18 +547,20 @@ namespace GameProject
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            for (var i = 0; i < _screenText.Count; i++)
-            {
-                var screenText = _screenText[i];
-                Assets.UIFont.Size = screenText.TextSize;
-                spriteBatch.DrawString(Assets.UIFont, screenText.Text, screenText.Position, screenText.Colour);
-            }
-
             for (var i = 0; i < _abilityEffects.Count; i++)
                 _abilityEffects[i]?.Draw(spriteBatch);
 
             for (var i = 0; i < _screenParticles.Count; i++)
                 _screenParticles[i]?.Draw(spriteBatch);
+        }
+
+        public static void DrawText(ShapeBatch shapeBatch)
+        {
+            for (var i = 0; i < _screenText.Count; i++)
+            {
+                var screenText = _screenText[i];
+                shapeBatch.DrawString(Assets.UIFont, screenText.Text, screenText.Position, UIHelper.EmSize(screenText.TextSize), screenText.Colour);
+            }
         }
 
         public static void Update(GameTime gameTime)
@@ -588,6 +589,10 @@ namespace GameProject
             _screenText.RemoveAll(t => t.Finished);
             _characterFadeEffects.RemoveAll(e => e.Finished);
             _abilityEffects.RemoveAll(e => e.Finished);
+
+            for (var i = 0; i < _screenParticles.Count; i++)
+                if (_screenParticles[i].Finished)
+                    _screenParticlePool.Free(_screenParticles[i]);
             _screenParticles.RemoveAll(p => p.Finished);
         }
     }

@@ -6,65 +6,56 @@ on:
     - 'v*'
 
 env:
-  ITCH_GAME_NAME: lookingforgroup
   ITCH_USER_NAME: apos
-  BUILD_PATH: Platforms/Core
+  ITCH_GAME_NAME: lookingforgroup
+  DESKTOP_PATH: Platforms/DesktopGL
+  WEB_PATH: Platforms/BlazorGL.KNI
 
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    # Windows, because both MonoGame and KNI compile infinite.fx with the DirectX shader
+    # compiler. On Linux that needs a Wine setup for MonoGame, and KNI has none.
+    runs-on: windows-latest
 
-    env:
-      MGFXC_WINE_PATH: /home/runner/.winemonogame
+    defaults:
+      run:
+        shell: bash
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+    - uses: actions/checkout@v4
       with:
-        dotnet-version: 3.1.101
-    - name: Setup Wine
+        fetch-depth: 0
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+    - name: Get version from tag
       run: |
-        sudo dpkg --add-architecture i386
-        sudo apt update
-        wget -qO- https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
-        sudo apt install software-properties-common
-        sudo apt-add-repository 'deb http://dl.winehq.org/wine-builds/ubuntu/ bionic main'
-        wget -qO- https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/Release.key | sudo apt-key add -
-        sudo sh -c 'echo "deb https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/ ./" > /etc/apt/sources.list.d/obs.list'
-        sudo apt update
-        sudo apt-get install --install-recommends winehq-stable
-        wget -qO- https://raw.githubusercontent.com/MonoGame/MonoGame/develop/Tools/MonoGame.Effect.Compiler/mgfxc_wine_setup.sh | sh
+        TAGVERSION=$(git describe --tags --abbrev=0)
+        echo "TAGVERSION=${TAGVERSION:1}" >> $GITHUB_ENV
     - name: Build Windows
-      run: dotnet publish ${{ env.BUILD_PATH }} -r win-x64 -c Release --output build-windows
+      run: dotnet publish ${{ env.DESKTOP_PATH }} -r win-x64 -c Release --output artifacts/windows --self-contained -p:Version=${{ env.TAGVERSION }}
     - name: Build Osx
-      run: dotnet publish ${{ env.BUILD_PATH }} -r osx-x64 -c Release --output build-osx
+      run: dotnet publish ${{ env.DESKTOP_PATH }} -r osx-x64 -c Release --output artifacts/osx --self-contained -p:Version=${{ env.TAGVERSION }}
     - name: Build Linux
-      run: dotnet publish ${{ env.BUILD_PATH }} -r linux-x64 -c Release --output build-linux
-    - name: Clean NetCoreBeauty
-      run: find . -name 'NetCoreBeauty' -type f -delete
-    - name: Publish Windows build to itch.io
-      uses: josephbmanley/butler-publish-itchio-action@master
+      run: dotnet publish ${{ env.DESKTOP_PATH }} -r linux-x64 -c Release --output artifacts/linux --self-contained -p:Version=${{ env.TAGVERSION }}
+    - name: Build Web
+      run: dotnet publish ${{ env.WEB_PATH }} -c Release --output artifacts/web -p:Version=${{ env.TAGVERSION }}
+    # The butler action runs in Docker, which only works on Linux runners.
+    - name: Install butler
+      run: |
+        curl -fsSL -o butler.zip https://broth.itch.zone/butler/windows-amd64/LATEST/archive/default
+        7z x butler.zip -obutler
+    - name: Publish to itch.io
       env:
-        BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-        CHANNEL: windows
-        ITCH_GAME: ${{ env.ITCH_GAME_NAME }}
-        ITCH_USER: ${{ env.ITCH_USER_NAME }}
-        PACKAGE: build-windows
-    - name: Publish OSX build to itch.io
-      uses: josephbmanley/butler-publish-itchio-action@master
-      env:
-        BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-        CHANNEL: osx
-        ITCH_GAME: ${{ env.ITCH_GAME_NAME }}
-        ITCH_USER: ${{ env.ITCH_USER_NAME }}
-        PACKAGE: build-osx
-    - name: Publish Linux build to itch.io
-      uses: josephbmanley/butler-publish-itchio-action@master
-      env:
-        BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-        CHANNEL: linux
-        ITCH_GAME: ${{ env.ITCH_GAME_NAME }}
-        ITCH_USER: ${{ env.ITCH_USER_NAME }}
-        PACKAGE: build-linux
+        BUTLER_API_KEY: ${{ secrets.BUTLER_CREDENTIALS }}
+      run: |
+        TARGET=${{ env.ITCH_USER_NAME }}/${{ env.ITCH_GAME_NAME }}
+        butler/butler push artifacts/windows $TARGET:windows --userversion ${{ env.TAGVERSION }}
+        butler/butler push artifacts/osx $TARGET:osx --userversion ${{ env.TAGVERSION }}
+        butler/butler push artifacts/linux $TARGET:linux --userversion ${{ env.TAGVERSION }}
+        # itch.io marks a build playable in the browser when the channel name says html, and it
+        # serves the index.html sitting at the root of the package, so what goes up is the
+        # contents of wwwroot and nothing above it.
+        butler/butler push artifacts/web/wwwroot $TARGET:html5 --userversion ${{ env.TAGVERSION }}

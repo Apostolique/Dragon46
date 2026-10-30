@@ -1,7 +1,7 @@
 using Apos.Input;
+using Apos.Shapes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SpriteFontPlus;
 using System;
 using System.Collections.Generic;
 
@@ -60,16 +60,15 @@ namespace GameProject
         {
             Size = size;
             Padding = padding;
-            Assets.UIFont.Size = Size;
             Text = text;
-            var textSize = Assets.UIFont.MeasureString(text);
+            var textSize = UIHelper.MeasureText(text, size);
             Width = (int)textSize.X + (padding * 2);
             Height = (int)textSize.Y + (padding * 2);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(ShapeBatch shapeBatch)
         {
-            UIHelper.DrawText(spriteBatch, Text, Position, colour, Size, Padding);
+            UIHelper.DrawText(shapeBatch, Text, Position, colour, Size, Padding);
         }
     }
 
@@ -85,18 +84,17 @@ namespace GameProject
         {
             Size = size;
             Padding = padding;
-            Assets.UIFont.Size = Size;
             Text = text;
-            var textSize = Assets.UIFont.MeasureString(text);
+            var textSize = UIHelper.MeasureText(text, size);
             Width = (int)textSize.X + (padding * 2);
             Height = (int)textSize.Y + (padding * 2);
         }
 
-        public bool Draw(SpriteBatch spriteBatch, Vector2 mousePosition)
+        public bool Draw(ShapeBatch shapeBatch, Vector2 mousePosition)
         {
             var hover = PointInButton(mousePosition);
 
-            UIHelper.DrawText(spriteBatch, Text, Position, hover ? hoverColour : colour, Size, Padding);
+            UIHelper.DrawText(shapeBatch, Text, Position, hover ? hoverColour : colour, Size, Padding);
 
             if (Triggers.MouseLeftClick.Released() && hover)
             {
@@ -126,34 +124,27 @@ namespace GameProject
 
     public static class UIHelper
     {
-        private static GraphicsDevice _graphics;
-        private static Texture2D _textBackground;
+        private static readonly Color _textBackground = new Color(0, 0, 0, 120);
 
         private static List<UIButton> _buttons = new List<UIButton>();
         private static List<UILabel> _labels = new List<UILabel>();
 
+        public static ShapeBatch ShapeBatch { get; private set; }
+
         public static void Setup(GraphicsDevice graphics)
         {
-            _graphics = graphics;
-
-            var textBGColour = new Color(0, 0, 0, 120);
-
-            var tempBG = new RenderTarget2D(graphics, graphics.PresentationParameters.BackBufferWidth, graphics.PresentationParameters.BackBufferHeight);
-            graphics.SetRenderTarget(tempBG);
-            graphics.Clear(textBGColour);
-            graphics.SetRenderTarget(null);
-            _textBackground = (Texture2D)tempBG;
+            ShapeBatch = new ShapeBatch(graphics);
         }
 
-        public static void Draw(SpriteBatch spriteBatch)
+        public static void Draw(ShapeBatch shapeBatch)
         {
             var mousePosition = new Vector2(InputHelper.NewMouse.X, InputHelper.NewMouse.Y);
 
             for (var i = 0; i < _buttons.Count; i++)
-                _buttons[i]?.Draw(spriteBatch, mousePosition);
+                _buttons[i]?.Draw(shapeBatch, mousePosition);
 
             for (var i = 0; i < _labels.Count; i++)
-                _labels[i]?.Draw(spriteBatch);
+                _labels[i]?.Draw(shapeBatch);
         }
 
         public static void AddLabel(UILabel label)
@@ -173,23 +164,35 @@ namespace GameProject
 
         public static void Cleanup()
         {
-            _textBackground?.Dispose();
+            ShapeBatch?.Dispose();
         }
 
-        public static void DrawText(SpriteBatch spriteBatch, string text, Vector2 position, Color colour, int size = 20, int padding = 3)
+        /// <summary>
+        /// Text sizes in the UI are the full height of the font in pixels. ShapeFont takes the em
+        /// size instead, which is smaller than the full height.
+        /// </summary>
+        public static float EmSize(int size)
+        {
+            return size / (Assets.UIFont.Ascent - Assets.UIFont.Descent);
+        }
+
+        public static Vector2 MeasureText(string text, int size)
+        {
+            return Assets.UIFont.MeasureString(text, EmSize(size));
+        }
+
+        public static void DrawText(ShapeBatch shapeBatch, string text, Vector2 position, Color colour, int size = 20, int padding = 3)
         {
             if (text.Length == 0)
                 return;
 
-            Assets.UIFont.Size = size;
-
-            var textSize = Assets.UIFont.MeasureString(text);
+            var textSize = MeasureText(text, size);
 
             var textBGPosition = position - new Vector2(padding, padding);
-            var textBGRect = new Rectangle((int)textBGPosition.X, (int)textBGPosition.Y, (int)textSize.X + (padding * 2), (int)textSize.Y + (padding * 2));
+            var textBGSize = new Vector2((int)textSize.X + (padding * 2), (int)textSize.Y + (padding * 2));
 
-            spriteBatch.Draw(_textBackground, textBGPosition, textBGRect, Color.White);
-            spriteBatch.DrawString(Assets.UIFont, text, position, colour);
+            shapeBatch.FillRectangle(textBGPosition, textBGSize, _textBackground, aaSize: 0f);
+            shapeBatch.DrawString(Assets.UIFont, text, position, EmSize(size), colour);
         }
     }
 }

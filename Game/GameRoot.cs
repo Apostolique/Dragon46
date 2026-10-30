@@ -63,6 +63,7 @@ namespace GameProject {
             Database.Load();
             Assets.Setup(Content);
             UIHelper.Setup(GraphicsDevice);
+            CameraWrapper.Setup(GraphicsDevice, Window);
 
             Backgrounds = new Backgrounds(GraphicsDevice);
             Foregrounds = new Foregrounds(GraphicsDevice);
@@ -77,7 +78,7 @@ namespace GameProject {
         {
             Window.Title = "Looking for Group";
 
-            InputHelper.UpdateSetup();
+            InputHelper.UpdateSetup(gameTime);
 
             //if (Triggers.Quit.Pressed())
             //    Exit();
@@ -144,8 +145,13 @@ namespace GameProject {
 
             _spriteBatch.Begin(sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend);
             ScreenEffectsManager.Draw(_spriteBatch);
-            UIHelper.Draw(_spriteBatch);
             _spriteBatch.End();
+
+            var shapeBatch = UIHelper.ShapeBatch;
+            shapeBatch.Begin();
+            ScreenEffectsManager.DrawText(shapeBatch);
+            UIHelper.Draw(shapeBatch);
+            shapeBatch.End();
 
             base.Draw(gameTime);
         }

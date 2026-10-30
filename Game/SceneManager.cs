@@ -248,11 +248,12 @@ namespace GameProject
 
         public void DrawUI()
         {
-            _spriteBatch.Begin(sortMode: SpriteSortMode.Deferred, blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
+            var shapeBatch = UIHelper.ShapeBatch;
+            shapeBatch.Begin();
 
-            _uiManager.Draw(_spriteBatch, _characters);
+            _uiManager.Draw(shapeBatch, _characters);
 
-            _spriteBatch.End();
+            shapeBatch.End();
         }
 
         protected bool MoveNextEncounter()

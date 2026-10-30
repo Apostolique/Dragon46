@@ -5,14 +5,27 @@
    "version": "0.2.0",
    "configurations": [
         {
-            "name": "Run Core platform",
+            "name": "Run DesktopGL platform",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "buildCore",
+            "preLaunchTask": "buildDesktopGL",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Platforms/Core/bin/Debug/netcoreapp3.1/LookingForGroup.dll",
+            "program": "${workspaceFolder}/Platforms/DesktopGL/bin/Debug/net10.0/LookingForGroup.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Platforms/Core",
+            "cwd": "${workspaceFolder}/Platforms/DesktopGL",
+            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": "Run WindowsDX platform",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "buildWindowsDX",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/Platforms/WindowsDX/bin/Debug/net10.0-windows/LookingForGroup.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Platforms/WindowsDX",
             // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
             "console": "internalConsole",
             "stopAtEntry": false
