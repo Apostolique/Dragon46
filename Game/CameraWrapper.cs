@@ -1,10 +1,12 @@
-using Dcrew.MonoGame._2D_Camera;
+using Apos.Camera;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace GameProject {
     public static class CameraWrapper {
-        static CameraWrapper() {
-            Camera = new Camera(new Vector2(2800, -50));
+        public static void Setup(GraphicsDevice graphicsDevice, GameWindow window) {
+            Camera = new Camera(new DefaultViewport(graphicsDevice, window));
+            Camera.XY = new Vector2(2800, -50);
         }
 
         public static void Update(GameTime gameTime) {

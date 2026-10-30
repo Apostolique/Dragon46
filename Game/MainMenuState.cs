@@ -41,17 +41,22 @@ namespace GameProject
             creditsButton.CenterX(graphics);
             creditsButton.Position.Y = 500;
 
+            // A page can't close itself.
+            #if !BLAZORGL
             var exitButton = new UIButton("> Exit Game", 42, 5)
             {
                 OnClick = () => { GameRoot.Instance.ExitGame(); }
             };
             exitButton.CenterX(graphics);
             exitButton.Position.Y = 575;
+            #endif
 
             UIHelper.AddButton(startButton);
             UIHelper.AddButton(settingsButton);
             UIHelper.AddButton(creditsButton);
+            #if !BLAZORGL
             UIHelper.AddButton(exitButton);
+            #endif
             UIHelper.AddLabel(titleLabel);
         }
 

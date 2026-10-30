@@ -49,7 +49,7 @@ namespace GameProject {
                 Matrix.CreateScale(Scale) *
                 Matrix.CreateScale(size.X, size.Y, 1) *
                 Matrix.CreateTranslation(Offset.X, Offset.Y, 1) *
-                CameraWrapper.Camera.View(Z) *
+                CameraWrapper.Camera.GetView(Z) *
                 Matrix.CreateScale(1f / size.X, 1f / size.Y, 1);
 
             Assets.Infinite.Parameters["ScrollMatrix"].SetValue(Matrix.Invert(m));

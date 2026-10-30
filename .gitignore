@@ -61,4 +61,6 @@ monodroid*.msi
 *.dll
 *.VC.db
 *.VC.opendb
-.vs/LD64/DesignTimeBuild/.dtbcache
+.vs/
+
+**/wwwroot/Content/*

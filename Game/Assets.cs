@@ -1,8 +1,8 @@
 using System.Collections.Generic;
+using Apos.Shapes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using SpriteFontPlus;
 
 namespace GameProject {
     public enum SoundType
@@ -44,7 +44,9 @@ namespace GameProject {
             Shrub4 = content.Load<Texture2D>("shrub_4");
             Tree = content.Load<Texture2D>("tree");
 
-            UIFont = DynamicSpriteFont.FromTtf(TitleContainer.OpenStream("Content/Lato-Bold.ttf"), 16);
+            using (var ttf = TitleContainer.OpenStream($"{content.RootDirectory}/Lato-Bold.ttf")) {
+                UIFont = new ShapeFont(ttf);
+            }
 
             CharacterSprites = new Dictionary<CharacterType, CharacterSprite>()
             {
@@ -163,7 +165,7 @@ namespace GameProject {
         public static Texture2D Shrub4;
         public static Texture2D Tree;
 
-        public static DynamicSpriteFont UIFont;
+        public static ShapeFont UIFont;
 
         public static Dictionary<CharacterType, CharacterSprite> CharacterSprites;
         public static Dictionary<AbilitySpecialEffectType, Texture2D> AbilitySpecialEffectTextures;

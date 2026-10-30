@@ -1,0 +1,212 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Looking for Group</title>
+    <base href="./" />
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="LookingForGroup.styles.css" rel="stylesheet" />
+    <style>
+        #game-loading
+        {
+            position: fixed;
+            top: 0; right: 0; bottom: 0; left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            /* Over the canvas, which KNI sizes and paints underneath while this is still up. */
+            z-index: 10;
+            opacity: 1;
+            transition: opacity 250ms ease-out;
+        }
+
+        .game-loading-inner
+        {
+            width: 9em;
+            color: #d4d4d8;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .game-loading-made { text-align: center; font-size: 0.85em; }
+        .game-loading-text { text-align: center; font-size: 1.8em; }
+    </style>
+</head>
+
+<body>
+
+    <div id="app"></div>
+
+    <!-- Outside `#app`, and so out of reach of Blazor, which replaces that element's contents
+         the moment the component renders. That happens before the game has drawn anything: the
+         first tick still has to load every PNG and WAV. Held here until a frame is actually on
+         the canvas, so the loading happens behind this instead of a black screen. -->
+    <div id="game-loading">
+        <div class="game-loading-inner">
+            <div class="game-loading-made">Made with<br/><a href="https://github.com/kniEngine/kni"><img src="kni.png" border="0" alt="Kni"></a></div>
+            <div class="game-loading-text">loading&nbsp;<marquee style="width:0.9em; vertical-align: bottom;">.&nbsp;.&nbsp;.&nbsp;&nbsp;&nbsp;</marquee></div>
+        </div>
+    </div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">x</a>
+    </div>
+
+    <!-- No `.br` copies get published, so this loads the plain files. itch.io compresses on the
+         way out anyway, which leaves nothing for a decode here to do. -->
+    <script src="_framework/blazor.webassembly.js"></script>
+
+    <script src="_content/nkast.Wasm.JSInterop/js/JSObject.10.0.3.js"></script>
+    <script src="_content/nkast.Wasm.Dom/js/Window.10.0.3.js"></script>
+    <script src="_content/nkast.Wasm.Dom/js/Document.10.0.3.js"></script>
+    <script src="_content/nkast.Wasm.Dom/js/Navigator.10.0.3.js"></script>
+    <script src="_content/nkast.Wasm.Dom/js/Gamepad.10.0.3.js"></script>
+    <script src="_content/nkast.Wasm.Dom/js/Media.10.0.3.js"></script>
+    <script src="_content/nkast.Wasm.XHR/js/XHR.10.0.3.js"></script>
+    <script src="_content/nkast.Wasm.Canvas/js/Canvas.10.0.3.js"></script>
+    <script src="_content/nkast.Wasm.Canvas/js/CanvasGLContext.10.0.3.js"></script>
+    <script src="_content/nkast.Wasm.Audio/js/Audio.10.0.3.js"></script>
+    <script src="_content/nkast.Wasm.XR/js/XR.10.0.3.js"></script>
+
+    <script>
+        // KNI drives `Game.IsActive` off the window's focus and blur events, and Apos.Input gates
+        // every condition on it, so an inactive game ignores every key.
+        //
+        // In an iframe that state sticks: coming back to a backgrounded itch.io page fires no
+        // focus event on the frame, so the blur from leaving is never undone. Visibility is the
+        // signal that actually tracks this on the web, and a click or a touch is proof the
+        // player is on the game whatever the frame thinks, so the missing focus is synthesized
+        // from those. KNI only listens for the event, so dispatching one is enough.
+        //
+        // Mirrors KNI's own flag rather than asking `document.hasFocus()`, which stays true when
+        // going fullscreen from the itch.io page even though KNI never saw a focus event.
+        //
+        // Filed upstream as kniEngine/kni#2693.
+        var gameActive = false;
+        window.addEventListener('focus', function () { gameActive = true; });
+        window.addEventListener('blur', function () { gameActive = false; });
+
+        /// force: dispatch even when the game already reads active. For the rare transitions,
+        /// where a redundant activation is cheaper than staying wrong.
+        function gameEnsureActive(force)
+        {
+            if (document.visibilityState === 'hidden') return;
+            if (gameActive && !force) return;
+            try { window.focus(); } catch (e) { }
+            window.dispatchEvent(new Event('focus'));
+        }
+
+        document.addEventListener('visibilitychange', function ()
+        {
+            if (document.visibilityState === 'visible') gameEnsureActive(true);
+        });
+        window.addEventListener('pageshow', function () { gameEnsureActive(true); });
+        // Entering or leaving fullscreen moves focus without telling the frame about it.
+        document.addEventListener('fullscreenchange', function () { gameEnsureActive(true); });
+        document.addEventListener('webkitfullscreenchange', function () { gameEnsureActive(true); });
+        // Capture, so the game is active before KNI's own handler queues the input.
+        window.addEventListener('touchstart', function () { gameEnsureActive(false); }, true);
+        window.addEventListener('mousedown', function () { gameEnsureActive(false); }, true);
+
+        var gameSynced = false;
+        var gameFrames = 0;
+
+        // Two frames, not one. The first tick is the one that builds the game and loads the
+        // art, and it returns before any of that has reached the canvas.
+        function gameDrewAFrame()
+        {
+            if (++gameFrames !== 2) return;
+
+            var el = document.getElementById('game-loading');
+            if (!el) return;
+
+            el.style.opacity = '0';
+            setTimeout(function ()
+            {
+                if (el.parentNode) el.parentNode.removeChild(el);
+            }, 300);
+        }
+
+        function tickJS()
+        {
+            window.theInstance.invokeMethod('TickDotNet');
+            gameDrewAFrame();
+
+            // The game window is built on the first tick, and KNI registers its focus listener
+            // with it. This script registered earlier, so any focus event in between was seen
+            // here and missed there, which would leave the mirror reading active over a game
+            // that isn't. One forced pass settles it.
+            if (!gameSynced)
+            {
+                gameSynced = true;
+                gameEnsureActive(true);
+            }
+
+            window.requestAnimationFrame(tickJS);
+        }
+
+        window.initRenderJS = (instance) =>
+        {
+            window.theInstance = instance;
+
+            // set initial canvas size
+            var canvas = document.getElementById('theCanvas');
+            var holder = document.getElementById('canvasHolder');
+            canvas.width = holder.clientWidth;
+            canvas.height = holder.clientHeight;
+            // disable context menu on right click
+            canvas.addEventListener("contextmenu", e => e.preventDefault());
+
+            // begin game loop
+            window.requestAnimationFrame(tickJS);
+        };
+
+        // The browser claims some of what the game binds: the arrows and space scroll the
+        // itch.io page around the frame, and a lone Alt moves focus to the browser's menu.
+        //
+        // Nothing in the game takes typed text, so the page keeps every key by default and
+        // hands back only the ones a player needs to get out of a stuck game. Preventing the
+        // default doesn't stop the event reaching KNI, which only listens for it.
+        var gameBrowserKeys = new Set(['F5', 'F11', 'F12']);
+
+        function gameIsBrowserKey(e)
+        {
+            if (gameBrowserKeys.has(e.key)) return true;
+
+            var ctrl = e.ctrlKey || e.metaKey;
+            var key = (e.key || '').toUpperCase();
+
+            // Reload, so a wedged game can be restarted.
+            if (ctrl && key === 'R') return true;
+            // The devtools, and the console a bug report comes from.
+            if (ctrl && e.shiftKey && (key === 'I' || key === 'J' || key === 'C')) return true;
+
+            return false;
+        }
+
+        window.addEventListener('keydown', function (e)
+        {
+            if (!gameIsBrowserKey(e)) e.preventDefault();
+        });
+
+        // Chromium moves focus to its own UI when Alt is tapped and released, so the release
+        // has to be swallowed alongside the press.
+        window.addEventListener('keyup', function (e)
+        {
+            if (e.key === 'Alt') e.preventDefault();
+        });
+        window.addEventListener("wheel", function(event)
+        {
+            // Prevent Mousewheel scrolling the outer page
+            // when running inside an iframe. e.g: itch.io embedding.
+            event.preventDefault();
+        }, { passive: false });
+    </script>
+</body>
+
+</html>
